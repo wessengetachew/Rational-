@@ -8,25 +8,40 @@
     <style>
         /* Base Styling */
         :root {
-            /* Color Palette */
+            /* Light Mode Palette */
             --color-primary: #1e3a5f; /* Deep Navy Blue */
             --color-secondary: #00bcd4; /* Cyan/Teal (Academic Accent) */
             --color-accent: #ff9800; /* Amber/Orange for emphasis */
             --color-background: #f7f9fc; /* Light, clean background */
             --color-control-bg: #ffffff;
             --color-border: #e0e6ed;
+            --color-text: var(--color-primary);
+            --color-axis: #333333;
             --font-family-sans: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --hover-red: #e74c3c;
             --hover-blue: #3498db;
+        }
+
+        /* Dark Mode Override */
+        body.dark-mode {
+            --color-primary: #a8c1e7; /* Light Blue for Dark Text */
+            --color-secondary: #00bcd4;
+            --color-accent: #ff9800;
+            --color-background: #121212; /* Deep Dark Background */
+            --color-control-bg: #1e1e1e; /* Darker Control Background */
+            --color-border: #333333;
+            --color-text: var(--color-primary);
+            --color-axis: #cccccc;
         }
         
         html, body {
             margin: 0;
             padding: 0;
             font-family: var(--font-family-sans);
-            color: var(--color-primary);
+            color: var(--color-text);
             background-color: var(--color-background);
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* Layout */
@@ -39,9 +54,10 @@
             width: 350px; 
             padding: 25px 30px; 
             background: var(--color-control-bg); 
-            box-shadow: 6px 0 15px rgba(0,0,0,0.08); 
+            box-shadow: 6px 0 15px rgba(0,0,0,0.15); 
             overflow-y: auto;
             flex-shrink: 0;
+            border-right: 1px solid var(--color-border);
         }
         
         #visualization { 
@@ -54,7 +70,7 @@
 
         /* Typography */
         h1 {
-            color: var(--color-primary);
+            color: var(--color-text);
             font-size: 2em;
             font-weight: 700;
             margin-bottom: 5px;
@@ -63,7 +79,7 @@
         }
 
         h2 { 
-            color: var(--color-primary); 
+            color: var(--color-text); 
             font-size: 1.25em;
             font-weight: 600;
             margin-top: 30px;
@@ -78,16 +94,18 @@
             padding: 15px; 
             border: 1px solid var(--color-border); 
             border-radius: 10px;
-            background-color: #fcfdff;
+            background-color: var(--color-control-bg);
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: border-color 0.3s, background-color 0.3s;
         }
 
         label { 
             display: block; 
             margin-bottom: 8px; 
             font-weight: 600;
-            color: #333;
+            color: var(--color-text);
             font-size: 0.95em;
+            transition: color 0.3s;
         }
         
         /* Input Styling */
@@ -101,12 +119,13 @@
 
         input[type=number], select {
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--color-border);
             border-radius: 6px;
             width: 100%;
             box-sizing: border-box;
-            background-color: #fff;
-            transition: border-color 0.2s;
+            background-color: var(--color-control-bg);
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.3s, color 0.3s;
         }
         
         input[type=number]:focus, select:focus {
@@ -159,12 +178,14 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            transition: background-color 0.3s;
         }
         canvas { 
             display: block; 
-            border: 1px solid #ddd; 
+            border: 1px solid var(--color-border); 
             border-radius: 6px;
             margin-top: 15px;
+            transition: border-color 0.3s;
         }
         
         /* Data Dashboard Layout */
@@ -173,25 +194,25 @@
              justify-content: space-between;
              width: 100%;
              margin-top: 30px;
-             /* Ensure dashboard containers don't show the placeholder text */
-             position: relative; 
         }
         .dashboard-chart-box {
-            width: 32%; /* Three charts side by side */
+            width: 32%; 
             min-height: 380px;
-            background: #ffffff;
+            background: var(--color-control-bg);
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             padding: 10px;
             border: 1px solid var(--color-border);
+            transition: border-color 0.3s, background-color 0.3s;
         }
         .dashboard-chart-title {
             font-size: 1.1em;
             font-weight: 600;
-            color: var(--color-primary);
+            color: var(--color-text);
             padding: 5px 0;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 1px dashed var(--color-border);
             margin-bottom: 10px;
+            transition: color 0.3s, border-color 0.3s;
         }
         
         /* Mathematical Prose Styling */
@@ -199,14 +220,17 @@
              width: 100%;
              margin-top: 40px;
              padding: 20px;
-             background-color: #f0f4f7;
+             background-color: color-mix(in srgb, var(--color-background) 80%, var(--color-border));
              border-radius: 10px;
              border-left: 5px solid var(--color-secondary);
+             color: var(--color-text);
+             transition: background-color 0.3s, color 0.3s;
         }
         #math-prose h3 {
-             color: var(--color-primary);
+             color: var(--color-text);
              font-size: 1.5em;
              margin-top: 0;
+             transition: color 0.3s;
         }
 
         /* Responsive */
@@ -229,6 +253,14 @@
         <h1>Advanced Visualizer</h1>
         <p style="font-style: italic; color: #555;">Explore the geometry of rational numbers and the constant $\mathbf{6/\pi^2}$.</p>
 
+        <div class="control-group">
+            <h2><span style="color: var(--color-secondary);">0.</span> Theme Control</h2>
+            <label for="darkModeToggle">Toggle Dark Mode:</label>
+            <div class="button-group">
+                <button id="darkModeToggle" onclick="toggleDarkMode()">Enable Dark Mode</button>
+            </div>
+        </div>
+        
         <div class="control-group">
             <h2><span style="color: var(--color-secondary);">1.</span> Visualization Mode</h2>
             <label for="visMode">Select View:</label>
@@ -303,16 +335,13 @@
         <div id="data-dashboard">
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Euler's Totient $\phi(q)$ Distribution</div>
-                <div style="text-align: center; color: #999; padding-top: 50%;"></div>
-            </div>
+                </div>
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Ratio Convergence: $|F_Q|/Q^2 \to 3/\pi^2$</div>
-                <div style="text-align: center; color: #999; padding-top: 50%;"></div>
-            </div>
+                </div>
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Möbius Function ($\mu(q)$) Sequence</div>
-                <div style="text-align: center; color: #999; padding-top: 50%;"></div>
-            </div>
+                </div>
         </div>
 
         <div id="math-prose">
@@ -339,6 +368,7 @@
 
     // Global state for interaction
     let hoveredPoint = null;
+    let isDarkMode = false;
     
     /**
      * @section Math Utilities
@@ -491,16 +521,9 @@
             for (let a = 1; a < q; a++) { 
                 if (gcd(a, q) === 1) {
                     fractions.push({ 
-                        a: a, 
-                        q: q, 
-                        value: a / q, 
-                        phi: phi_q,
-                        mu: mu_q,
-                        sigma: sigma_q,
-                        omega: omega_q,
-                        // Position placeholder, calculated during drawing
-                        x_pos: 0,
-                        y_pos: 0
+                        a: a, q: q, value: a / q, 
+                        phi: phi_q, mu: mu_q, sigma: sigma_q, omega: omega_q,
+                        x_pos: 0, y_pos: 0
                     });
                     reducedCoprimeCount++;
                 }
@@ -526,10 +549,7 @@
                 latticePoints.push({
                     a: a, b: b, gcd_val: g, is_coprime: (g === 1),
                     prop_value: g, 
-                    mu: mobius(g),
-                    omega: omega(g),
-                    sigma: divisorSum(g),
-                    // Position placeholder
+                    mu: mobius(g), omega: omega(g), sigma: divisorSum(g),
                     x_pos: 0, y_pos: 0 
                 });
             }
@@ -556,11 +576,9 @@
     const CANVAS_W = 600;
     const CANVAS_H = 1050; // 600 (Main) + 450 (Dashboard)
     
-    // Y-coordinate separation for the three main visualization areas
     const Y_CIRCLE_AREA = 0;
     const Y_DASHBOARD_AREA = 670;
     
-    // Chart geometry
     const PLOT_W = (CANVAS_W / 3) * 0.9;
     const PLOT_H = 350;
 
@@ -569,18 +587,26 @@
     let pointSize = 2.5;
     let sat_val = 80;
     let bright_val = 80;
+    let axisColor;
+    let bgColor;
 
     function setup() {
         let canvas = createCanvas(CANVAS_W, CANVAS_H); 
         canvas.parent('visualization');
         canvas.id('p5Canvas'); 
         colorMode(HSB, 360, 100, 100);
-        // Start loop for interactive hover effects
         loop(); 
         window.sketch = this; 
         
         document.getElementById('limitQ').max = 250;
         document.getElementById('limitQ').value = Q_current;
+        
+        // Check for Dark Mode on startup
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            isDarkMode = true;
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = 'Disable Dark Mode';
+        }
         
         resetSketch(); 
     }
@@ -597,13 +623,12 @@
              document.getElementById('limitQ').max = 100;
         }
         
-        // Force the slider value to respect the new max if Q_current exceeds it
         if (Q_current > parseInt(document.getElementById('limitQ').max)) {
             Q_current = parseInt(document.getElementById('limitQ').max);
             document.getElementById('limitQ').value = Q_current;
         }
         
-        dataCache = {}; // Clear cache on mode switch
+        dataCache = {}; 
         updateVisualization();
     }
     
@@ -615,6 +640,10 @@
 
         document.getElementById('limitQValue').textContent = Q_current;
         document.getElementById('propQ').textContent = Q_current;
+        
+        // Update p5.js color variables based on mode
+        bgColor = color(isDarkMode ? 0 : 360, 0, isDarkMode ? 7 : 100);
+        axisColor = isDarkMode ? color(0, 0, 80) : color(0, 0, 20);
 
         if (!dataCache[Q_current]) {
             dataCache[Q_current] = getPointsAndProperties(Q_current);
@@ -629,7 +658,6 @@
         document.getElementById('propAvgPhi').textContent = data.AvgPhiRatio.toFixed(6);
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
-        // Redraw immediately for static elements
         redraw();
     }
     
@@ -637,7 +665,7 @@
         if (!dataCache[Q_current]) return; 
         const data = dataCache[Q_current];
         
-        background(255);
+        background(bgColor);
         
         // 1. Draw Main Visualization
         push();
@@ -650,23 +678,9 @@
         pop();
 
         // 2. Draw Dashboard Charts (Horizontally arranged)
-        // Phi Chart (Left)
-        push();
-        translate(10, Y_DASHBOARD_AREA); 
-        drawPhiBarChart(data.Q_phi_values);
-        pop();
-        
-        // Ratio Chart (Center)
-        push();
-        translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA); 
-        drawRatioConvergence(data.ratio_history);
-        pop();
-        
-        // Mobius Chart (Right)
-        push();
-        translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA); 
-        drawMobiusSequence(data.mobius_history);
-        pop();
+        push(); translate(10, Y_DASHBOARD_AREA); drawPhiBarChart(data.Q_phi_values); pop();
+        push(); translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA); drawRatioConvergence(data.ratio_history); pop();
+        push(); translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA); drawMobiusSequence(data.mobius_history); pop();
         
         // 3. Draw Hover Tooltip on Top
         if (hoveredPoint) {
@@ -674,21 +688,20 @@
         }
     }
     
-    // --- Coloring Logic ---
     function getPointColor(p, scheme, isLattice) {
         if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) {
-            return color(0, 0, 10); // Default dark
+            return color(0, 0, isDarkMode ? 90 : 10); 
         }
         
         if (scheme === 'mobius') {
-            if (p.mu === 1) return color(220, 80, 95); // Blue for mu=1
-            if (p.mu === -1) return color(0, 80, 95);  // Red for mu=-1
-            return color(0, 0, 50); // Gray/Black for mu=0 (non-squarefree)
+            if (p.mu === 1) return color(220, 80, 95); 
+            if (p.mu === -1) return color(0, 80, 95);  
+            return color(0, 0, isDarkMode ? 50 : 50); 
         }
         
         if (scheme === 'omega') {
             const maxOmega = Math.max(3, ...dataCache[Q_current].fractions.map(f => f.omega));
-            let hue = map(p.omega, 0, maxOmega, 180, 300); // Teal to Purple
+            let hue = map(p.omega, 0, maxOmega, 180, 300); 
             return color(hue, sat_val, bright_val);
         }
         
@@ -709,14 +722,13 @@
         const radius = width * 0.45;
         
         noFill();
-        stroke(0, 30);
+        stroke(axisColor);
         strokeWeight(1);
         ellipse(0, 0, radius * 2);
 
         const scheme = document.getElementById('colorScheme').value;
         hoveredPoint = null;
         
-        // Loop through points to draw and check hover
         for (let p of fractions) {
             const angle = -2 * PI * p.value; 
             const x = radius * cos(angle);
@@ -728,11 +740,10 @@
             let currentPointSize = pointSize;
             let pointColor = getPointColor(p, scheme, false);
 
-            // Check Hover (only for points not near the center 0/1)
             if (p.q > 1 && dist(mouseX, mouseY, p.x_pos, p.y_pos) < pointSize * 2) {
                 hoveredPoint = p;
                 currentPointSize *= 1.8;
-                pointColor = color(var(--color-accent)); // Hover highlight
+                pointColor = color(25, 90, 100); // Orange/Accent for hover
             }
             
             stroke(pointColor);
@@ -750,11 +761,11 @@
         const plotSize = width - 2 * margin;
         translate(margin, plotSize + margin); 
 
-        stroke(0, 50);
+        stroke(axisColor);
         line(0, 0, plotSize, 0); 
         line(0, 0, 0, -plotSize); 
         
-        fill(0); textSize(16);
+        fill(axisColor); textSize(16);
         textAlign(CENTER, TOP); text('a (X-axis)', plotSize / 2, 15);
         textAlign(CENTER, CENTER);
         push(); translate(-30, -plotSize / 2); rotate(-PI / 2); text('b (Y-axis)', 0, 0); pop();
@@ -773,11 +784,10 @@
             let currentPointSize = pointSize;
             let pointColor = getPointColor(p, scheme, true);
 
-            // Check Hover
             if (dist(mouseX, mouseY, p.x_pos, p.y_pos) < pointSize * 2) {
                 hoveredPoint = p;
                 currentPointSize *= 1.8;
-                pointColor = color(var(--color-accent)); 
+                pointColor = color(25, 90, 100); 
             }
 
             stroke(pointColor);
@@ -797,17 +807,15 @@
         let tooltipX = p.x_pos + 10;
         let tooltipY = p.y_pos - tooltipH - 10;
         
-        // Boundary check
         if (tooltipX + tooltipW > CANVAS_W) tooltipX = p.x_pos - tooltipW - 10;
         if (tooltipY < 0) tooltipY = p.y_pos + 10;
 
-        // Draw background box
-        fill(255, 240); 
-        stroke(var(--color-secondary));
+        fill(bgColor); 
+        stroke(color(180, 80, 95));
         strokeWeight(2);
         rect(tooltipX, tooltipY, tooltipW, tooltipH, 5);
         
-        fill(var(--color-primary));
+        fill(axisColor);
         textSize(12);
         textAlign(LEFT, TOP);
         
@@ -821,7 +829,6 @@
         } else {
              label1 = `Point: (${p.a}, ${p.b})`;
              label2 = `GCD: ${p.gcd_val}`;
-             // Use properties of GCD(a, b) for lattice plot
              pointData = { mu: p.mu, sigma: p.sigma, phi: phi(p.gcd_val) }; 
         }
         
@@ -844,15 +851,15 @@
         const chartH = PLOT_H;
         const margin = 30;
 
-        noFill(); stroke(200); rect(0, 0, chartW, chartH);
-        fill(var(--color-primary)); textAlign(CENTER, TOP); textSize(16);
+        noFill(); stroke(axisColor); rect(0, 0, chartW, chartH);
+        fill(axisColor); textAlign(CENTER, TOP); textSize(16);
         text("Euler's Totient ($\phi(q)$) Distribution", chartW / 2, 10);
         
         const maxPhi = Math.max(...phiData.map(d => d.phi), 1);
         const plotAreaH = chartH - margin * 2;
         const barW = chartW / Q_current;
         
-        stroke(50); line(0, chartH - margin, chartW, chartH - margin); 
+        stroke(axisColor); line(0, chartH - margin, chartW, chartH - margin); 
 
         push();
         translate(0, chartH - margin);
@@ -867,12 +874,12 @@
             rect(i * barW, 0, barW * 0.9, -barHeight);
 
             if (data.q % Math.floor(Q_current / 8) === 0 || data.q === Q_current) {
-                fill(0); textSize(10); textAlign(CENTER, TOP);
+                fill(axisColor); textSize(10); textAlign(CENTER, TOP);
                 text(data.q, i * barW + barW / 2, 5);
             }
         }
         
-        fill(0); textSize(10); textAlign(LEFT, CENTER);
+        fill(axisColor); textSize(10); textAlign(LEFT, CENTER);
         text(`Max \u03D5(q): ${maxPhi}`, 5, -plotAreaH);
         
         pop();
@@ -885,27 +892,26 @@
         const chartH = PLOT_H;
         const margin = 30;
 
-        noFill(); stroke(200); rect(0, 0, chartW, chartH);
-        fill(var(--color-primary)); textAlign(CENTER, TOP); textSize(16);
+        noFill(); stroke(axisColor); rect(0, 0, chartW, chartH);
+        fill(axisColor); textAlign(CENTER, TOP); textSize(16);
         text("Ratio Convergence: $|F_Q|/Q^2$ to $3/\pi^2$", chartW / 2, 10);
         
         const minY = 0.28;
         const maxY = Math.max(...ratioHistory.map(d => d.ratio), 0.5);
         
-        // Draw Asymptotic Line (3/pi^2)
         const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
         
-        stroke(var(--color-secondary)); 
+        stroke(180, 80, 95); // Teal accent
         strokeWeight(2);
         line(0, asymptoticY, chartW, asymptoticY);
         
-        fill(var(--color-secondary)); textSize(12); textAlign(RIGHT, CENTER);
+        fill(180, 80, 95); textSize(12); textAlign(RIGHT, CENTER);
         text(`3/\u03C0² \u2248 ${ZETA2_INV_HALF.toFixed(5)}`, chartW - 5, asymptoticY);
 
-        stroke(50); line(0, chartH - margin, chartW, chartH - margin); 
+        stroke(axisColor); line(0, chartH - margin, chartW, chartH - margin); 
         
         // Plot Ratio Line
-        noFill(); stroke(var(--color-accent)); strokeWeight(2);
+        noFill(); stroke(25, 90, 100); strokeWeight(2); // Orange accent
         
         beginShape();
         for (let i = 0; i < ratioHistory.length; i++) {
@@ -919,11 +925,11 @@
         // X-Axis Labels
         for (let i = 0; i <= Q_current; i += Math.floor(Q_current / 5)) {
             const x = map(i, 0, Q_current, 0, chartW);
-            fill(0); textSize(10); textAlign(CENTER, TOP);
+            fill(axisColor); textSize(10); textAlign(CENTER, TOP);
             text(i, x, chartH - margin + 5);
         }
         
-        fill(0); textSize(10); textAlign(LEFT, CENTER);
+        fill(axisColor); textSize(10); textAlign(LEFT, CENTER);
         text(`Max: ${maxY.toFixed(3)}`, 5, margin);
     }
     
@@ -935,15 +941,15 @@
         const plotAreaH = chartH - margin * 2;
         const midpointY = chartH - margin - plotAreaH / 2;
 
-        noFill(); stroke(200); rect(0, 0, chartW, chartH);
-        fill(var(--color-primary)); textAlign(CENTER, TOP); textSize(16);
+        noFill(); stroke(axisColor); rect(0, 0, chartW, chartH);
+        fill(axisColor); textAlign(CENTER, TOP); textSize(16);
         text("Möbius Function $\mu(q)$ Sequence (Square-Free Test)", chartW / 2, 10);
         
         // Draw Midline (y=0)
-        stroke(0, 50); line(0, midpointY, chartW, midpointY);
+        stroke(axisColor); line(0, midpointY, chartW, midpointY);
         
         // Draw +1 and -1 lines
-        stroke(200);
+        stroke(axisColor);
         line(0, midpointY - plotAreaH / 2, chartW, midpointY - plotAreaH / 2); // mu=1
         line(0, midpointY + plotAreaH / 2, chartW, midpointY + plotAreaH / 2); // mu=-1
         
@@ -957,13 +963,13 @@
 
             if (data.mu === 1) {
                 y = midpointY - plotAreaH / 2;
-                pColor = color(var(--hover-blue));
+                pColor = color(220, 80, 95); // Blue
             } else if (data.mu === -1) {
                 y = midpointY + plotAreaH / 2;
-                pColor = color(var(--hover-red));
+                pColor = color(0, 80, 95); // Red
             } else { // mu = 0
                 y = midpointY;
-                pColor = color(0, 0, 50);
+                pColor = color(0, 0, isDarkMode ? 50 : 50);
             }
             
             fill(pColor);
@@ -971,9 +977,8 @@
             ellipse(x, y, pointDiameter, pointDiameter);
             
             // Draw Sum (M(Q)) line
-            // Rescale M(Q) from [-Q, Q] to [midpointY - plotAreaH/2, midpointY + plotAreaH/2]
             const M_y = map(data.M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
-            stroke(60, 80, 80); // Darker line for the sum
+            stroke(60, 80, 80); 
             if (i > 0) {
                 const prevX = map(mobiusData[i-1].q, 1, Q_current, 0, chartW);
                 const prevM_y = map(mobiusData[i-1].M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
@@ -984,17 +989,39 @@
             
             // X-Axis Labels
             if (data.q % Math.floor(Q_current / 8) === 0 || data.q === Q_current) {
-                fill(0); textSize(10); textAlign(CENTER, TOP);
+                fill(axisColor); textSize(10); textAlign(CENTER, TOP);
                 text(data.q, x, chartH - margin + 5);
             }
         }
     }
 
     //================================================================================================
+    // [UI CONTROL FUNCTIONS] 
+    //================================================================================================
+
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        const body = document.body;
+        const button = document.getElementById('darkModeToggle');
+
+        if (isDarkMode) {
+            body.classList.add('dark-mode');
+            button.textContent = 'Disable Dark Mode';
+        } else {
+            body.classList.remove('dark-mode');
+            button.textContent = 'Enable Dark Mode';
+        }
+        
+        // Re-run visualization update to refresh p5.js colors
+        updateVisualization();
+    }
+    
+    //================================================================================================
     // [EXPORT FUNCTIONS] 
     //================================================================================================
 
     function exportPNG() {
+        // This function uses the P5.js built-in saveCanvas(), which works correctly.
         saveCanvas(visMode + '_Q' + Q_current + '_full.png', 'png');
     }
 
