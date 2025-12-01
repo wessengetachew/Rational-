@@ -16,7 +16,6 @@
             --color-control-bg: #ffffff;
             --color-border: #e0e6ed;
             --color-text: var(--color-primary);
-            --color-axis: #333333;
             --font-family-sans: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --hover-red: #e74c3c;
             --hover-blue: #3498db;
@@ -31,7 +30,6 @@
             --color-control-bg: #1e1e1e; /* Darker Control Background */
             --color-border: #333333;
             --color-text: var(--color-primary);
-            --color-axis: #cccccc;
         }
         
         html, body {
@@ -179,6 +177,7 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
             transition: background-color 0.3s;
+            width: 600px; /* Explicitly size for consistency */
         }
         canvas { 
             display: block; 
@@ -192,7 +191,7 @@
         #data-dashboard {
              display: flex;
              justify-content: space-between;
-             width: 100%;
+             width: 600px; /* Match chart-box width */
              margin-top: 30px;
         }
         .dashboard-chart-box {
@@ -217,7 +216,7 @@
         
         /* Mathematical Prose Styling */
         #math-prose {
-             width: 100%;
+             width: 600px; /* Match chart-box width */
              margin-top: 40px;
              padding: 20px;
              background-color: color-mix(in srgb, var(--color-background) 80%, var(--color-border));
@@ -232,17 +231,6 @@
              margin-top: 0;
              transition: color 0.3s;
         }
-
-        /* Responsive */
-        @media (max-width: 1000px) {
-            #container { flex-direction: column; }
-            #controls { width: auto; max-height: 50vh; }
-            #visualization { padding: 10px; }
-            .chart-box { width: 95%; min-width: 300px; }
-            #data-dashboard { flex-direction: column; gap: 20px; }
-            .dashboard-chart-box { width: 100%; min-height: 300px; }
-        }
-
     </style>
 </head>
 <body>
@@ -273,8 +261,8 @@
         <div class="control-group">
             <h2><span style="color: var(--color-secondary);">2.</span> Core Parameters</h2>
             <label for="limitQ">Limit $\mathbf{Q}$ (Max Denominator/Axis Limit):</label>
-            <input type="range" id="limitQ" min="2" max="250" value="30" step="1" oninput="updateVisualization()">
-            <span id="limitQValue" class="property-value">30</span>
+            <input type="range" id="limitQ" min="2" max="250" value="45" step="1" oninput="updateVisualization()">
+            <span id="limitQValue" class="property-value">45</span>
             <p style="font-size: 0.85em; margin-top: 5px; color: #777;">$Q$ defines the domain $[1, Q] \times [1, Q]$.</p>
 
             <label for="pointSize">Point Size:</label>
@@ -335,13 +323,13 @@
         <div id="data-dashboard">
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Euler's Totient $\phi(q)$ Distribution</div>
-                </div>
+            </div>
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Ratio Convergence: $|F_Q|/Q^2 \to 3/\pi^2$</div>
-                </div>
+            </div>
             <div class="dashboard-chart-box">
                 <div class="dashboard-chart-title">Möbius Function ($\mu(q)$) Sequence</div>
-                </div>
+            </div>
         </div>
 
         <div id="math-prose">
@@ -370,6 +358,23 @@
     let hoveredPoint = null;
     let isDarkMode = false;
     
+    // P5.js Drawing Constants
+    let Q_current = 45; // Default Q from screenshot
+    const CANVAS_W = 600;
+    const CANVAS_H = 1050; 
+    const Y_CIRCLE_AREA = 0;
+    const Y_DASHBOARD_AREA = 670;
+    const PLOT_W = (CANVAS_W / 3) * 0.9;
+    const PLOT_H = 350;
+
+    let visMode = 'circle';
+    let dataCache = {};
+    let pointSize = 2.5;
+    let sat_val = 80;
+    let bright_val = 80;
+    let axisColor;
+    let bgColor;
+
     /**
      * @section Math Utilities
      */
@@ -382,7 +387,6 @@
         return a;
     }
     
-    // --- Primes and Factorization Sieve ---
     let primes = [];
     let isPrimeCalculatedUpTo = 0;
     
@@ -405,7 +409,6 @@
         isPrimeCalculatedUpTo = n;
     }
 
-    // --- Distinct Prime Factor Count (omega(n)) ---
     function omega(n) {
         if (n === 1) return 0;
         let count = 0;
@@ -424,7 +427,6 @@
         return count;
     }
     
-    // --- Euler's Totient Function (phi(n)) ---
     function phi(n) {
         if (n === 0) return 0;
         let result = n;
@@ -444,7 +446,6 @@
         return Math.round(result);
     }
 
-    // --- Möbius Function (mu(n)) ---
     function mobius(n) {
         if (n === 1) return 1;
         let factors = 0;
@@ -456,7 +457,7 @@
             if (temp % p === 0) {
                 factors++;
                 temp /= p;
-                if (temp % p === 0) return 0; // Contains square factor (mu=0)
+                if (temp % p === 0) return 0; 
             }
         }
         if (temp > 1) factors++; 
@@ -464,7 +465,6 @@
         return (factors % 2 === 0) ? 1 : -1;
     }
     
-    // --- Divisor Sum Function (sigma_1(n)) ---
     function divisorSum(n) {
         if (n === 1) return 1;
         let sum = 1;
@@ -496,14 +496,12 @@
         let fractions = [];
         let reducedCoprimeCount = 0; 
         
-        // Dashboard Data Holders
         let Q_phi_values = [];
         let ratio_history = [];
         let mobius_history = [];
         let current_F = 1;
         let phi_sum_ratio = 0;
         
-        // 1. Generate Points and Multiplicative Data
         for (let q = 1; q <= Q; q++) {
             const phi_q = phi(q);
             const mu_q = mobius(q);
@@ -517,14 +515,9 @@
             ratio_history.push({ q: q, ratio: current_F / (q * q) });
             mobius_history.push({ q: q, mu: mu_q, M_q: mobius_history.length > 0 ? mobius_history[mobius_history.length - 1].M_q + mu_q : mu_q });
 
-            // Generate fractions for the Unit Circle Plot
             for (let a = 1; a < q; a++) { 
                 if (gcd(a, q) === 1) {
-                    fractions.push({ 
-                        a: a, q: q, value: a / q, 
-                        phi: phi_q, mu: mu_q, sigma: sigma_q, omega: omega_q,
-                        x_pos: 0, y_pos: 0
-                    });
+                    fractions.push({ a: a, q: q, value: a / q, phi: phi_q, mu: mu_q, sigma: sigma_q, omega: omega_q, x_pos: 0, y_pos: 0 });
                     reducedCoprimeCount++;
                 }
             }
@@ -534,14 +527,12 @@
             }
         }
         
-        // 2. Calculate Total Coprime Pairs (A_Q)
         let A_Q = 0;
         sieve(Q);
         for (let d = 1; d <= Q; d++) {
             A_Q += mobius(d) * Math.floor(Q / d) * Math.floor(Q / d);
         }
         
-        // 3. Prepare data for Lattice Plot (a, b)
         let latticePoints = [];
         for (let a = 1; a <= Q; a++) {
             for (let b = 1; b <= Q; b++) {
@@ -572,28 +563,9 @@
     // [P5.JS VISUALIZATION CORE] 
     //================================================================================================
 
-    let Q_current = 30;
-    const CANVAS_W = 600;
-    const CANVAS_H = 1050; // 600 (Main) + 450 (Dashboard)
-    
-    const Y_CIRCLE_AREA = 0;
-    const Y_DASHBOARD_AREA = 670;
-    
-    const PLOT_W = (CANVAS_W / 3) * 0.9;
-    const PLOT_H = 350;
-
-    let visMode = 'circle';
-    let dataCache = {};
-    let pointSize = 2.5;
-    let sat_val = 80;
-    let bright_val = 80;
-    let axisColor;
-    let bgColor;
-
     function setup() {
         let canvas = createCanvas(CANVAS_W, CANVAS_H); 
-        canvas.parent('visualization');
-        canvas.id('p5Canvas'); 
+        canvas.parent('p5Canvas'); // Attach to the canvas placeholder, not the container
         colorMode(HSB, 360, 100, 100);
         loop(); 
         window.sketch = this; 
@@ -601,11 +573,9 @@
         document.getElementById('limitQ').max = 250;
         document.getElementById('limitQ').value = Q_current;
         
-        // Check for Dark Mode on startup
+        // Initial Dark Mode Check
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            isDarkMode = true;
-            document.body.classList.add('dark-mode');
-            document.getElementById('darkModeToggle').textContent = 'Disable Dark Mode';
+             // Only set the state, don't auto-toggle for consistency
         }
         
         resetSketch(); 
@@ -641,9 +611,15 @@
         document.getElementById('limitQValue').textContent = Q_current;
         document.getElementById('propQ').textContent = Q_current;
         
-        // Update p5.js color variables based on mode
-        bgColor = color(isDarkMode ? 0 : 360, 0, isDarkMode ? 7 : 100);
-        axisColor = isDarkMode ? color(0, 0, 80) : color(0, 0, 20);
+        // --- FIX: Define p5 colors based on CSS root variables ---
+        const style = getComputedStyle(document.body);
+        const textCssColor = style.getPropertyValue('--color-text');
+        const bgCssColor = style.getPropertyValue('--color-control-bg');
+        
+        // Convert CSS hex/rgb to p5 color objects for drawing
+        axisColor = color(textCssColor);
+        bgColor = color(bgCssColor);
+        // --- END FIX ---
 
         if (!dataCache[Q_current]) {
             dataCache[Q_current] = getPointsAndProperties(Q_current);
@@ -669,7 +645,8 @@
         
         // 1. Draw Main Visualization
         push();
-        translate(0, Y_CIRCLE_AREA);
+        // Shift drawing down slightly to align better within the 600px width/height area
+        translate(0, 50); 
         if (visMode === 'circle') {
             drawUnitCircle(data.fractions);
         } else {
@@ -678,6 +655,7 @@
         pop();
 
         // 2. Draw Dashboard Charts (Horizontally arranged)
+        // Chart Area starts at Y=670
         push(); translate(10, Y_DASHBOARD_AREA); drawPhiBarChart(data.Q_phi_values); pop();
         push(); translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA); drawRatioConvergence(data.ratio_history); pop();
         push(); translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA); drawMobiusSequence(data.mobius_history); pop();
@@ -690,7 +668,8 @@
     
     function getPointColor(p, scheme, isLattice) {
         if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) {
-            return color(0, 0, isDarkMode ? 90 : 10); 
+            // Use axis color for uniform coloring
+            return axisColor; 
         }
         
         if (scheme === 'mobius') {
@@ -718,7 +697,8 @@
     // --- Visualization 1: Unit Circle ---
     function drawUnitCircle(fractions) {
         push();
-        translate(width / 2, 300); 
+        // Translate to the visual center of the plot area
+        translate(width / 2, 250); 
         const radius = width * 0.45;
         
         noFill();
@@ -734,8 +714,9 @@
             const x = radius * cos(angle);
             const y = radius * sin(angle);
             
+            // Store screen coordinates for hover check
             p.x_pos = x + width / 2;
-            p.y_pos = y + 300;
+            p.y_pos = y + 250 + 50; // +50 to account for the overall translation
             
             let currentPointSize = pointSize;
             let pointColor = getPointColor(p, scheme, false);
@@ -743,7 +724,7 @@
             if (p.q > 1 && dist(mouseX, mouseY, p.x_pos, p.y_pos) < pointSize * 2) {
                 hoveredPoint = p;
                 currentPointSize *= 1.8;
-                pointColor = color(25, 90, 100); // Orange/Accent for hover
+                pointColor = color(25, 90, 100); 
             }
             
             stroke(pointColor);
@@ -759,7 +740,8 @@
         push();
         const margin = 50;
         const plotSize = width - 2 * margin;
-        translate(margin, plotSize + margin); 
+        // Translate to the bottom-left corner of the plot area
+        translate(margin, plotSize + 50); 
 
         stroke(axisColor);
         line(0, 0, plotSize, 0); 
@@ -778,8 +760,9 @@
             const x = p.a * scaleFactor;
             const y = -p.b * scaleFactor;
 
+            // Store screen coordinates for hover check
             p.x_pos = x + margin;
-            p.y_pos = y + plotSize + margin;
+            p.y_pos = y + plotSize + 50; 
             
             let currentPointSize = pointSize;
             let pointColor = getPointColor(p, scheme, true);
@@ -835,6 +818,7 @@
         text(label1, tooltipX + 5, tooltipY + 5);
         text(label2, tooltipX + 5, tooltipY + 20);
         
+        stroke(axisColor);
         line(tooltipX + 5, tooltipY + 38, tooltipX + tooltipW - 5, tooltipY + 38);
         
         textSize(10);
@@ -901,7 +885,7 @@
         
         const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
         
-        stroke(180, 80, 95); // Teal accent
+        stroke(180, 80, 95); 
         strokeWeight(2);
         line(0, asymptoticY, chartW, asymptoticY);
         
@@ -910,8 +894,7 @@
 
         stroke(axisColor); line(0, chartH - margin, chartW, chartH - margin); 
         
-        // Plot Ratio Line
-        noFill(); stroke(25, 90, 100); strokeWeight(2); // Orange accent
+        noFill(); stroke(25, 90, 100); strokeWeight(2); 
         
         beginShape();
         for (let i = 0; i < ratioHistory.length; i++) {
@@ -922,7 +905,6 @@
         }
         endShape();
         
-        // X-Axis Labels
         for (let i = 0; i <= Q_current; i += Math.floor(Q_current / 5)) {
             const x = map(i, 0, Q_current, 0, chartW);
             fill(axisColor); textSize(10); textAlign(CENTER, TOP);
@@ -945,13 +927,11 @@
         fill(axisColor); textAlign(CENTER, TOP); textSize(16);
         text("Möbius Function $\mu(q)$ Sequence (Square-Free Test)", chartW / 2, 10);
         
-        // Draw Midline (y=0)
         stroke(axisColor); line(0, midpointY, chartW, midpointY);
         
-        // Draw +1 and -1 lines
         stroke(axisColor);
-        line(0, midpointY - plotAreaH / 2, chartW, midpointY - plotAreaH / 2); // mu=1
-        line(0, midpointY + plotAreaH / 2, chartW, midpointY + plotAreaH / 2); // mu=-1
+        line(0, midpointY - plotAreaH / 2, chartW, midpointY - plotAreaH / 2); 
+        line(0, midpointY + plotAreaH / 2, chartW, midpointY + plotAreaH / 2); 
         
         const pointDiameter = 4;
         
@@ -963,11 +943,11 @@
 
             if (data.mu === 1) {
                 y = midpointY - plotAreaH / 2;
-                pColor = color(220, 80, 95); // Blue
+                pColor = color(220, 80, 95); 
             } else if (data.mu === -1) {
                 y = midpointY + plotAreaH / 2;
-                pColor = color(0, 80, 95); // Red
-            } else { // mu = 0
+                pColor = color(0, 80, 95); 
+            } else { 
                 y = midpointY;
                 pColor = color(0, 0, isDarkMode ? 50 : 50);
             }
@@ -976,7 +956,6 @@
             noStroke();
             ellipse(x, y, pointDiameter, pointDiameter);
             
-            // Draw Sum (M(Q)) line
             const M_y = map(data.M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
             stroke(60, 80, 80); 
             if (i > 0) {
@@ -987,7 +966,6 @@
             fill(60, 80, 80);
             ellipse(x, M_y, 2, 2);
             
-            // X-Axis Labels
             if (data.q % Math.floor(Q_current / 8) === 0 || data.q === Q_current) {
                 fill(axisColor); textSize(10); textAlign(CENTER, TOP);
                 text(data.q, x, chartH - margin + 5);
@@ -996,7 +974,7 @@
     }
 
     //================================================================================================
-    // [UI CONTROL FUNCTIONS] 
+    // [UI CONTROL AND EXPORT FUNCTIONS] 
     //================================================================================================
 
     function toggleDarkMode() {
@@ -1012,16 +990,10 @@
             button.textContent = 'Enable Dark Mode';
         }
         
-        // Re-run visualization update to refresh p5.js colors
         updateVisualization();
     }
     
-    //================================================================================================
-    // [EXPORT FUNCTIONS] 
-    //================================================================================================
-
     function exportPNG() {
-        // This function uses the P5.js built-in saveCanvas(), which works correctly.
         saveCanvas(visMode + '_Q' + Q_current + '_full.png', 'png');
     }
 
@@ -1055,3 +1027,4 @@
 </script>
 </body>
 </html>
+
