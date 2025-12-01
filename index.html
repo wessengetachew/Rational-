@@ -277,7 +277,7 @@
             <h1>The Asymptotic Density of Coprime Integers</h1>
             <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
             <div id="abstract">
-                <span style="font-weight: bold;">Abstract:</span> This interactive tool employs a WebGL renderer to analyze and display the geometric distribution of coprime integer pairs (a, q) where gcd(a, q)=1. The visualization focuses on two domains: the Farey sequence mapped onto the unit circle (angles 2 * $\pi$ * a/q) and the coprime lattice (a x q). Computational results, including the sequence cardinality |F_Q| and the ratio |F_Q| / Q², are provided to illustrate the convergence toward the fundamental constant 3 / $\pi^2$ = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
+                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles $2\pi a/q$) and the **coprime lattice** $(a, q)$. Computational results, including the sequence cardinality **$|F_Q|$** and the ratio **$|F_Q|/Q^2$**, are provided to illustrate the convergence toward the fundamental constant **$3/\pi^2$** $= 1/(2\zeta(2))$, connecting geometric patterns to the **Riemann Zeta Function**. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
             </div>
         </div>
 
@@ -286,13 +286,13 @@
         </div>
 
         <div id="math-prose">
-            <h3>Theoretical Background: The Constant 6 / $\pi^2$</h3>
-            <p>The probability P that two positive integers selected uniformly at random are coprime is given by the reciprocal of the Riemann Zeta function evaluated at s=2.</p>
-            <p>This result is derived from the Euler product formula for the Zeta function. The probability P is:</p>
+            <h3>Theoretical Background: The Constant $6/\pi^2$</h3>
+            <p>The probability $P$ that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at $s=2$.</p>
+            <p>This result is derived from the **Euler product formula** for the Zeta function. The probability $P$ is:</p>
             <div class="equation-block">
-                P(gcd(a, b) = 1) = 1 / $\zeta$(2) = 1 / [ Sum from n=1 to infinity of (1 / n²) ] = 6 / $\pi^2$ $\approx$ 0.6079
+                $$P(\text{gcd}(a, b) = 1) = 1 / \zeta(2) = 1 / \left[ \sum_{n=1}^{\infty} \frac{1}{n^2} \right] = \frac{6}{\pi^2} \approx 0.6079$$
             </div>
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the Q x Q square converges to 6 / $\pi^2$; in the unit circle plot, the cardinality of the Farey sequence |F_Q| grows asymptotically as |F_Q| $\sim$ (3 / $\pi^2$) * Q².</p>
+            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the $Q \times Q$ square converges to **$6/\pi^2$**; in the unit circle plot, the cardinality of the Farey sequence **$|F_Q|$** grows asymptotically as **$|F_Q| \sim (3/\pi^2) Q^2$**.</p>
         </div>
     </div>
 </div> <script>
@@ -326,11 +326,11 @@
     let bgColor;
     let dashboardGraphics; 
     
-    // --- TOOLTIP STATE ---
+    // --- TOOLTIP STATE (RESTORED) ---
     let hoveredPoint = null; 
     let hoveredPointScreenX = 0;
     let hoveredPointScreenY = 0;
-    // ---------------------
+    // ---------------------------------
 
     // --- Math Utilities (Functions assumed working) ---
     function gcd(a, b) { 
@@ -436,7 +436,7 @@
                 const g = gcd(a, b);
                 latticePoints.push({
                     a: a, b: b, gcd_val: g, is_coprime: (g === 1),
-                    q_val: b, // using b as the denominator in terms of prime factorization functions
+                    prop_value: g, // prop_value is used for coloring logic
                     mu: mobius(b), omega: omega(b), sigma: divisorSum(b),
                 });
             }
@@ -454,7 +454,9 @@
         canvas.id('p5Canvas'); 
         canvas.parent('visualization-area');
         colorMode(HSB, 360, 100, 100);
-        noLoop(); 
+        
+        // RESTORED: Enable continuous loop for mouse interaction / tooltips
+        loop(); 
         
         dashboardGraphics = createGraphics(CANVAS_W, CANVAS_H, P2D);
         dashboardGraphics.colorMode(HSB, 360, 100, 100);
@@ -462,9 +464,6 @@
         document.getElementById('limitQ').max = 250;
         document.getElementById('limitQ').value = Q_current;
         resetSketch(); 
-        
-        // Enable continuous loop for mouse interaction / tooltips
-        loop(); 
     }
     
     function resetSketch() {
@@ -493,7 +492,6 @@
         document.getElementById('propQ').textContent = Q_current;
         
         const style = getComputedStyle(document.body);
-        // p5 color objects must be recreated if the theme changes
         const isDarkMode = document.body.classList.contains('dark-mode');
         const textColorHex = isDarkMode ? '#D7DBDD' : '#17202A';
         const controlBgHex = isDarkMode ? '#2C2C2C' : '#FFFFFF';
@@ -514,7 +512,7 @@
         document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
-        // Since we enabled loop() in setup, draw() is called automatically
+        // Since loop() is called in setup, redraw() is handled by the loop.
     }
     
     function draw() {
@@ -542,11 +540,13 @@
         const centerY = MAIN_PLOT_Y_OFFSET;
 
         if (visMode === 'circle') {
-            drawUnitCircleWebGL(data.fractions);
+            // RESTORED: Find closest point for highlighting/tooltip
             hoveredPoint = findClosestPoint(data.fractions, centerX, centerY, 'circle');
+            drawUnitCircleWebGL(data.fractions);
         } else {
-            drawCoprimeLatticeWebGL(data.latticePoints);
+             // RESTORED: Find closest point for highlighting/tooltip
             hoveredPoint = findClosestPoint(data.latticePoints, centerX, centerY, 'lattice');
+            drawCoprimeLatticeWebGL(data.latticePoints);
         }
         pop();
         
@@ -555,7 +555,7 @@
         image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
     }
     
-    // --- POINT PICKING LOGIC (New Function) ---
+    // --- POINT PICKING LOGIC (RESTORED) ---
     function findClosestPoint(dataPoints, centerX, centerY, mode) {
         const mouseXCanvas = mouseX - CANVAS_W / 2;
         const mouseYCanvas = mouseY - CANVAS_H / 2;
@@ -573,11 +573,10 @@
                 // 3D coordinates of the point on the unit circle (z-plane)
                 const angle = -2 * PI * p.value; 
                 const x_3d = radius * cos(angle);
-                const y_3d = 0; // Always on the XZ plane (Y=0) in this setup
+                const y_3d = 0; 
                 const z_3d = radius * sin(angle); 
                 
                 // Project 3D coordinate to 2D screen coordinate
-                // Use screenX/screenY to get 2D projection of 3D points
                 px = screenX(x_3d, y_3d + centerY, z_3d); 
                 py = screenY(x_3d, y_3d + centerY, z_3d);
                 
@@ -601,8 +600,8 @@
                 minDistanceSq = distSq;
                 closestPoint = p;
                 // Store screen position for drawing the tooltip in P2D
-                hoveredPointScreenX = px;
-                hoveredPointScreenY = py;
+                hoveredPointScreenX = px + CANVAS_W / 2; // Convert back to P2D relative coordinates
+                hoveredPointScreenY = py + CANVAS_H / 2;
             }
         }
         return closestPoint;
@@ -614,37 +613,30 @@
         const sat_val = parseInt(document.getElementById('saturation').value);
         const bright_val = parseInt(document.getElementById('brightness').value);
 
-        const target = isLattice ? p.q_val : p.q;
-
         if (scheme === 'mobius') {
             if (p.mu === 1) return color(220, 80, 95); 
             if (p.mu === -1) return color(0, 80, 95);  
             return color(0, 0, 50); 
         }
         if (scheme === 'omega') {
-            const maxOmega = Q_current > 100 ? 5 : 3;
-            let hue = map(isLattice ? p.omega : omega(target), 0, maxOmega, 180, 300); 
+            const maxOmega = Math.max(3, ...dataCache[Q_current].fractions.map(f => f.omega));
+            let hue = map(p.omega, 0, maxOmega, 180, 300); 
             return color(hue, sat_val, bright_val);
         }
         
-        let val;
-        let maxVal = Q_current;
-        let minVal = 1;
+        let propValues = isLattice ? dataCache[Q_current].latticePoints.map(p => p.prop_value) : dataCache[Q_current].fractions.map(p => p.q);
+        let minVal = Math.min(...propValues.filter(v => v > 0)); 
+        let maxVal = Math.max(...propValues);
+        if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
         
-        if (scheme === 'divisor_sum') {
-            val = isLattice ? p.sigma : p.sigma; 
-            maxVal = divisorSum(Q_current); 
-        } else if (scheme === 'gcd_coprime' && isLattice) {
-            return p.is_coprime ? color(120, sat_val, bright_val) : color(30, sat_val, bright_val);
-        } else {
-            val = target;
-        }
-
+        // Use prop_value for lattice coloring, q for circle coloring unless divisor_sum is selected
+        const val = isLattice ? p.prop_value : (scheme === 'divisor_sum' ? p.sigma : p.q);
+        
         let hue = map(val, minVal, maxVal, 0, 300);
         return color(hue, sat_val, bright_val);
     }
     
-    // --- VISUALIZATION DRAWING (Highlighted Hovered Point) ---
+    // --- VISUALIZATION DRAWING (Highlighted Hovered Point RESTORED) ---
     function drawUnitCircleWebGL(fractions) {
         push();
         const radius = MAIN_PLOT_RADIUS; 
@@ -677,7 +669,7 @@
             const z = radius * sin(angle);
             
             push();
-            stroke(color(0, 100, 100)); // Bright yellow-red highlight
+            stroke(color(0, 100, 100)); // Bright yellow-red highlight (HSB)
             strokeWeight(pointSize * 2.5);
             point(x, 0, z);
             pop();
@@ -749,15 +741,19 @@
         pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
         pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
         
-        // 4. Draw Tooltip
+        // 4. Draw Tooltip (RESTORED)
         if (hoveredPoint) {
             drawTooltipP2D(pg, hoveredPoint, visMode);
         }
     }
     
-    // --- TOOLTIP DRAWING (New Function) ---
+    // --- TOOLTIP DRAWING (RESTORED) ---
     function drawTooltipP2D(pg, p, mode) {
         let lines = [];
+        
+        // Retrieve colors from global p5 context
+        const controlBg = color(getComputedStyle(document.body).getPropertyValue('--color-control-bg'));
+        const textColor = color(getComputedStyle(document.body).getPropertyValue('--color-primary'));
         
         if (mode === 'circle') {
             lines.push(`Fraction: ${p.a}/${p.q}`);
@@ -769,8 +765,8 @@
             lines.push(`Coordinates: (${p.a}, ${p.b})`);
             lines.push(`GCD(a, b): ${p.gcd_val} ${p.is_coprime ? '(Coprime)' : ''}`);
             lines.push(`\u03C6(b): ${phi(p.b)}`);
-            lines.push(`\u03BC(b): ${p.mu}`); 
-            lines.push(`\u03C3(b): ${p.sigma}`);
+            lines.push(`\u03BC(b): ${mobius(p.b)}`); // Use mobius(b) instead of p.mu from lattice generation
+            lines.push(`\u03C3(b): ${divisorSum(p.b)}`);
         }
 
         const padding = 8;
@@ -786,21 +782,21 @@
         const boxH = lines.length * 15 + padding * 2; 
 
         // Screen position (relative to the top-left of the P2D canvas)
-        let x = hoveredPointScreenX + CANVAS_W / 2 + 10;
-        let y = hoveredPointScreenY + CANVAS_H / 2 - boxH / 2;
+        let x = hoveredPointScreenX + 10;
+        let y = hoveredPointScreenY - boxH / 2;
         
         // Boundary checks to keep tooltip on screen
-        if (x + boxW > CANVAS_W) x = hoveredPointScreenX + CANVAS_W / 2 - boxW - 10;
+        if (x + boxW > CANVAS_W) x = hoveredPointScreenX - boxW - 10;
         if (y < 0) y = 0;
         if (y + boxH > Y_COMPUTATIONAL_AREA_P2D) y = Y_COMPUTATIONAL_AREA_P2D - boxH;
 
         // Draw box
-        pg.fill(0, 0, 10); // Dark background for contrast
-        pg.stroke(axisColor);
+        pg.fill(controlBg); 
+        pg.stroke(textColor);
         pg.rect(x, y, boxW, boxH, 3);
         
         // Draw text
-        pg.fill(axisColor);
+        pg.fill(textColor);
         pg.textAlign(LEFT, TOP);
         for (let i = 0; i < lines.length; i++) {
             pg.text(lines[i], x + padding, y + padding + i * 15);
@@ -818,7 +814,7 @@
         
         let titleText;
         if (visMode === 'circle') {
-            titleText = 'Farey Sequence Angles on the Unit Circle (q \u2264 Q)'; // Unicode for <=
+            titleText = 'Farey Sequence Angles on the Unit Circle (q \u2264 Q)'; 
         } else {
             titleText = 'Coprime Pairs Density (Lattice Plot gcd(a, b)=g)';
         }
@@ -882,7 +878,7 @@
 
         // --- Box 1: Farey Sequence Cardinality |F_Q| ---
         pg.textStyle(NORMAL);
-        pg.text(`Farey Sequence |F\u208B${Q_current}\u208C|:`, x + colW/2, y + 10); // \u208B and \u208C are subscript brackets
+        pg.text(`Farey Sequence |F\u208B${Q_current}\u208C|:`, x + colW/2, y + 10); 
         pg.textStyle(NORMAL);
         pg.fill(color('#E67E22'));
         pg.text(data.FareyCount.toLocaleString(), x + colW/2, y + 35);
@@ -906,13 +902,12 @@
 
         // --- Box 4: Asymptotic Ratio |F_Q| / Q² ---
         pg.textStyle(NORMAL);
-        pg.text(`Ratio |F\u208B${Q_current}\u208C| / Q\u00B2:`, x + colW*3.5, y + 10); // \u00B2 is superscript 2
+        pg.text(`Ratio |F\u208B${Q_current}\u208C| / Q\u00B2:`, x + colW*3.5, y + 10); 
         pg.textStyle(NORMAL);
         pg.fill(color('#2ECC71'));
         pg.text(data.ratio_history[data.ratio_history.length - 1].ratio.toFixed(6), x + colW*3.5, y + 35);
         pg.fill(axisColor);
         pg.textSize(10);
-        // Use \u03C0 for pi
         pg.text(`Target: 3 / \u03C0\u00B2 \u2248 ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55); 
 
         // Draw vertical separators
@@ -981,7 +976,7 @@
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
-        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2 \u2192 3 / \u03C0\u00B2", chartW / 2, 5); // \u2192 is right arrow
+        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2 \u2192 3 / \u03C0\u00B2", chartW / 2, 5); 
     }
     
     function drawMobiusSequenceP2D(pg, mobiusData) {
@@ -1028,7 +1023,7 @@
     function toggleDarkMode() {
         const isDarkMode = document.body.classList.toggle('dark-mode');
         document.getElementById('darkModeToggle').textContent = isDarkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
-        updateVisualization(); // Ensure colors update immediately
+        updateVisualization();
     }
     
     function exportPNG() { 
@@ -1037,6 +1032,7 @@
         saveCanvas(filename, 'png'); 
     }
     
+    // **MODIFIED: Now accepts a dataType argument to export specific data sets.**
     function exportCSV(dataType) { 
         const data = dataCache[Q_current];
         let csvContent = "";
@@ -1058,7 +1054,8 @@
             } else {
                 csvContent = "a,b,GCD_Value,Is_Coprime,Mu_b,Sigma_b\n";
                 for (let p of data.latticePoints) {
-                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${p.mu},${p.sigma}\n`;
+                    // Use b's properties, not gcd's properties for consistency with coloring logic
+                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${mobius(p.b)},${divisorSum(p.b)}\n`;
                 }
                 filename = "Coprime_Lattice_Q" + Q_current + ".csv";
             }
@@ -1071,7 +1068,6 @@
         } else if (dataType === 'ratio') {
             csvContent = "Q,Farey_Count_FQ,Ratio_FQ_div_Q2\n";
             for (let d of data.ratio_history) {
-                const FQ = (d.q > 0 && d.q <= data.ratio_history.length) ? data.ratio_history[d.q - 1].q * data.ratio_history[d.q - 1].ratio * d.q : 'N/A';
                 csvContent += `${d.q},${(d.q * d.q * d.ratio).toFixed(0)},${d.ratio.toFixed(8)}\n`;
             }
             filename = "Ratio_Convergence_Q" + Q_current + ".csv";
