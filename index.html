@@ -44,7 +44,7 @@
         #container {
             display: flex;
             min-height: 100vh;
-            max-width: 1600px; /* Increased max width */
+            max-width: 1600px; 
             margin: 0 auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
@@ -104,7 +104,7 @@
             padding-bottom: 5px;
         }
         
-        /* --- Controls & Data (Unchanged) --- */
+        /* --- Controls & Data --- */
         .control-group { 
             margin-bottom: 25px; 
             padding: 15px; 
@@ -142,7 +142,7 @@
             color: var(--color-accent); 
         }
 
-        /* --- Visualization Area (Adjusted for 900px wide canvas) --- */
+        /* --- Visualization Area --- */
         #visualization-area {
             display: flex;
             flex-direction: column;
@@ -154,30 +154,6 @@
             border-radius: 5px;
             margin-top: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* Dashboard Styling (Adjusted for 900px wide canvas) */
-        #data-dashboard {
-             display: flex;
-             justify-content: space-between;
-             width: 900px; /* MATCH CANVAS WIDTH */
-             margin-top: 30px;
-        }
-        .dashboard-chart-box {
-            width: 32%; 
-            background: var(--color-control-bg);
-            border-radius: 5px;
-            border: 1px solid var(--color-border);
-            padding: 10px;
-        }
-        .dashboard-chart-title {
-            font-size: 1em;
-            font-weight: 600;
-            color: var(--color-secondary);
-            padding: 5px 0;
-            border-bottom: 1px dashed var(--color-border);
-            margin-bottom: 10px;
-            text-align: center;
         }
         
         /* Math Prose */
@@ -287,24 +263,12 @@
             <h1>The Asymptotic Density of Coprime Integers</h1>
             <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
             <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * pi * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q^2**, are provided to illustrate the convergence toward the fundamental constant **3 / pi^2** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
+                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * pi * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q^2|**, are provided to illustrate the convergence toward the fundamental constant **3 / pi^2** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
             </div>
         </div>
 
         <div id="visualization-area">
              <canvas id="p5Canvas"></canvas> 
-        </div>
-
-        <div id="data-dashboard">
-            <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Euler's Totient $\phi$(q) Distribution</div>
-            </div>
-            <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Ratio Convergence: |F_Q| / Q^2 $\to$ 3 / pi^2</div>
-            </div>
-            <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Möbius Function ($\mu$(q)) Sequence</div>
-            </div>
         </div>
 
         <div id="math-prose">
@@ -328,7 +292,6 @@
 
     // Global state
     let Q_current = 45; 
-    // **CHANGE 1: INCREASED CANVAS DIMENSIONS**
     const CANVAS_W = 900; 
     const CANVAS_H = 1200; 
     
@@ -338,16 +301,18 @@
     
     // Adjusted start Y for 2D charts area
     const Y_DASHBOARD_AREA_P2D = 820; 
-    const MAIN_PLOT_RADIUS = CANVAS_W * 0.4 / 2; // For Circle visualization
-    const MAIN_PLOT_SIZE = CANVAS_W * 0.9; // For Lattice visualization
+    const Y_COMPUTATIONAL_AREA_P2D = 550; // New area for computational results
+    const MAIN_PLOT_Y_OFFSET = -CANVAS_H * 0.17; 
+    const MAIN_PLOT_RADIUS = CANVAS_W * 0.4 / 2; 
+    const MAIN_PLOT_SIZE = CANVAS_W * 0.75; 
 
     let dataCache = {};
     let pointSize = 2.5;
     let axisColor;
     let bgColor;
-    let dashboardGraphics; // p5.Graphics buffer for 2D UI/Charts
+    let dashboardGraphics; 
     
-    // --- Math Utilities (Functions unchanged, assumed working) ---
+    // --- Math Utilities (Functions assumed working) ---
     function gcd(a, b) { 
         if (a === 0) return b;
         while (b) { [a, b] = [b, a % b]; }
@@ -412,7 +377,7 @@
         return sum;
     }
 
-    // --- Data Generation (Functions unchanged) ---
+    // --- Data Generation ---
     function getPointsAndProperties(Q) {
         let fractions = []; let reducedCoprimeCount = 0; 
         let Q_phi_values = []; let ratio_history = []; let mobius_history = [];
@@ -459,23 +424,19 @@
     }
     
     //================================================================================================
-    // [P5.JS CORE: WEBGL IMPLEMENTATION FOR PERFORMANCE] 
+    // [P5.JS CORE: WEBGL IMPLEMENTATION] 
     //================================================================================================
 
     function setup() {
-        // Use WEBGL for GPU rendering with new dimensions
         let canvas = createCanvas(CANVAS_W, CANVAS_H, WEBGL); 
         canvas.id('p5Canvas'); 
         canvas.parent('visualization-area');
         colorMode(HSB, 360, 100, 100);
         noLoop(); 
         
-        // Create a separate P2D buffer for 2D charts and UI overlay
-        // **CHANGE 2: Updated P2D buffer size**
         dashboardGraphics = createGraphics(CANVAS_W, CANVAS_H, P2D);
         dashboardGraphics.colorMode(HSB, 360, 100, 100);
 
-        // Initial setup
         document.getElementById('limitQ').max = 250;
         document.getElementById('limitQ').value = Q_current;
         resetSketch(); 
@@ -490,7 +451,6 @@
              document.getElementById('limitQ').max = 100;
         }
         
-        // Limit Q if visualization domain changes its max value
         if (Q_current > parseInt(document.getElementById('limitQ').max)) {
             Q_current = parseInt(document.getElementById('limitQ').max);
             document.getElementById('limitQ').value = Q_current;
@@ -503,13 +463,10 @@
     function updateVisualization() {
         Q_current = parseInt(document.getElementById('limitQ').value);
         pointSize = parseFloat(document.getElementById('pointSize').value);
-        const sat_val = parseInt(document.getElementById('saturation').value);
-        const bright_val = parseInt(document.getElementById('brightness').value);
 
         document.getElementById('limitQValue').textContent = Q_current;
         document.getElementById('propQ').textContent = Q_current;
         
-        // Define p5 colors from CSS variables
         const style = getComputedStyle(document.body);
         axisColor = color(style.getPropertyValue('--color-text'));
         bgColor = color(style.getPropertyValue('--color-control-bg'));
@@ -521,10 +478,10 @@
         const data = dataCache[Q_current];
         const finalRatio = data.ratio_history[data.ratio_history.length - 1].ratio;
 
-        // Update data panel
-        document.getElementById('propFarey').textContent = data.FareyCount;
-        document.getElementById('propReducedCoprime').textContent = data.B_Q;
-        document.getElementById('propTotalCoprime').textContent = data.A_Q;
+        // Update data panel (HTML)
+        document.getElementById('propFarey').textContent = data.FareyCount.toLocaleString();
+        document.getElementById('propReducedCoprime').textContent = data.B_Q.toLocaleString();
+        document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
         redraw();
@@ -535,7 +492,7 @@
         const data = dataCache[Q_current];
         const visMode = document.getElementById('visMode').value;
         
-        // 1. WEBGL Setup: Clear buffer and draw 3D background plane
+        // 1. WEBGL Setup
         clear();
         push();
         translate(0, 0, -100); 
@@ -544,14 +501,11 @@
         plane(CANVAS_W * 2, CANVAS_H * 2); 
         pop();
         
-        // Set stroke for all points in the main visualization
         strokeWeight(pointSize);
         
-        // 2. Draw Main Visualization (3D centered)
+        // 2. Draw Main Visualization
         push();
-        // Shift up for the title area at the top
-        const mainPlotYOffset = -CANVAS_H * 0.22; 
-        translate(0, mainPlotYOffset, 0); 
+        translate(0, MAIN_PLOT_Y_OFFSET, 0); 
         
         if (visMode === 'circle') {
             drawUnitCircleWebGL(data.fractions);
@@ -560,13 +514,13 @@
         }
         pop();
         
-        // 3. Draw 2D UI Overlay (Title, Legend, Charts)
+        // 3. Draw 2D UI Overlay (Title, Legend, Live Metrics, Charts)
         drawUIOverlay(dashboardGraphics, data, visMode);
         image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
     }
     
+    // --- COLORING LOGIC (Unchanged) ---
     function getPointColor(p, scheme, isLattice) {
-        // --- Color Mapping Logic (Uses p5 color objects) ---
         if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) { return axisColor; }
         const sat_val = parseInt(document.getElementById('saturation').value);
         const bright_val = parseInt(document.getElementById('brightness').value);
@@ -590,12 +544,11 @@
         return color(hue, sat_val, bright_val);
     }
     
-    // --- Visualization 1: Unit Circle (WEBGL) ---
+    // --- VISUALIZATION DRAWING (Unchanged) ---
     function drawUnitCircleWebGL(fractions) {
         push();
         const radius = MAIN_PLOT_RADIUS; 
         
-        // Draw the circle outline (torus in 3D)
         push();
         stroke(axisColor); noFill(); strokeWeight(1);
         rotateX(PI/2); 
@@ -604,7 +557,6 @@
 
         const scheme = document.getElementById('colorScheme').value;
         
-        // Draw Points: GPU batching
         beginShape(POINTS);
         for (let p of fractions) {
             const angle = -2 * PI * p.value; 
@@ -618,12 +570,10 @@
         pop();
     }
 
-    // --- Visualization 2: Coprime Lattice (WEBGL) ---
     function drawCoprimeLatticeWebGL(latticePoints) {
         push();
-        const plotSize = MAIN_PLOT_SIZE * 0.75; // Make it a bit smaller than 900 for padding
+        const plotSize = MAIN_PLOT_SIZE * 0.75; 
         
-        // Translate origin to bottom-left corner of the logical plot area
         translate(-plotSize/2, plotSize/2, 0); 
         
         stroke(axisColor); strokeWeight(1);
@@ -633,7 +583,6 @@
         const scheme = document.getElementById('colorScheme').value;
         const scaleFactor = plotSize / Q_current;
         
-        // Draw Points: GPU batching
         beginShape(POINTS);
         for (let p of latticePoints) {
             const x = p.a * scaleFactor;
@@ -646,25 +595,26 @@
         pop();
     }
     
-    // --- DRAW 2D UI OVERLAY (Title, Legend, Charts) ---
+    // --- DRAW 2D UI OVERLAY ---
     function drawUIOverlay(pg, data, visMode) {
         pg.clear();
         pg.background(0, 0, 0, 0); 
         
-        // **NEW: Draw Title and Legend at the top**
+        // 1. Title and Legend
         drawLegendAndTitleP2D(pg, visMode);
 
-        // Draw dashboard charts below the main visualization
+        // **MODIFIED: 2. Computational Results Display for Export**
+        drawLiveDataDisplayP2D(pg, data, visMode);
+
+        // 3. Draw dashboard charts 
         pg.push(); pg.translate(10, Y_DASHBOARD_AREA_P2D); drawPhiBarChartP2D(pg, data.Q_phi_values); pg.pop();
         pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
         pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
     }
     
-    // **NEW: Function to draw Title and Detailed Legend**
     function drawLegendAndTitleP2D(pg, visMode) {
         const scheme = document.getElementById('colorScheme').value;
         const Q = Q_current;
-        const radius = MAIN_PLOT_RADIUS.toFixed(0);
         
         // --- 1. Title ---
         pg.fill(axisColor);
@@ -719,7 +669,64 @@
         pg.text(colorRangeText, CANVAS_W / 2 + 10, legendY + 65);
     }
 
-    // --- CHART DRAWING FUNCTIONS (Adjusted positions for new canvas size) ---
+    // **MODIFIED: Function to draw Core Computational Results for Export**
+    function drawLiveDataDisplayP2D(pg, data, visMode) {
+        const x = CANVAS_W * 0.05;
+        const y = Y_COMPUTATIONAL_AREA_P2D; 
+        const w = CANVAS_W * 0.9;
+        const h = 75;
+        const colW = w / 4;
+        
+        pg.fill(bgColor);
+        pg.stroke(axisColor);
+        pg.rect(x, y, w, h, 5);
+        
+        pg.fill(axisColor);
+        pg.textSize(14);
+        pg.textAlign(CENTER, TOP);
+
+        // --- Box 1: Farey Sequence Cardinality |F_Q| ---
+        pg.textStyle(BOLD);
+        pg.text(`Farey Sequence |F${Q_current}|:`, x + colW/2, y + 10);
+        pg.textStyle(NORMAL);
+        pg.fill(color('#E67E22'));
+        pg.text(data.FareyCount.toLocaleString(), x + colW/2, y + 35);
+        pg.fill(axisColor);
+
+        // --- Box 2: Count of Reduced Fractions B_Q ---
+        pg.textStyle(BOLD);
+        pg.text(`Reduced Fractions B${Q_current}:`, x + colW*1.5, y + 10);
+        pg.textStyle(NORMAL);
+        pg.fill(color('#0077B6'));
+        pg.text(data.B_Q.toLocaleString(), x + colW*1.5, y + 35);
+        pg.fill(axisColor);
+
+        // --- Box 3: Total Coprime Pairs A_Q ---
+        pg.textStyle(BOLD);
+        pg.text(`Coprime Pairs A${Q_current}:`, x + colW*2.5, y + 10);
+        pg.textStyle(NORMAL);
+        pg.fill(color('#9B59B6'));
+        pg.text(data.A_Q.toLocaleString(), x + colW*2.5, y + 35);
+        pg.fill(axisColor);
+
+        // --- Box 4: Asymptotic Ratio |F_Q| / Q^2 ---
+        pg.textStyle(BOLD);
+        pg.text(`Ratio |F${Q_current}| / Q²:`, x + colW*3.5, y + 10);
+        pg.textStyle(NORMAL);
+        pg.fill(color('#2ECC71'));
+        pg.text(data.ratio_history[data.ratio_history.length - 1].ratio.toFixed(6), x + colW*3.5, y + 35);
+        pg.fill(axisColor);
+        pg.textSize(10);
+        pg.text(`Target: ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55);
+
+        // Draw vertical separators
+        pg.stroke(axisColor);
+        pg.line(x + colW, y + 5, x + colW, y + h - 5);
+        pg.line(x + colW*2, y + 5, x + colW*2, y + h - 5);
+        pg.line(x + colW*3, y + 5, x + colW*3, y + h - 5);
+    }
+    
+    // --- CHART DRAWING FUNCTIONS (Positions relative to Y_DASHBOARD_AREA_P2D) ---
     
     function drawPhiBarChartP2D(pg, phiData) {
         const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
@@ -740,6 +747,12 @@
             pg.rect(i * barW, 0, barW * 0.9, -barHeight);
         }
         pg.pop();
+        
+        // Title for the chart
+        pg.fill(axisColor);
+        pg.textSize(14);
+        pg.textAlign(CENTER, TOP);
+        pg.text("Euler's Totient $\\phi$(q) Distribution", chartW / 2, 5);
     }
     
     function drawRatioConvergenceP2D(pg, ratioHistory) {
@@ -749,9 +762,13 @@
         const minY = 0.28; const maxY = Math.max(...ratioHistory.map(d => d.ratio), 0.5);
         const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
         
+        // Asymptotic Line
         pg.stroke(color('#E67E22')); pg.strokeWeight(2);
         pg.line(0, asymptoticY, chartW, asymptoticY);
-        
+        pg.fill(axisColor); pg.textSize(10); pg.textAlign(RIGHT, CENTER);
+        pg.text(`Target ${ZETA2_INV_HALF.toFixed(4)}`, chartW - 5, asymptoticY);
+
+        // Data Line
         pg.noFill(); pg.stroke(color('#0077B6')); pg.strokeWeight(2); 
         
         pg.beginShape();
@@ -762,6 +779,12 @@
             pg.vertex(x, y);
         }
         pg.endShape();
+        
+        // Title for the chart
+        pg.fill(axisColor);
+        pg.textSize(14);
+        pg.textAlign(CENTER, TOP);
+        pg.text("Ratio Convergence: $|F_Q| / Q^2 \\to 3 / \\pi^2$", chartW / 2, 5);
     }
     
     function drawMobiusSequenceP2D(pg, mobiusData) {
@@ -796,6 +819,12 @@
                 pg.line(prevX, prevM_y, x, M_y);
             }
         }
+        
+        // Title for the chart
+        pg.fill(axisColor);
+        pg.textSize(14);
+        pg.textAlign(CENTER, TOP);
+        pg.text("Mertens Function $M(Q) = \\Sigma\\mu(q)$", chartW / 2, 5);
     }
     
     // --- UI Control and Export Functions ---
@@ -806,14 +835,13 @@
     }
     
     function exportPNG() { 
-        // **ENHANCED EXPORT FILENAME**
         const visMode = document.getElementById('visMode').value;
-        const filename = visMode + '_Q' + Q_current + '_Export.png';
+        // **Updated Filename**
+        const filename = visMode + '_Q' + Q_current + '_Export_WithResults.png';
         saveCanvas(filename, 'png'); 
     }
     
     function exportCSV() { 
-        // ... (data export logic - unchanged) ...
         const data = dataCache[Q_current];
         let csvContent;
         let filename;
