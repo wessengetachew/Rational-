@@ -132,8 +132,8 @@
             cursor: pointer;
             font-weight: 500;
             transition: background-color 0.2s;
-            margin-top: 5px; 
-            width: 100%; 
+            margin-top: 5px; /* Added spacing */
+            width: 100%; /* Make buttons full width for better touch targets */
         }
         .button-group button:hover { background-color: #005A99; }
         
@@ -326,12 +326,6 @@
     let bgColor;
     let dashboardGraphics; 
     
-    // --- TOOLTIP STATE ---
-    let hoveredPoint = null; 
-    let hoveredPointScreenX = 0;
-    let hoveredPointScreenY = 0;
-    // ---------------------
-
     // --- Math Utilities (Functions assumed working) ---
     function gcd(a, b) { 
         if (a === 0) return b;
@@ -418,7 +412,6 @@
                 }
             }
             if (q === 1) {
-                // Fractions 0/1 and 1/1 are included in the farey sequence
                 fractions.push({ a: 0, q: 1, value: 0, phi: 1, mu: 1, sigma: 1, omega: 0 });
                 fractions.push({ a: 1, q: 1, value: 1, phi: 1, mu: 1, sigma: 1, omega: 0 });
             }
@@ -436,8 +429,7 @@
                 const g = gcd(a, b);
                 latticePoints.push({
                     a: a, b: b, gcd_val: g, is_coprime: (g === 1),
-                    q_val: b, // using b as the denominator in terms of prime factorization functions
-                    mu: mobius(b), omega: omega(b), sigma: divisorSum(b),
+                    prop_value: g, mu: mobius(g), omega: omega(g), sigma: divisorSum(g),
                 });
             }
         }
@@ -462,9 +454,6 @@
         document.getElementById('limitQ').max = 250;
         document.getElementById('limitQ').value = Q_current;
         resetSketch(); 
-        
-        // Enable continuous loop for mouse interaction / tooltips
-        loop(); 
     }
     
     function resetSketch() {
@@ -493,13 +482,8 @@
         document.getElementById('propQ').textContent = Q_current;
         
         const style = getComputedStyle(document.body);
-        // p5 color objects must be recreated if the theme changes
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const textColorHex = isDarkMode ? '#D7DBDD' : '#17202A';
-        const controlBgHex = isDarkMode ? '#2C2C2C' : '#FFFFFF';
-        
-        axisColor = color(textColorHex);
-        bgColor = color(controlBgHex);
+        axisColor = color(style.getPropertyValue('--color-text'));
+        bgColor = color(style.getPropertyValue('--color-control-bg'));
 
         if (!dataCache[Q_current]) {
             dataCache[Q_current] = getPointsAndProperties(Q_current);
@@ -514,7 +498,7 @@
         document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
-        // Since we enabled loop() in setup, draw() is called automatically
+        redraw();
     }
     
     function draw() {
@@ -537,75 +521,16 @@
         push();
         translate(0, MAIN_PLOT_Y_OFFSET, 0); 
         
-        // Calculate the center coordinates for projection reference
-        const centerX = 0;
-        const centerY = MAIN_PLOT_Y_OFFSET;
-
         if (visMode === 'circle') {
             drawUnitCircleWebGL(data.fractions);
-            hoveredPoint = findClosestPoint(data.fractions, centerX, centerY, 'circle');
         } else {
             drawCoprimeLatticeWebGL(data.latticePoints);
-            hoveredPoint = findClosestPoint(data.latticePoints, centerX, centerY, 'lattice');
         }
         pop();
         
-        // 3. Draw 2D UI Overlay (Title, Legend, Live Metrics, Charts, and Tooltip)
+        // 3. Draw 2D UI Overlay (Title, Legend, Live Metrics, Charts)
         drawUIOverlay(dashboardGraphics, data, visMode);
         image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
-    }
-    
-    // --- POINT PICKING LOGIC (New Function) ---
-    function findClosestPoint(dataPoints, centerX, centerY, mode) {
-        const mouseXCanvas = mouseX - CANVAS_W / 2;
-        const mouseYCanvas = mouseY - CANVAS_H / 2;
-        let closestPoint = null;
-        let minDistanceSq = 100; // Search radius squared (adjust this value as needed)
-        
-        const plotSize = MAIN_PLOT_SIZE * 0.75; 
-        const radius = MAIN_PLOT_RADIUS; 
-        const scaleFactor = plotSize / Q_current;
-
-        for (let p of dataPoints) {
-            let px, py; 
-
-            if (mode === 'circle') {
-                // 3D coordinates of the point on the unit circle (z-plane)
-                const angle = -2 * PI * p.value; 
-                const x_3d = radius * cos(angle);
-                const y_3d = 0; // Always on the XZ plane (Y=0) in this setup
-                const z_3d = radius * sin(angle); 
-                
-                // Project 3D coordinate to 2D screen coordinate
-                // Use screenX/screenY to get 2D projection of 3D points
-                px = screenX(x_3d, y_3d + centerY, z_3d); 
-                py = screenY(x_3d, y_3d + centerY, z_3d);
-                
-            } else { // mode === 'lattice'
-                // 3D coordinates (flat on XZ plane, shifted Y for the plot position)
-                const x_3d = p.a * scaleFactor - plotSize/2;
-                const y_3d = -(p.b * scaleFactor - plotSize/2) + MAIN_PLOT_Y_OFFSET; 
-                const z_3d = 0; 
-                
-                // Project 3D coordinate to 2D screen coordinate
-                px = screenX(x_3d, y_3d, z_3d); 
-                py = screenY(x_3d, y_3d, z_3d);
-            }
-            
-            // Calculate distance in 2D screen space
-            const dx = px - mouseXCanvas;
-            const dy = py - mouseYCanvas;
-            const distSq = dx * dx + dy * dy;
-
-            if (distSq < minDistanceSq) {
-                minDistanceSq = distSq;
-                closestPoint = p;
-                // Store screen position for drawing the tooltip in P2D
-                hoveredPointScreenX = px;
-                hoveredPointScreenY = py;
-            }
-        }
-        return closestPoint;
     }
     
     // --- COLORING LOGIC (Unchanged) ---
@@ -614,75 +539,48 @@
         const sat_val = parseInt(document.getElementById('saturation').value);
         const bright_val = parseInt(document.getElementById('brightness').value);
 
-        const target = isLattice ? p.q_val : p.q;
-
         if (scheme === 'mobius') {
             if (p.mu === 1) return color(220, 80, 95); 
             if (p.mu === -1) return color(0, 80, 95);  
             return color(0, 0, 50); 
         }
         if (scheme === 'omega') {
-            const maxOmega = Q_current > 100 ? 5 : 3;
-            let hue = map(isLattice ? p.omega : omega(target), 0, maxOmega, 180, 300); 
+            const maxOmega = Math.max(3, ...dataCache[Q_current].fractions.map(f => f.omega));
+            let hue = map(p.omega, 0, maxOmega, 180, 300); 
             return color(hue, sat_val, bright_val);
         }
-        
-        let val;
-        let maxVal = Q_current;
-        let minVal = 1;
-        
-        if (scheme === 'divisor_sum') {
-            val = isLattice ? p.sigma : p.sigma; 
-            maxVal = divisorSum(Q_current); 
-        } else if (scheme === 'gcd_coprime' && isLattice) {
-            return p.is_coprime ? color(120, sat_val, bright_val) : color(30, sat_val, bright_val);
-        } else {
-            val = target;
-        }
-
+        let propValues = isLattice ? dataCache[Q_current].latticePoints.map(p => p.prop_value) : dataCache[Q_current].fractions.map(p => p.q);
+        let minVal = Math.min(...propValues.filter(v => v > 0)); 
+        let maxVal = Math.max(...propValues);
+        if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
+        const val = isLattice ? p.prop_value : (scheme === 'divisor_sum' ? p.sigma : p.q);
         let hue = map(val, minVal, maxVal, 0, 300);
         return color(hue, sat_val, bright_val);
     }
     
-    // --- VISUALIZATION DRAWING (Highlighted Hovered Point) ---
+    // --- VISUALIZATION DRAWING (Unchanged) ---
     function drawUnitCircleWebGL(fractions) {
         push();
         const radius = MAIN_PLOT_RADIUS; 
-        const scheme = document.getElementById('colorScheme').value;
         
-        // Draw the circle guide
         push();
         stroke(axisColor); noFill(); strokeWeight(1);
         rotateX(PI/2); 
         torus(radius, 1, 100, 100); 
         pop();
 
+        const scheme = document.getElementById('colorScheme').value;
+        
         beginShape(POINTS);
         for (let p of fractions) {
             const angle = -2 * PI * p.value; 
             const x = radius * cos(angle);
             const z = radius * sin(angle); 
             
-            // Draw regular point
             stroke(getPointColor(p, scheme, false));
             vertex(x, 0, z); 
         }
         endShape();
-        
-        // Highlight Hovered Point
-        if (hoveredPoint && hoveredPoint.q) {
-            const p = hoveredPoint;
-            const angle = -2 * PI * p.value; 
-            const x = radius * cos(angle);
-            const z = radius * sin(angle);
-            
-            push();
-            stroke(color(0, 100, 100)); // Bright yellow-red highlight
-            strokeWeight(pointSize * 2.5);
-            point(x, 0, z);
-            pop();
-        }
-        
         pop();
     }
 
@@ -692,17 +590,10 @@
         
         translate(-plotSize/2, plotSize/2, 0); 
         
-        // Draw Axes
         stroke(axisColor); strokeWeight(1);
-        line(0, 0, plotSize, 0); // X-axis (a)
-        line(0, 0, 0, -plotSize); // Y-axis (b)
-        // Label axes 
-        const axisOffset = 10;
-        textSize(16); textAlign(LEFT, CENTER);
-        text('a', plotSize + axisOffset, 0);
-        textAlign(CENTER, BOTTOM);
-        text('b', 0, -plotSize - axisOffset);
-        
+        line(0, 0, plotSize, 0); 
+        line(0, 0, 0, -plotSize); 
+
         const scheme = document.getElementById('colorScheme').value;
         const scaleFactor = plotSize / Q_current;
         
@@ -711,25 +602,10 @@
             const x = p.a * scaleFactor;
             const y = -p.b * scaleFactor; 
             
-            // Draw regular point
             stroke(getPointColor(p, scheme, true));
             vertex(x, y, 0); 
         }
         endShape();
-        
-        // Highlight Hovered Point
-        if (hoveredPoint && hoveredPoint.a && hoveredPoint.b) {
-            const p = hoveredPoint;
-            const x = p.a * scaleFactor;
-            const y = -p.b * scaleFactor; 
-            
-            push();
-            stroke(color(0, 100, 100)); // Bright yellow-red highlight
-            strokeWeight(pointSize * 2.5);
-            point(x, y, 0);
-            pop();
-        }
-        
         pop();
     }
     
@@ -748,65 +624,8 @@
         pg.push(); pg.translate(10, Y_DASHBOARD_AREA_P2D); drawPhiBarChartP2D(pg, data.Q_phi_values); pg.pop();
         pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
         pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
-        
-        // 4. Draw Tooltip
-        if (hoveredPoint) {
-            drawTooltipP2D(pg, hoveredPoint, visMode);
-        }
     }
     
-    // --- TOOLTIP DRAWING (New Function) ---
-    function drawTooltipP2D(pg, p, mode) {
-        let lines = [];
-        
-        if (mode === 'circle') {
-            lines.push(`Fraction: ${p.a}/${p.q}`);
-            lines.push(`Value: ${p.value.toFixed(6)}`);
-            lines.push(`\u03C6(q): ${p.phi}`); // Unicode phi
-            lines.push(`\u03BC(q): ${p.mu}`); // Unicode mu
-            lines.push(`\u03C3(q): ${p.sigma}`); // Unicode sigma
-        } else { // lattice
-            lines.push(`Coordinates: (${p.a}, ${p.b})`);
-            lines.push(`GCD(a, b): ${p.gcd_val} ${p.is_coprime ? '(Coprime)' : ''}`);
-            lines.push(`\u03C6(b): ${phi(p.b)}`);
-            lines.push(`\u03BC(b): ${p.mu}`); 
-            lines.push(`\u03C3(b): ${p.sigma}`);
-        }
-
-        const padding = 8;
-        pg.textSize(12);
-        
-        // Measure text width for accurate box sizing
-        let maxW = 0;
-        for (let line of lines) {
-            maxW = Math.max(maxW, pg.textWidth(line));
-        }
-
-        const boxW = maxW + padding * 2;
-        const boxH = lines.length * 15 + padding * 2; 
-
-        // Screen position (relative to the top-left of the P2D canvas)
-        let x = hoveredPointScreenX + CANVAS_W / 2 + 10;
-        let y = hoveredPointScreenY + CANVAS_H / 2 - boxH / 2;
-        
-        // Boundary checks to keep tooltip on screen
-        if (x + boxW > CANVAS_W) x = hoveredPointScreenX + CANVAS_W / 2 - boxW - 10;
-        if (y < 0) y = 0;
-        if (y + boxH > Y_COMPUTATIONAL_AREA_P2D) y = Y_COMPUTATIONAL_AREA_P2D - boxH;
-
-        // Draw box
-        pg.fill(0, 0, 10); // Dark background for contrast
-        pg.stroke(axisColor);
-        pg.rect(x, y, boxW, boxH, 3);
-        
-        // Draw text
-        pg.fill(axisColor);
-        pg.textAlign(LEFT, TOP);
-        for (let i = 0; i < lines.length; i++) {
-            pg.text(lines[i], x + padding, y + padding + i * 15);
-        }
-    }
-
     function drawLegendAndTitleP2D(pg, visMode) {
         const scheme = document.getElementById('colorScheme').value;
         const Q = Q_current;
@@ -1028,7 +847,7 @@
     function toggleDarkMode() {
         const isDarkMode = document.body.classList.toggle('dark-mode');
         document.getElementById('darkModeToggle').textContent = isDarkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
-        updateVisualization(); // Ensure colors update immediately
+        updateVisualization();
     }
     
     function exportPNG() { 
@@ -1037,6 +856,7 @@
         saveCanvas(filename, 'png'); 
     }
     
+    // **MODIFIED: Now accepts a dataType argument to export specific data sets.**
     function exportCSV(dataType) { 
         const data = dataCache[Q_current];
         let csvContent = "";
@@ -1056,7 +876,7 @@
                 }
                 filename = "Farey_Angles_Q" + Q_current + ".csv";
             } else {
-                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_b,Sigma_b\n";
+                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_gcd,Sigma_gcd\n";
                 for (let p of data.latticePoints) {
                     csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${p.mu},${p.sigma}\n`;
                 }
