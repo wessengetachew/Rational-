@@ -44,7 +44,7 @@
         #container {
             display: flex;
             min-height: 100vh;
-            max-width: 1400px; /* Max width for academic look */
+            max-width: 1400px; 
             margin: 0 auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
@@ -156,7 +156,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        /* Dashboard Styling (Simplified for P2D rendering) */
+        /* Dashboard Styling */
         #data-dashboard {
              display: flex;
              justify-content: space-between;
@@ -189,6 +189,18 @@
              border-left: 5px solid var(--color-secondary);
              border-radius: 5px;
         }
+        .equation-block {
+            font-family: 'Courier New', monospace;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .dark-mode .equation-block {
+            background-color: #333;
+            color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -214,10 +226,10 @@
         </div>
 
         <div class="control-group">
-            <label for="limitQ">Limit $\mathbf{Q}$ (Maximum Denominator / Axis Extent):</label>
+            <label for="limitQ">Limit Q (Maximum Denominator / Axis Extent):</label>
             <input type="range" id="limitQ" min="2" max="250" value="45" step="1" oninput="updateVisualization()">
             <span id="limitQValue" class="property-value">45</span>
-            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with $\frac{6}{\pi^2} Q^2$.</p>
+            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with 6 / pi^2 * Q^2.</p>
 
             <label for="pointSize">Point Size (WebGL `strokeWeight`):</label>
             <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
@@ -226,11 +238,11 @@
         <div class="control-group">
             <label for="colorScheme">Color Mapping Function:</label>
             <select id="colorScheme" onchange="updateVisualization()">
-                <option value="denominator">By Denominator ($q$)</option>
-                <option value="gcd_coprime">By GCD ($=1$ vs $>1$)</option>
-                <option value="mobius">By Möbius $\mu(q)$</option>
-                <option value="omega">By Distinct Prime Count $\omega(q)$</option>
-                <option value="divisor_sum">By Divisor Sum $\sigma(q)$</option>
+                <option value="denominator">By Denominator (q)</option>
+                <option value="gcd_coprime">By GCD (=1 vs >1)</option>
+                <option value="mobius">By Möbius mu(q)</option>
+                <option value="omega">By Distinct Prime Count omega(q)</option>
+                <option value="divisor_sum">By Divisor Sum sigma(q)</option>
                 <option value="none">None (Uniform Color)</option>
             </select>
             
@@ -242,22 +254,22 @@
         </div>
         
         <div class="control-group">
-            <h3><span style="color: var(--color-secondary);">II.</span> Computational Results ($Q=\mathbf{\text{<span id="propQ" class="property-value"></span>}}$)</h3>
+            <h3><span style="color: var(--color-secondary);">II.</span> Computational Results (Q=<span id="propQ" class="property-value"></span>)</h3>
             
-            <p class="property-label">Farey Sequence Cardinality $|F_Q|$:</p> 
+            <p class="property-label">Farey Sequence Cardinality |F_Q|:</p> 
             <strong id="propFarey" class="property-value"></strong>
             
-            <p class="property-label">Count of Reduced Fractions $B_Q$:</p> 
+            <p class="property-label">Count of Reduced Fractions B_Q:</p> 
             <strong id="propReducedCoprime" class="property-value"></strong>
             
-            <p class="property-label">Total Coprime Pairs $A_Q$ in $[1, Q] \times [1, Q]$:</p> 
+            <p class="property-label">Total Coprime Pairs A_Q in [1, Q] x [1, Q]:</p> 
             <strong id="propTotalCoprime" class="property-value"></strong>
             
             <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
             
-            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: $|F_Q|/Q^2$</p> 
+            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: |F_Q| / Q^2</p> 
             <strong id="propRatio" class="property-value"></strong>
-            <p style="font-size: 0.9em; color: #555;">Target Asymptote ($3/\pi^2$): $\mathbf{0.30396}$</p>
+            <p style="font-size: 0.9em; color: #555;">Target Asymptote (3 / pi^2): 0.30396</p>
         </div>
 
         <div class="control-group">
@@ -273,35 +285,37 @@
         
         <div id="title-section">
             <h1>The Asymptotic Density of Coprime Integers</h1>
-            <h2 class="subtitle">A Visual Framework for $\zeta(2)$, Farey Sequences, and Multiplicative Functions</h2>
+            <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
             <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs $(a, q)$ where $\gcd(a, q)=1$. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles $2\pi a/q$) and the **coprime lattice** ($a \times q$). Computational results, including the sequence cardinality $|F_Q|$ and the ratio $|F_Q|/Q^2$, are provided to illustrate the convergence toward the fundamental constant $\mathbf{3/\pi^2} = 1/(2\zeta(2))$, connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
+                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * pi * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q^2**, are provided to illustrate the convergence toward the fundamental constant **3 / pi^2** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
             </div>
         </div>
 
         <div id="visualization-area">
-             <h3 id="chartTitle">Rational Angles on the Unit Circle ($q \le Q$)</h3>
+             <h3 id="chartTitle">Farey Sequence Angles on the Unit Circle (q $\le$ Q)</h3>
              <canvas id="p5Canvas"></canvas> 
         </div>
 
         <div id="data-dashboard">
             <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Euler's Totient $\phi(q)$ Distribution</div>
+                <div class="dashboard-chart-title">Euler's Totient $\phi$(q) Distribution</div>
             </div>
             <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Ratio Convergence: $|F_Q|/Q^2 \to 3/\pi^2$</div>
+                <div class="dashboard-chart-title">Ratio Convergence: |F_Q| / Q^2 $\to$ 3 / pi^2</div>
             </div>
             <div class="dashboard-chart-box">
-                <div class="dashboard-chart-title">Möbius Function ($\mu(q)$) Sequence</div>
+                <div class="dashboard-chart-title">Möbius Function ($\mu$(q)) Sequence</div>
             </div>
         </div>
 
         <div id="math-prose">
-            <h3>Theoretical Background: The Constant $\frac{6}{\pi^2}$</h3>
-            <p>The probability that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at $s=2$.</p>
-            <p>This result is derived from the **Euler product formula** for the Zeta function:</p>
-            $$ P(\gcd(a, b)=1) = \frac{1}{\zeta(2)} = \frac{1}{\sum_{n=1}^{\infty} \frac{1}{n^2}} = \frac{6}{\pi^2} \approx 0.6079 $$
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the $Q \times Q$ square converges to $6/\pi^2$; in the unit circle plot, the cardinality of the Farey sequence $|F_Q|$ grows asymptotically as $|F_Q| \sim \frac{3}{\pi^2} Q^2$.</p>
+            <h3>Theoretical Background: The Constant 6 / pi^2</h3>
+            <p>The probability P that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at s=2.</p>
+            <p>This result is derived from the **Euler product formula** for the Zeta function. The probability P is:</p>
+            <div class="equation-block">
+                P(gcd(a, b) = 1) = 1 / $\zeta$(2) = 1 / [ Sum from n=1 to infinity of (1 / n^2) ] = 6 / pi^2 $\approx$ 0.6079
+            </div>
+            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the Q x Q square converges to **6 / pi^2**; in the unit circle plot, the cardinality of the Farey sequence **|F_Q|** grows asymptotically as **|F_Q| $\sim$ (3 / pi^2) * Q^2**.</p>
         </div>
     </div>
 </div> <script>
@@ -465,10 +479,10 @@
         const chartTitle = document.getElementById('chartTitle');
         
         if (visMode === 'circle') {
-             chartTitle.innerHTML = 'Farey Sequence Angles on the Unit Circle ($q \le Q$)';
+             chartTitle.innerHTML = 'Farey Sequence Angles on the Unit Circle (q $\le$ Q)';
              document.getElementById('limitQ').max = 250; 
         } else {
-             chartTitle.innerHTML = 'Coprime Pairs Density (Lattice Plot $\gcd(a, b)=g$)';
+             chartTitle.innerHTML = 'Coprime Pairs Density (Lattice Plot gcd(a, b)=g)';
              document.getElementById('limitQ').max = 100;
         }
         
