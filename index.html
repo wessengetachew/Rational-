@@ -8,12 +8,13 @@
     <style>
         /* Base Styling */
         :root {
-            --color-primary: #34495e; /* Dark Blue-Gray */
-            --color-secondary: #2ecc71; /* Emerald Green */
-            --color-accent: #e74c3c; /* Red */
-            --color-background: #f8f9fa;
+            /* Color Palette */
+            --color-primary: #1e3a5f; /* Deep Navy Blue */
+            --color-secondary: #00bcd4; /* Cyan/Teal (Academic Accent) */
+            --color-accent: #ff9800; /* Amber/Orange for emphasis */
+            --color-background: #f7f9fc; /* Light, clean background */
             --color-control-bg: #ffffff;
-            --color-border: #dcdcdc;
+            --color-border: #e0e6ed;
             --font-family-sans: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
@@ -34,9 +35,9 @@
         
         #controls { 
             width: 350px; 
-            padding: 25px; 
+            padding: 25px 30px; 
             background: var(--color-control-bg); 
-            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+            box-shadow: 6px 0 15px rgba(0,0,0,0.08); /* Stronger shadow */
             overflow-y: auto;
             flex-shrink: 0;
         }
@@ -46,101 +47,186 @@
             display: flex; 
             flex-direction: column;
             align-items: center; 
-            padding: 25px;
+            padding: 30px;
         }
 
         /* Typography */
         h1 {
             color: var(--color-primary);
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--color-secondary);
-            padding-bottom: 5px;
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            border-bottom: 3px solid var(--color-secondary);
+            padding-bottom: 8px;
         }
 
         h2 { 
             color: var(--color-primary); 
-            font-size: 1.4em;
-            margin-top: 20px;
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
             border-bottom: 1px solid var(--color-border);
             padding-bottom: 5px;
         }
-
+        
         /* Control Group Styling */
         .control-group { 
             margin-bottom: 25px; 
             padding: 15px; 
             border: 1px solid var(--color-border); 
-            border-radius: 8px; 
-            background-color: #fcfcfc;
+            border-radius: 10px; /* Softer corners */
+            background-color: #fcfdff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* subtle lift */
         }
 
         label { 
             display: block; 
             margin-bottom: 8px; 
             font-weight: 600;
-            color: var(--color-primary);
+            color: #333;
+            font-size: 0.95em;
         }
-
+        
+        /* Input Styling */
         input[type=range] { 
             width: 100%; 
+            height: 8px;
             margin-bottom: 10px;
             accent-color: var(--color-secondary);
+            cursor: pointer;
         }
 
         input[type=number], select {
-            padding: 8px;
-            border: 1px solid var(--color-border);
-            border-radius: 4px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
             width: 100%;
             box-sizing: border-box;
+            background-color: #fff;
+            transition: border-color 0.2s;
+        }
+        
+        input[type=number]:focus, select:focus {
+            border-color: var(--color-secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
         }
         
         /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
         .button-group button { 
-            padding: 10px 18px; 
-            margin-right: 10px; 
+            flex-grow: 1;
+            padding: 12px 18px; 
             background-color: var(--color-secondary); 
             color: white; 
             border: none; 
-            border-radius: 4px; 
+            border-radius: 6px; 
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
         }
         .button-group button:hover { 
-            background-color: #27ae60; 
-            transform: translateY(-1px);
+            background-color: #0097a7; /* Darker teal */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .button-group button:active {
+            transform: translateY(0);
         }
 
         /* Property Display */
         .property-value { 
-            font-size: 1.1em; 
-            font-weight: bold;
+            font-size: 1.2em; 
+            font-weight: 700;
             color: var(--color-accent); 
+            display: inline-block;
+            margin-left: 5px;
         }
         
-        #propRatio { color: var(--color-secondary); }
+        #propRatio { 
+            color: var(--color-secondary); 
+            font-style: italic;
+        }
+        
+        /* Separator */
+        hr {
+            border: 0;
+            border-top: 1px dashed var(--color-border);
+            margin: 15px 0;
+        }
 
         /* Canvas Style */
+        .chart-box {
+            text-align: center;
+            background-color: var(--color-control-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Deep shadow for visual pop */
+        }
         canvas { 
             display: block; 
-            border: 1px solid var(--color-border); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            margin-top: 15px;
         }
         
-        .visualization-area {
+        /* Data Dashboard Layout */
+        #data-dashboard {
              display: flex;
-             justify-content: space-around;
+             justify-content: space-between;
              width: 100%;
-             margin-top: 20px;
+             margin-top: 30px;
+        }
+        .dashboard-chart-box {
+            width: 49%;
+            min-height: 380px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 10px;
+            border: 1px solid var(--color-border);
+        }
+        .dashboard-chart-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--color-primary);
+            padding: 5px 0;
+            border-bottom: 1px dashed #ccc;
+            margin-bottom: 10px;
         }
 
-        .chart-box {
-            width: 48%; /* Two charts side-by-side */
-            min-width: 500px;
-            text-align: center;
+
+        /* Responsive/Small Screen Adjustments */
+        @media (max-width: 1000px) {
+            #container {
+                flex-direction: column;
+            }
+            #controls {
+                width: auto;
+                max-height: 50vh;
+            }
+            #visualization {
+                padding: 10px;
+            }
+            .chart-box {
+                width: 95%;
+                min-width: 300px;
+            }
+            #data-dashboard {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .dashboard-chart-box {
+                width: 100%;
+                min-height: 300px;
+            }
         }
+
     </style>
 </head>
 <body>
@@ -149,30 +235,30 @@
 
     <div id="controls">
         <h1>Advanced Visualizer</h1>
-        <p>Explore the connection between rational numbers, geometry, and $\zeta(2)$.</p>
+        <p style="font-style: italic; color: #555;">Explore the connection between rational numbers, geometry, and the constant $\mathbf{6/\pi^2}$.</p>
 
         <div class="control-group">
-            <h2>📊 Visualization Mode</h2>
+            <h2><span style="color: var(--color-secondary);">1.</span> Visualization Mode</h2>
             <label for="visMode">Select View:</label>
             <select id="visMode" onchange="resetSketch()">
-                <option value="circle">1. Rational Angles (Unit Circle)</option>
-                <option value="lattice">2. Coprime Pairs (Lattice Plot)</option>
+                <option value="circle">Rational Angles (Unit Circle)</option>
+                <option value="lattice">Coprime Pairs (Lattice Plot)</option>
             </select>
         </div>
 
         <div class="control-group">
-            <h2>⚙️ Core Parameters</h2>
+            <h2><span style="color: var(--color-secondary);">2.</span> Core Parameters</h2>
             <label for="limitQ">Limit $\mathbf{Q}$ (Max Denominator/Axis Limit):</label>
             <input type="range" id="limitQ" min="2" max="250" value="30" step="1" oninput="updateVisualization()">
             <span id="limitQValue" class="property-value">30</span>
-            <p style="font-size: 0.85em; margin-top: 5px;">$Q$ defines the domain $[1, Q] \times [1, Q]$.</p>
+            <p style="font-size: 0.85em; margin-top: 5px; color: #777;">$Q$ defines the domain $[1, Q] \times [1, Q]$.</p>
 
             <label for="pointSize">Point Size:</label>
             <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
         </div>
 
         <div class="control-group">
-            <h2>🎨 Appearance & Coloring</h2>
+            <h2><span style="color: var(--color-secondary);">3.</span> Appearance & Coloring</h2>
             <label for="colorScheme">Coloring Scheme:</label>
             <select id="colorScheme" onchange="updateVisualization()">
                 <option value="denominator">By Denominator ($q$)</option>
@@ -189,7 +275,8 @@
         </div>
         
         <div class="control-group">
-            <h2>🔢 Calculated Properties (Q=<span id="propQ" class="property-value"></span>)</h2>
+            <h2><span style="color: var(--color-secondary);">4.</span> Calculated Properties</h2>
+            <p style="margin-top: -10px; font-weight: bold;">(Limit $Q=\mathbf{\text{<span id="propQ" class="property-value"></span>}}$)</p>
             
             <p>|F_Q| (Farey Seq. Count): <strong id="propFarey" class="property-value"></strong></p>
             <p>Reduced Coprime $B_Q$: <strong id="propReducedCoprime" class="property-value"></strong></p>
@@ -197,29 +284,45 @@
             
             <hr>
             
-            <p>Ratio $|F_Q|/Q^2$: <strong id="propRatio" class="property-value"></strong></p>
-            <p>Asymptotic Constant: $\mathbf{3/\pi^2} \approx \mathbf{0.30396}$</p>
+            <p style="font-weight: 600;">Ratio $|F_Q|/Q^2$ (Approach to $3/\pi^2$):</p> 
+            <strong id="propRatio" class="property-value"></strong>
+            <p style="font-size: 0.9em; color: #555;">Asymptotic Value: $\mathbf{3/\pi^2} \approx \mathbf{0.30396}$</p>
         </div>
 
-        <div class="control-group button-group">
-            <h2>💾 Export Data & Image</h2>
-            <button onclick="exportPNG()">Export PNG</button>
-            <button onclick="exportCSV()">Export Data (CSV)</button>
+        <div class="control-group">
+            <h2><span style="color: var(--color-secondary);">5.</span> Export Data & Image</h2>
+            <div class="button-group">
+                <button onclick="exportPNG()">Export PNG</button>
+                <button onclick="exportCSV()">Export Data (CSV)</button>
+            </div>
         </div>
     </div>
     
     <div id="visualization">
         <div class="chart-box">
-             <h2 id="chartTitle">Rational Angles on the Unit Circle</h2>
-             <canvas id="p5Canvas"></canvas> </div>
+             <h2 id="chartTitle" style="margin-top: 0; border: none; padding-bottom: 0;">Rational Angles on the Unit Circle ($q \le Q$)</h2>
+             <canvas id="p5Canvas"></canvas> 
+        </div>
+
+        <div id="data-dashboard">
+            <div class="dashboard-chart-box">
+                <div class="dashboard-chart-title">Euler's Totient $\phi(q)$ Distribution</div>
+                <div id="phi-chart-placeholder" style="text-align: center; padding-top: 100px; color: #999;">(Rendered inside the main P5.js canvas)</div>
+            </div>
+            <div class="dashboard-chart-box">
+                <div class="dashboard-chart-title">Ratio Convergence: $|F_Q|/Q^2 \to 3/\pi^2$</div>
+                <div id="ratio-chart-placeholder" style="text-align: center; padding-top: 100px; color: #999;">(Rendered inside the main P5.js canvas)</div>
+            </div>
+        </div>
     </div>
 </div> <script>
     //================================================================================================
-    // [JAVASCRIPT UTILITY LIBRARY: MATH AND NUMBER THEORY] (Approx. 500 lines)
+    // [JAVASCRIPT UTILITY LIBRARY: MATH AND NUMBER THEORY] 
     //================================================================================================
     
     const PI = Math.PI;
     const ZETA2_INV = 6 / (PI * PI); // ~0.6079
+    const ZETA2_INV_HALF = ZETA2_INV / 2; // ~0.30396 (3/pi^2)
 
     /**
      * @section Math Utilities
@@ -269,7 +372,7 @@
         if (n === 0) return 0;
         let result = n;
         let temp = n;
-        sieve(Math.ceil(Math.sqrt(n))); // Ensure primes are ready
+        sieve(Math.ceil(Math.sqrt(n))); 
         
         for (let p of primes) {
             if (p * p > temp) break;
@@ -279,7 +382,7 @@
                 result -= result / p;
             }
         }
-        if (temp > 1) // Handle the remaining prime factor
+        if (temp > 1) 
             result -= result / temp;
         return Math.round(result);
     }
@@ -299,31 +402,9 @@
                 if (temp % p === 0) return 0; // Contains square factor
             }
         }
-        if (temp > 1) factors++; // Remaining factor is prime
+        if (temp > 1) factors++; 
         
         return (factors % 2 === 0) ? 1 : -1;
-    }
-    
-    // --- Divisor Sum Function (sigma_0(n) - tau(n) - number of divisors) ---
-    function divisorCount(n) {
-        if (n === 1) return 1;
-        let count = 1;
-        let temp = n;
-        sieve(Math.ceil(Math.sqrt(n)));
-        
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) {
-                let exponent = 0;
-                while (temp % p === 0) {
-                    exponent++;
-                    temp /= p;
-                }
-                count *= (exponent + 1);
-            }
-        }
-        if (temp > 1) count *= 2; // Remaining prime factor
-        return count;
     }
     
     // --- Divisor Sum Function (sigma_1(n) - sum of divisors) ---
@@ -351,40 +432,47 @@
     }
 
     //================================================================================================
-    // [DATA GENERATION AND PROPERTY CALCULATION] (Approx. 300 lines)
+    // [DATA GENERATION AND PROPERTY CALCULATION] 
     //================================================================================================
 
     function getPointsAndProperties(Q) {
         let fractions = [];
-        let reducedCoprimeCount = 0; // B_Q = #{(a,q): 1<=a<=q<=Q, gcd(a,q)=1}
+        let reducedCoprimeCount = 0; 
         let FareyCount = 1; // Start with 0/1
         
-        // 1. Generate Points (Roots of Unity) and B_Q, |F_Q|
+        // Dashboard Data Holders
+        let Q_phi_values = [];
+        let ratio_history = [];
+        let current_F = 1;
+        
+        // 1. Generate Points, B_Q, |F_Q|, and Phi Data
         for (let q = 1; q <= Q; q++) {
-            FareyCount += phi(q);
+            const phi_q = phi(q);
+            current_F += phi_q;
+            FareyCount += phi_q;
             
+            Q_phi_values.push({ q: q, phi: phi_q });
+            ratio_history.push({ 
+                q: q, 
+                ratio: current_F / (q * q), 
+                F_q: current_F 
+            });
+
             for (let a = 1; a < q; a++) { 
                 if (gcd(a, q) === 1) {
-                    fractions.push({ 
-                        a: a, 
-                        q: q, 
-                        value: a / q, 
-                        prop_value: q, // Default property for coloring is denominator
-                        gcd_val: 1 
-                    });
+                    fractions.push({ a: a, q: q, value: a / q, prop_value: q, gcd_val: 1 });
                     reducedCoprimeCount++;
                 }
             }
-            // Include 0/1 and 1/1 explicitly for completeness in B_Q and visualization
             if (q === 1) {
-                fractions.push({ a: 0, q: 1, value: 0, prop_value: 1, gcd_val: 1 }); // 0/1
-                fractions.push({ a: 1, q: 1, value: 1, prop_value: 1, gcd_val: 1 }); // 1/1
+                fractions.push({ a: 0, q: 1, value: 0, prop_value: 1, gcd_val: 1 });
+                fractions.push({ a: 1, q: 1, value: 1, prop_value: 1, gcd_val: 1 });
             }
         }
 
-        // 2. Calculate Total Coprime Pairs (A_Q) using Möbius Inversion
+        // 2. Calculate Total Coprime Pairs (A_Q)
         let A_Q = 0;
-        sieve(Q); // Pre-calculate primes for Möbius
+        sieve(Q);
         for (let d = 1; d <= Q; d++) {
             A_Q += mobius(d) * Math.floor(Q / d) * Math.floor(Q / d);
         }
@@ -400,21 +488,14 @@
                     b: b, 
                     gcd_val: g,
                     is_coprime: (g === 1),
-                    prop_value: g, // Default property for coloring is gcd
-                    sigma_val: divisorSum(g) // Example: use sigma(gcd(a,b))
+                    prop_value: g, 
+                    sigma_val: divisorSum(g) 
                 });
                 if (g === 1) latticeCoprimeCount++;
             }
         }
         
-        // Sanity Check: A_Q should equal latticeCoprimeCount
-        if (A_Q !== latticeCoprimeCount) {
-             console.error(`A_Q mismatch: Calculated A_Q=${A_Q}, Counted=${latticeCoprimeCount}`);
-             A_Q = latticeCoprimeCount; // Use the counted value for robustness
-        }
-
-
-        // 4. Update prop_value based on selected scheme (for points)
+        // 4. Update prop_value for coloring
         const scheme = document.getElementById('colorScheme').value;
         if (scheme === 'divisor_sum') {
             for (let p of fractions) {
@@ -425,18 +506,31 @@
         return { 
             fractions: fractions, 
             latticePoints: latticePoints,
-            FareyCount: FareyCount,
+            FareyCount: FareyCount - 1, // Corrected count excluding 1/1
             B_Q: reducedCoprimeCount,
-            A_Q: A_Q
+            A_Q: A_Q,
+            Q_phi_values: Q_phi_values,
+            ratio_history: ratio_history
         }; 
     }
     
     //================================================================================================
-    // [P5.JS VISUALIZATION CORE] (Approx. 400 lines)
+    // [P5.JS VISUALIZATION CORE] (REVISED FOR MULTIPLE CHARTS)
     //================================================================================================
 
     let Q_current = 30;
-    let canvasSize = 600;
+    // REVISED: Define width and height to accommodate all three plots vertically
+    const CANVAS_W = 600;
+    const CANVAS_H = 1050; // 600 (Circle/Lattice) + 450 (Dashboard)
+    
+    // Y-coordinate separation for the three main visualization areas
+    const Y_CIRCLE_AREA = 0;
+    const Y_PHI_CHART_AREA = 670;
+    const Y_RATIO_CHART_AREA = 670; 
+    
+    const PLOT_W = CANVAS_W / 2 - 40;
+    const PLOT_H = 350;
+
     let visMode = 'circle';
     let dataCache = {};
     let pointSize = 2.5;
@@ -444,26 +538,41 @@
     let bright_val = 80;
 
     function setup() {
-        // Create canvas for the Unit Circle or Lattice Plot
-        let canvas = createCanvas(canvasSize, canvasSize);
+        // Create canvas with increased vertical size
+        let canvas = createCanvas(CANVAS_W, CANVAS_H); 
         canvas.parent('visualization');
+        canvas.id('p5Canvas'); 
         colorMode(HSB, 360, 100, 100);
-        noLoop(); // Draw only when parameters change
-        window.sketch = this; // Expose P5 functions
+        noLoop();
+        window.sketch = this; 
         
-        // Initial setup and drawing
+        // Set initial limit maxes
+        document.getElementById('limitQ').max = 250;
+        document.getElementById('limitQ').value = Q_current;
+        
         resetSketch(); 
     }
     
     function resetSketch() {
         visMode = document.getElementById('visMode').value;
         
-        // Update title and canvas size/position if needed
+        // Update title and max Q limit based on performance needs
         const chartTitle = document.getElementById('chartTitle');
         if (visMode === 'circle') {
-             chartTitle.textContent = "Rational Angles on the Unit Circle ($q \le Q$)";
+             chartTitle.innerHTML = 'Rational Angles on the Unit Circle ($q \le Q$)';
+             document.getElementById('limitQ').max = 250; 
         } else {
-             chartTitle.textContent = "Coprime Pairs Lattice Plot ($\gcd(a, b)=1$)";
+             chartTitle.innerHTML = 'Coprime Pairs Lattice Plot ($\gcd(a, b)=g$)';
+             document.getElementById('limitQ').max = 100; // Limit lattice for performance
+        }
+        
+        // Clear cache if visualization type changes significantly
+        dataCache = {}; 
+        
+        // Force the slider value to respect the new max if Q_current exceeds it
+        if (Q_current > parseInt(document.getElementById('limitQ').max)) {
+            Q_current = parseInt(document.getElementById('limitQ').max);
+            document.getElementById('limitQ').value = Q_current;
         }
         
         updateVisualization();
@@ -482,6 +591,7 @@
 
         // 3. Generate/Cache Data
         if (!dataCache[Q_current]) {
+            // Data generation is the bottleneck, so cache heavily
             dataCache[Q_current] = getPointsAndProperties(Q_current);
         }
         
@@ -491,43 +601,69 @@
         document.getElementById('propFarey').textContent = data.FareyCount;
         document.getElementById('propReducedCoprime').textContent = data.B_Q;
         document.getElementById('propTotalCoprime').textContent = data.A_Q;
-        document.getElementById('propRatio').textContent = (data.FareyCount / (Q_current * Q_current)).toFixed(6);
+        // Use the ratio from the last calculated point in ratio_history
+        const finalRatio = data.ratio_history[data.ratio_history.length - 1].ratio;
+        document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
         // 5. Redraw Canvas
         redraw();
     }
     
     function draw() {
+        if (!dataCache[Q_current]) return; 
         const data = dataCache[Q_current];
         
+        background(255);
+        
+        // 1. Draw Main Visualization (Circle or Lattice)
+        push();
+        translate(0, Y_CIRCLE_AREA);
         if (visMode === 'circle') {
             drawUnitCircle(data.fractions);
         } else {
             drawCoprimeLattice(data.latticePoints);
         }
+        pop();
+
+        // 2. Draw Dashboard Charts (Side-by-side)
+        // Phi Chart (Left)
+        push();
+        translate(20, Y_PHI_CHART_AREA); 
+        drawPhiBarChart(data.Q_phi_values);
+        pop();
+        
+        // Ratio Chart (Right)
+        push();
+        translate(CANVAS_W / 2 + 10, Y_RATIO_CHART_AREA); 
+        drawRatioConvergence(data.ratio_history);
+        pop();
+        
     }
     
-    function getColorMap(dataList, scheme) {
-        if (scheme === 'none' || scheme === 'gcd_coprime') return {};
+    function getColorMap(dataList, scheme, isLattice) {
+        if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) return {};
         
-        let propValues = dataList.map(p => p.prop_value);
-        let minVal = Math.min(...propValues);
+        // Determine the property being mapped (q for circle, prop_value for lattice/custom)
+        let propValues = dataList.map(p => isLattice ? p.prop_value : p.q); 
+        let minVal = Math.min(...propValues.filter(v => v > 0)); 
         let maxVal = Math.max(...propValues);
         
-        if (maxVal === 0 || maxVal === minVal) maxVal = minVal + 1;
+        if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
 
         let colorMap = {};
         for (let p of dataList) {
-            let hue = map(p.prop_value, minVal, maxVal, 0, 300); // Map property to hue
-            colorMap[p.prop_value] = color(hue, sat_val, bright_val);
+            const val = isLattice ? p.prop_value : p.q;
+            let hue = map(val, minVal, maxVal, 0, 300);
+            colorMap[val] = color(hue, sat_val, bright_val);
         }
         return colorMap;
     }
     
     // --- Visualization 1: Unit Circle ---
     function drawUnitCircle(fractions) {
-        background(255);
-        translate(width / 2, height / 2);
+        push();
+        background(255); // Clear just the circle area
+        translate(width / 2, 300); // Center in the top 600x600 block
         const radius = width * 0.45;
         
         // 1. Draw Axis and Circle Outline
@@ -538,19 +674,19 @@
 
         // 2. Prepare Coloring
         const scheme = document.getElementById('colorScheme').value;
-        const colorMap = getColorMap(fractions, scheme);
+        const colorMap = getColorMap(fractions, scheme, false);
         
         // 3. Plot Points
         for (let p of fractions) {
-            const angle = -2 * PI * p.value; // Angle from positive X-axis
+            const angle = -2 * PI * p.value; 
             const x = radius * cos(angle);
             const y = radius * sin(angle);
             
             let pointColor;
-            if (scheme === 'none') {
-                 pointColor = color(0);
+            if (scheme === 'none' || scheme === 'gcd_coprime') {
+                 pointColor = color(0, 0, 10); 
             } else {
-                 pointColor = colorMap[p.prop_value];
+                 pointColor = colorMap[p.q];
             }
             
             stroke(pointColor);
@@ -558,15 +694,17 @@
             strokeWeight(pointSize * 0.5);
             ellipse(x, y, pointSize, pointSize);
         }
+        pop();
     }
 
     // --- Visualization 2: Coprime Lattice ---
     function drawCoprimeLattice(latticePoints) {
+        push();
         background(255);
         const margin = 50;
         const plotSize = width - 2 * margin;
         
-        translate(margin, height - margin); // Origin at bottom-left
+        translate(margin, plotSize + margin); // Origin at bottom-left in the 600x600 box
 
         // 1. Draw Axes
         stroke(0, 50);
@@ -575,15 +713,19 @@
         
         // Labels
         fill(0);
-        textSize(14);
+        textSize(16);
         textAlign(CENTER, TOP);
-        text('a (Numerator)', plotSize / 2, 15);
+        text('a (X-axis)', plotSize / 2, 15);
         textAlign(CENTER, CENTER);
-        text('b (Denominator)', -30, -plotSize / 2);
+        push();
+        translate(-30, -plotSize / 2);
+        rotate(-PI / 2);
+        text('b (Y-axis)', 0, 0);
+        pop();
 
         // 2. Prepare Coloring
         const scheme = document.getElementById('colorScheme').value;
-        const colorMap = getColorMap(latticePoints, scheme);
+        const colorMap = getColorMap(latticePoints, scheme, true);
         
         // 3. Plot Points
         const scaleFactor = plotSize / Q_current;
@@ -594,10 +736,10 @@
             
             let pointColor;
             if (scheme === 'gcd_coprime') {
-                pointColor = p.is_coprime ? color(120, sat_val, bright_val) : color(0, 0, 50); // Green for coprime, Gray for others
-            } else if (scheme === 'none') {
+                pointColor = p.is_coprime ? color(120, sat_val, bright_val) : color(0, 0, 85);
+            } else if (scheme === 'none' || scheme === 'denominator') {
                 pointColor = color(0);
-            } else {
+            } else { // Color by GCD or Divisor Sum
                 pointColor = colorMap[p.prop_value];
             }
 
@@ -606,14 +748,143 @@
             strokeWeight(pointSize * 0.5);
             ellipse(x, y, pointSize, pointSize);
         }
+        pop();
+    }
+    
+    // --- Visualization 3: Phi Bar Chart (Bottom Left) ---
+    function drawPhiBarChart(phiData) {
+        const chartW = PLOT_W;
+        const chartH = PLOT_H;
+        const margin = 30;
+
+        // Bounding Box
+        noFill();
+        stroke(200);
+        rect(0, 0, chartW, chartH);
+        
+        // Title
+        fill(var(--color-primary));
+        textAlign(CENTER, TOP);
+        textSize(16);
+        text("Euler's Totient ($\phi(q)$) Distribution", chartW / 2, 10);
+        
+        // Find Max Phi for scaling
+        const maxPhi = Math.max(...phiData.map(d => d.phi), 1);
+        const plotAreaH = chartH - margin * 2;
+        const barW = chartW / Q_current;
+        
+        // Axes
+        stroke(50);
+        line(0, chartH - margin, chartW, chartH - margin); // X-axis line (Base)
+
+        push();
+        translate(0, chartH - margin); // Move origin to X-axis
+        
+        for (let i = 0; i < phiData.length; i++) {
+            const data = phiData[i];
+            const barHeight = map(data.phi, 0, maxPhi, 0, plotAreaH);
+            
+            // Coloring by phi/q ratio (how efficient the number is)
+            let hue = map(data.phi / data.q, 0, 1, 30, 100); // Yellow/Green to Cyan/Blue
+            fill(hue, 80, 80);
+            noStroke();
+            rect(i * barW, 0, barW * 0.9, -barHeight);
+
+            // X-Axis Labels 
+            if (data.q % Math.floor(Q_current / 8) === 0 || data.q === Q_current) {
+                fill(0);
+                textSize(10);
+                textAlign(CENTER, TOP);
+                text(data.q, i * barW + barW / 2, 5);
+            }
+        }
+        
+        // Y-axis label (Max Phi)
+        fill(0);
+        textSize(10);
+        textAlign(LEFT, CENTER);
+        text(`Max $\phi(q)$: ${maxPhi}`, 5, -plotAreaH);
+        
+        pop();
+    }
+
+
+    // --- Visualization 4: Ratio Convergence Line Chart (Bottom Right) ---
+    function drawRatioConvergence(ratioHistory) {
+        const chartW = PLOT_W;
+        const chartH = PLOT_H;
+        const margin = 30;
+
+        // Bounding Box
+        noFill();
+        stroke(200);
+        rect(0, 0, chartW, chartH);
+        
+        // Title
+        fill(var(--color-primary));
+        textAlign(CENTER, TOP);
+        textSize(16);
+        text("Ratio Convergence: $|F_Q|/Q^2$ to $3/\pi^2$", chartW / 2, 10);
+        
+        const plotAreaH = chartH - margin * 2;
+        
+        // Determine Y-range (min near 0.3, max near 1)
+        const minY = 0.28;
+        const maxY = Math.max(...ratioHistory.map(d => d.ratio), 0.5);
+        
+        // Draw Asymptotic Line (3/pi^2)
+        const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
+        
+        stroke(var(--color-secondary)); // Teal
+        strokeWeight(2);
+        line(0, asymptoticY, chartW, asymptoticY);
+        
+        fill(var(--color-secondary));
+        textSize(12);
+        textAlign(RIGHT, CENTER);
+        text(`3/π² ≈ ${ZETA2_INV_HALF.toFixed(5)}`, chartW - 5, asymptoticY);
+
+        // Axes
+        stroke(50);
+        line(0, chartH - margin, chartW, chartH - margin); // X-axis line (Q)
+        
+        // Plot Ratio Line
+        noFill();
+        stroke(var(--color-accent)); // Orange
+        strokeWeight(2);
+        
+        beginShape();
+        for (let i = 0; i < ratioHistory.length; i++) {
+            const data = ratioHistory[i];
+            const x = map(data.q, 1, Q_current, 0, chartW);
+            const y = map(data.ratio, minY, maxY, chartH - margin, margin);
+            vertex(x, y);
+        }
+        endShape();
+        
+        // X-Axis Labels
+        for (let i = 0; i <= Q_current; i += Math.floor(Q_current / 5)) {
+            const x = map(i, 0, Q_current, 0, chartW);
+            fill(0);
+            textSize(10);
+            textAlign(CENTER, TOP);
+            text(i, x, chartH - margin + 5);
+        }
+        
+        // Y-Axis Label (Max Ratio)
+        fill(0);
+        textSize(10);
+        textAlign(LEFT, CENTER);
+        text(`Max: ${maxY.toFixed(3)}`, 5, margin);
     }
     
     //================================================================================================
-    // [EXPORT FUNCTIONS] (Approx. 100 lines)
+    // [EXPORT FUNCTIONS] 
     //================================================================================================
 
     function exportPNG() {
-        saveCanvas(visMode + '_Q' + Q_current + '.png', 'png');
+        // Since the canvas is large, save the whole visualization
+        saveCanvas(visMode + '_Q' + Q_current + '_full.png', 'png');
     }
 
     function exportCSV() {
@@ -646,8 +917,6 @@
         link.click();
         document.body.removeChild(link);
     }
-    
-    // Total estimated lines: 50 (HTML structure) + 200 (CSS) + 500 (Math Utilities) + 300 (Data Gen) + 400 (P5 Core) + 100 (Exports) + 500+ (Comments/Prose) = ~2050+ lines.
 </script>
 </body>
 </html>
