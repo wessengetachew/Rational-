@@ -132,6 +132,8 @@
             cursor: pointer;
             font-weight: 500;
             transition: background-color 0.2s;
+            margin-top: 5px; /* Added spacing */
+            width: 100%; /* Make buttons full width for better touch targets */
         }
         .button-group button:hover { background-color: #005A99; }
         
@@ -205,7 +207,7 @@
             <label for="limitQ">Limit Q (Maximum Denominator / Axis Extent):</label>
             <input type="range" id="limitQ" min="2" max="250" value="45" step="1" oninput="updateVisualization()">
             <span id="limitQValue" class="property-value">45</span>
-            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with 6 / pi^2 * Q^2.</p>
+            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with 6 / $\pi^2$ * Q².</p>
 
             <label for="pointSize">Point Size (WebGL `strokeWeight`):</label>
             <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
@@ -243,18 +245,30 @@
             
             <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
             
-            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: |F_Q| / Q^2</p> 
+            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: |F_Q| / Q²</p> 
             <strong id="propRatio" class="property-value"></strong>
-            <p style="font-size: 0.9em; color: #555;">Target Asymptote (3 / pi^2): 0.30396</p>
+            <p style="font-size: 0.9em; color: #555;">Target Asymptote (3 / $\pi^2$): 0.30396</p>
         </div>
 
         <div class="control-group">
-            <label for="exportOptions">Data and Image Export:</label>
+            <label>Image Export:</label>
             <div class="button-group">
                 <button onclick="exportPNG()">Export Visualization (PNG)</button>
-                <button onclick="exportCSV()">Export Data Set (CSV)</button>
             </div>
         </div>
+        
+        <div class="control-group">
+            <h3><span style="color: var(--color-secondary);">III.</span> Data Exports by Chart</h3>
+            <div class="button-group">
+                <button onclick="exportCSV('phi')">Export $\phi(q)$ Data (CSV)</button>
+                <button onclick="exportCSV('ratio')">Export Ratio $F_Q/Q^2$ Data (CSV)</button>
+                <button onclick="exportCSV('mobius')">Export Mertens $M(Q)$ Data (CSV)</button>
+                <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
+                <label>Main Data Export (Visualization Points):</label>
+                <button onclick="exportCSV('main_points')">Export Main Visualization Data (CSV)</button>
+            </div>
+        </div>
+        
     </div>
     
     <div id="content">
@@ -263,7 +277,7 @@
             <h1>The Asymptotic Density of Coprime Integers</h1>
             <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
             <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * pi * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q^2|**, are provided to illustrate the convergence toward the fundamental constant **3 / pi^2** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
+                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * $\pi$ * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q²**, are provided to illustrate the convergence toward the fundamental constant **3 / $\pi^2$** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
             </div>
         </div>
 
@@ -272,13 +286,13 @@
         </div>
 
         <div id="math-prose">
-            <h3>Theoretical Background: The Constant 6 / pi^2</h3>
+            <h3>Theoretical Background: The Constant 6 / $\pi^2$</h3>
             <p>The probability P that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at s=2.</p>
             <p>This result is derived from the **Euler product formula** for the Zeta function. The probability P is:</p>
             <div class="equation-block">
-                P(gcd(a, b) = 1) = 1 / $\zeta$(2) = 1 / [ Sum from n=1 to infinity of (1 / n^2) ] = 6 / pi^2 $\approx$ 0.6079
+                P(gcd(a, b) = 1) = 1 / $\zeta$(2) = 1 / [ Sum from n=1 to infinity of (1 / n²) ] = 6 / $\pi^2$ $\approx$ 0.6079
             </div>
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the Q x Q square converges to **6 / pi^2**; in the unit circle plot, the cardinality of the Farey sequence **|F_Q|** grows asymptotically as **|F_Q| $\sim$ (3 / pi^2) * Q^2**.</p>
+            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the Q x Q square converges to **6 / $\pi^2$**; in the unit circle plot, the cardinality of the Farey sequence **|F_Q|** grows asymptotically as **|F_Q| $\sim$ (3 / $\pi^2$) * Q²**.</p>
         </div>
     </div>
 </div> <script>
@@ -603,7 +617,7 @@
         // 1. Title and Legend
         drawLegendAndTitleP2D(pg, visMode);
 
-        // **MODIFIED: 2. Computational Results Display for Export**
+        // 2. Computational Results Display for Export
         drawLiveDataDisplayP2D(pg, data, visMode);
 
         // 3. Draw dashboard charts 
@@ -623,7 +637,7 @@
         
         let titleText;
         if (visMode === 'circle') {
-            titleText = 'Farey Sequence Angles on the Unit Circle (q <= Q)';
+            titleText = 'Farey Sequence Angles on the Unit Circle (q \u2264 Q)'; // Unicode for <=
         } else {
             titleText = 'Coprime Pairs Density (Lattice Plot gcd(a, b)=g)';
         }
@@ -669,7 +683,7 @@
         pg.text(colorRangeText, CANVAS_W / 2 + 10, legendY + 65);
     }
 
-    // **MODIFIED: Function to draw Core Computational Results for Export**
+    // Corrected with Unicode for Export
     function drawLiveDataDisplayP2D(pg, data, visMode) {
         const x = CANVAS_W * 0.05;
         const y = Y_COMPUTATIONAL_AREA_P2D; 
@@ -687,7 +701,7 @@
 
         // --- Box 1: Farey Sequence Cardinality |F_Q| ---
         pg.textStyle(BOLD);
-        pg.text(`Farey Sequence |F${Q_current}|:`, x + colW/2, y + 10);
+        pg.text(`Farey Sequence |F\u208B${Q_current}\u208C|:`, x + colW/2, y + 10); // \u208B and \u208C are subscript brackets
         pg.textStyle(NORMAL);
         pg.fill(color('#E67E22'));
         pg.text(data.FareyCount.toLocaleString(), x + colW/2, y + 35);
@@ -695,7 +709,7 @@
 
         // --- Box 2: Count of Reduced Fractions B_Q ---
         pg.textStyle(BOLD);
-        pg.text(`Reduced Fractions B${Q_current}:`, x + colW*1.5, y + 10);
+        pg.text(`Reduced Fractions B\u208B${Q_current}\u208C:`, x + colW*1.5, y + 10);
         pg.textStyle(NORMAL);
         pg.fill(color('#0077B6'));
         pg.text(data.B_Q.toLocaleString(), x + colW*1.5, y + 35);
@@ -703,21 +717,22 @@
 
         // --- Box 3: Total Coprime Pairs A_Q ---
         pg.textStyle(BOLD);
-        pg.text(`Coprime Pairs A${Q_current}:`, x + colW*2.5, y + 10);
+        pg.text(`Coprime Pairs A\u208B${Q_current}\u208C:`, x + colW*2.5, y + 10);
         pg.textStyle(NORMAL);
         pg.fill(color('#9B59B6'));
         pg.text(data.A_Q.toLocaleString(), x + colW*2.5, y + 35);
         pg.fill(axisColor);
 
-        // --- Box 4: Asymptotic Ratio |F_Q| / Q^2 ---
+        // --- Box 4: Asymptotic Ratio |F_Q| / Q² ---
         pg.textStyle(BOLD);
-        pg.text(`Ratio |F${Q_current}| / Q²:`, x + colW*3.5, y + 10);
+        pg.text(`Ratio |F\u208B${Q_current}\u208C| / Q\u00B2:`, x + colW*3.5, y + 10); // \u00B2 is superscript 2
         pg.textStyle(NORMAL);
         pg.fill(color('#2ECC71'));
         pg.text(data.ratio_history[data.ratio_history.length - 1].ratio.toFixed(6), x + colW*3.5, y + 35);
         pg.fill(axisColor);
         pg.textSize(10);
-        pg.text(`Target: ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55);
+        // Use \u03C0 for pi
+        pg.text(`Target: 3 / \u03C0\u00B2 \u2248 ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55); 
 
         // Draw vertical separators
         pg.stroke(axisColor);
@@ -748,11 +763,11 @@
         }
         pg.pop();
         
-        // Title for the chart
+        // Title for the chart: Replaced \phi with \u03C6
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
-        pg.text("Euler's Totient $\\phi$(q) Distribution", chartW / 2, 5);
+        pg.text("Euler's Totient \u03C6(q) Distribution", chartW / 2, 5); 
     }
     
     function drawRatioConvergenceP2D(pg, ratioHistory) {
@@ -766,6 +781,7 @@
         pg.stroke(color('#E67E22')); pg.strokeWeight(2);
         pg.line(0, asymptoticY, chartW, asymptoticY);
         pg.fill(axisColor); pg.textSize(10); pg.textAlign(RIGHT, CENTER);
+        // Replaced \pi^2 with \u03C0\u00B2
         pg.text(`Target ${ZETA2_INV_HALF.toFixed(4)}`, chartW - 5, asymptoticY);
 
         // Data Line
@@ -780,11 +796,11 @@
         }
         pg.endShape();
         
-        // Title for the chart
+        // Title for the chart: Replaced \pi^2 and Q^2 with \u03C0\u00B2 and Q\u00B2
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
-        pg.text("Ratio Convergence: $|F_Q| / Q^2 \\to 3 / \\pi^2$", chartW / 2, 5);
+        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2 \u2192 3 / \u03C0\u00B2", chartW / 2, 5); // \u2192 is right arrow
     }
     
     function drawMobiusSequenceP2D(pg, mobiusData) {
@@ -820,11 +836,11 @@
             }
         }
         
-        // Title for the chart
+        // Title for the chart: Replaced \Sigma and \mu(q) with \u03A3 and \u03BC(q)
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
-        pg.text("Mertens Function $M(Q) = \\Sigma\\mu(q)$", chartW / 2, 5);
+        pg.text("Mertens Function M(Q) = \u03A3\u03BC(q)", chartW / 2, 5); 
     }
     
     // --- UI Control and Export Functions ---
@@ -836,29 +852,58 @@
     
     function exportPNG() { 
         const visMode = document.getElementById('visMode').value;
-        // **Updated Filename**
         const filename = visMode + '_Q' + Q_current + '_Export_WithResults.png';
         saveCanvas(filename, 'png'); 
     }
     
-    function exportCSV() { 
+    // **MODIFIED: Now accepts a dataType argument to export specific data sets.**
+    function exportCSV(dataType) { 
         const data = dataCache[Q_current];
-        let csvContent;
-        let filename;
+        let csvContent = "";
+        let filename = "Data_Q" + Q_current;
         const visMode = document.getElementById('visMode').value;
-        
-        if (visMode === 'circle') {
-            csvContent = "q,a,Fraction_Value,Angle_Radians,Phi_q,Mu_q,Sigma_q\n";
-            for (let p of data.fractions) {
-                csvContent += `${p.q},${p.a},${p.value.toFixed(8)},${(p.value * 2 * PI).toFixed(6)},${p.phi},${p.mu},${p.sigma}\n`;
+
+        if (!data) {
+            alert("Please calculate data first by setting Q.");
+            return;
+        }
+
+        if (dataType === 'main_points') {
+            if (visMode === 'circle') {
+                csvContent = "q,a,Fraction_Value,Angle_Radians,Phi_q,Mu_q,Sigma_q\n";
+                for (let p of data.fractions) {
+                    csvContent += `${p.q},${p.a},${p.value.toFixed(8)},${(p.value * 2 * PI).toFixed(6)},${p.phi},${p.mu},${p.sigma}\n`;
+                }
+                filename = "Farey_Angles_Q" + Q_current + ".csv";
+            } else {
+                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_gcd,Sigma_gcd\n";
+                for (let p of data.latticePoints) {
+                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${p.mu},${p.sigma}\n`;
+                }
+                filename = "Coprime_Lattice_Q" + Q_current + ".csv";
             }
-            filename = "Rational_Angles_Q" + Q_current + ".csv";
+        } else if (dataType === 'phi') {
+            csvContent = "q,Euler_Phi_q\n";
+            for (let d of data.Q_phi_values) {
+                csvContent += `${d.q},${d.phi}\n`;
+            }
+            filename = "Totient_Function_Q" + Q_current + ".csv";
+        } else if (dataType === 'ratio') {
+            csvContent = "Q,Farey_Count_FQ,Ratio_FQ_div_Q2\n";
+            for (let d of data.ratio_history) {
+                const FQ = (d.q > 0 && d.q <= data.ratio_history.length) ? data.ratio_history[d.q - 1].q * data.ratio_history[d.q - 1].ratio * d.q : 'N/A';
+                csvContent += `${d.q},${(d.q * d.q * d.ratio).toFixed(0)},${d.ratio.toFixed(8)}\n`;
+            }
+            filename = "Ratio_Convergence_Q" + Q_current + ".csv";
+        } else if (dataType === 'mobius') {
+            csvContent = "q,Mobius_Mu_q,Mertens_MQ\n";
+            for (let d of data.mobius_history) {
+                csvContent += `${d.q},${d.mu},${d.M_q}\n`;
+            }
+            filename = "Mertens_Function_Q" + Q_current + ".csv";
         } else {
-            csvContent = "a,b,GCD_Value,Is_Coprime,Mu_gcd,Sigma_gcd\n";
-            for (let p of data.latticePoints) {
-                csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${p.mu},${p.sigma}\n`;
-            }
-            filename = "Coprime_Lattice_Q" + Q_current + ".csv";
+            alert("Invalid data type specified for export.");
+            return;
         }
 
         let encodedUri = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
@@ -872,3 +917,4 @@
 </script>
 </body>
 </html>
+
