@@ -44,7 +44,7 @@
         #container {
             display: flex;
             min-height: 100vh;
-            max-width: 1600px; 
+            max-width: 1800px; /* Increased Max Width */
             margin: 0 auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
@@ -160,7 +160,7 @@
         
         /* Math Prose */
         #math-prose {
-             max-width: 900px; /* MATCH CANVAS WIDTH */
+             max-width: 1000px; /* MATCH NEW CANVAS WIDTH */
              margin-top: 40px;
              padding: 20px;
              background-color: var(--color-control-bg);
@@ -186,7 +186,7 @@
 <div id="container">
 
     <div id="controls">
-        <h3><span style="color: var(--color-secondary);">I.</span> Experimental Parameters</h3>
+        <h3 id="controls-header"><span style="color: var(--color-secondary);">I.</span> Experimental Parameters</h3>
 
         <div class="control-group">
             <label for="darkModeToggle">Theme Control:</label>
@@ -198,16 +198,16 @@
         <div class="control-group">
             <label for="visMode">Visualization Domain:</label>
             <select id="visMode" onchange="resetSketch()">
-                <option value="circle">Farey Sequence Angles (Unit Circle)</option>
-                <option value="lattice">Coprime Pairs Density (Lattice Plot)</option>
+                <option value="circle">Farey Sequence Angles (Unit Circle, Max Q=350)</option>
+                <option value="lattice">Coprime Pairs Density (Lattice Plot, Max Q=150)</option>
             </select>
         </div>
 
         <div class="control-group">
             <label for="limitQ">Limit Q (Maximum Denominator / Axis Extent):</label>
-            <input type="range" id="limitQ" min="2" max="250" value="45" step="1" oninput="updateVisualization()">
+            <input type="range" id="limitQ" min="2" max="350" value="45" step="1" oninput="updateVisualization()">
             <span id="limitQValue" class="property-value">45</span>
-            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with 6 / $\pi^2$ * Q².</p>
+            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with $6/\pi^2 \cdot Q^2$.</p>
 
             <label for="pointSize">Point Size (WebGL `strokeWeight`):</label>
             <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
@@ -218,9 +218,9 @@
             <select id="colorScheme" onchange="updateVisualization()">
                 <option value="denominator">By Denominator (q)</option>
                 <option value="gcd_coprime">By GCD (=1 vs >1)</option>
-                <option value="mobius">By Möbius mu(q)</option>
-                <option value="omega">By Distinct Prime Count omega(q)</option>
-                <option value="divisor_sum">By Divisor Sum sigma(q)</option>
+                <option value="mobius">By Möbius $\mu(q)$</option>
+                <option value="omega">By Distinct Prime Count $\omega(q)$</option>
+                <option value="divisor_sum">By Divisor Sum $\sigma(q)$</option>
                 <option value="none">None (Uniform Color)</option>
             </select>
             
@@ -234,20 +234,20 @@
         <div class="control-group">
             <h3><span style="color: var(--color-secondary);">II.</span> Computational Results (Q=<span id="propQ" class="property-value"></span>)</h3>
             
-            <p class="property-label">Farey Sequence Cardinality |F_Q|:</p> 
+            <p class="property-label">Farey Sequence Cardinality $|F_Q|$:</p> 
             <strong id="propFarey" class="property-value"></strong>
             
-            <p class="property-label">Count of Reduced Fractions B_Q:</p> 
+            <p class="property-label">Count of Reduced Fractions $B_Q$:</p> 
             <strong id="propReducedCoprime" class="property-value"></strong>
             
-            <p class="property-label">Total Coprime Pairs A_Q in [1, Q] x [1, Q]:</p> 
+            <p class="property-label">Total Coprime Pairs $A_Q$ in $[1, Q] \times [1, Q]$:</p> 
             <strong id="propTotalCoprime" class="property-value"></strong>
             
             <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
             
-            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: |F_Q| / Q²</p> 
+            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: $|F_Q| / Q^2$</p> 
             <strong id="propRatio" class="property-value"></strong>
-            <p style="font-size: 0.9em; color: #555;">Target Asymptote (3 / $\pi^2$): 0.30396</p>
+            <p style="font-size: 0.9em; color: #555;">Target Asymptote ($3/\pi^2$): 0.30396</p>
         </div>
 
         <div class="control-group">
@@ -275,9 +275,9 @@
         
         <div id="title-section">
             <h1>The Asymptotic Density of Coprime Integers</h1>
-            <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
+            <h2 class="subtitle">A Visual Framework for $\zeta(2)$, Farey Sequences, and Multiplicative Functions</h2>
             <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles $2\pi a/q$) and the **coprime lattice** $(a, q)$. Computational results, including the sequence cardinality **$|F_Q|$** and the ratio **$|F_Q|/Q^2$**, are provided to illustrate the convergence toward the fundamental constant **$3/\pi^2$** $= 1/(2\zeta(2))$, connecting geometric patterns to the **Riemann Zeta Function**. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
+                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs $(a, q)$ where $\text{gcd}(a, q)=1$. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles $2\pi a/q$) and the **coprime lattice** $(a, q)$. Computational results, including the sequence cardinality $|F_Q|$ and the ratio $|F_Q|/Q^2$, are provided to illustrate the convergence toward the fundamental constant $\mathbf{3/\pi^2} = 1/(2\zeta(2))$, connecting geometric patterns to the **Riemann Zeta Function**. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing millions of points.
             </div>
         </div>
 
@@ -292,7 +292,7 @@
             <div class="equation-block">
                 $$P(\text{gcd}(a, b) = 1) = 1 / \zeta(2) = 1 / \left[ \sum_{n=1}^{\infty} \frac{1}{n^2} \right] = \frac{6}{\pi^2} \approx 0.6079$$
             </div>
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the $Q \times Q$ square converges to **$6/\pi^2$**; in the unit circle plot, the cardinality of the Farey sequence **$|F_Q|$** grows asymptotically as **$|F_Q| \sim (3/\pi^2) Q^2$**.</p>
+            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the $Q \times Q$ square converges to $\mathbf{6/\pi^2}$; in the unit circle plot, the cardinality of the Farey sequence $|F_Q|$ grows asymptotically as $\mathbf{|F_Q| \sim (3/\pi^2) Q^2}$.</p>
         </div>
     </div>
 </div> <script>
@@ -306,17 +306,19 @@
 
     // Global state
     let Q_current = 45; 
-    const CANVAS_W = 900; 
-    const CANVAS_H = 1200; 
+    
+    // UPDATED: Larger Canvas Size
+    const CANVAS_W = 1000; 
+    const CANVAS_H = 1400; 
     
     // Adjusted plot dimensions based on new canvas width
     const PLOT_W = (CANVAS_W / 3) * 0.9;
     const PLOT_H = 350;
     
     // Adjusted start Y for 2D charts area
-    const Y_DASHBOARD_AREA_P2D = 820; 
-    const Y_COMPUTATIONAL_AREA_P2D = 550; // New area for computational results
-    const MAIN_PLOT_Y_OFFSET = -CANVAS_H * 0.17; 
+    const Y_DASHBOARD_AREA_P2D = 1020; // Pushed down for larger main plot
+    const Y_COMPUTATIONAL_AREA_P2D = 650; // New area for computational results
+    const MAIN_PLOT_Y_OFFSET = -CANVAS_H * 0.22; // Adjusted offset for larger canvas
     const MAIN_PLOT_RADIUS = CANVAS_W * 0.4 / 2; 
     const MAIN_PLOT_SIZE = CANVAS_W * 0.75; 
 
@@ -326,11 +328,15 @@
     let bgColor;
     let dashboardGraphics; 
     
-    // --- TOOLTIP STATE (RESTORED) ---
+    // --- TOOLTIP STATE ---
     let hoveredPoint = null; 
     let hoveredPointScreenX = 0;
     let hoveredPointScreenY = 0;
-    // ---------------------------------
+    // ----------------------
+
+    // --- Control Lock State ---
+    let isMouseOverControls = false;
+    // --------------------------
 
     // --- Math Utilities (Functions assumed working) ---
     function gcd(a, b) { 
@@ -418,7 +424,6 @@
                 }
             }
             if (q === 1) {
-                // Fractions 0/1 and 1/1 are included in the farey sequence
                 fractions.push({ a: 0, q: 1, value: 0, phi: 1, mu: 1, sigma: 1, omega: 0 });
                 fractions.push({ a: 1, q: 1, value: 1, phi: 1, mu: 1, sigma: 1, omega: 0 });
             }
@@ -436,7 +441,7 @@
                 const g = gcd(a, b);
                 latticePoints.push({
                     a: a, b: b, gcd_val: g, is_coprime: (g === 1),
-                    prop_value: g, // prop_value is used for coloring logic
+                    prop_value: g, 
                     mu: mobius(b), omega: omega(b), sigma: divisorSum(b),
                 });
             }
@@ -455,24 +460,61 @@
         canvas.parent('visualization-area');
         colorMode(HSB, 360, 100, 100);
         
-        // RESTORED: Enable continuous loop for mouse interaction / tooltips
+        // Setup mouse events for camera control lock
+        canvas.mouseOut(stopCameraRotation);
+        
         loop(); 
         
         dashboardGraphics = createGraphics(CANVAS_W, CANVAS_H, P2D);
         dashboardGraphics.colorMode(HSB, 360, 100, 100);
 
-        document.getElementById('limitQ').max = 250;
+        // UPDATED: Set maximums for the range slider
+        document.getElementById('limitQ').max = 350;
         document.getElementById('limitQ').value = Q_current;
         resetSketch(); 
+    }
+    
+    function mouseMoved() {
+        // Only allow default P5 camera rotation (orbitControl) if the mouse is outside the controls panel
+        isMouseOverControls = checkMouseOverControls();
+        return !isMouseOverControls;
+    }
+    
+    function mouseDragged() {
+        // Only allow default P5 camera rotation (orbitControl) if the mouse is outside the controls panel
+        isMouseOverControls = checkMouseOverControls();
+        return !isMouseOverControls;
+    }
+
+    function stopCameraRotation() {
+        // Stop camera rotation when mouse leaves the canvas
+        isMouseOverControls = true; // Pretend it's over controls to block orbitControl from triggering outside the canvas
+    }
+    
+    // NEW FUNCTION: Check if the mouse is over the controls panel (to lock camera rotation)
+    function checkMouseOverControls() {
+        const controlsDiv = document.getElementById('controls');
+        const rect = controlsDiv.getBoundingClientRect();
+        
+        const mouseXPage = mouseX + controlsDiv.parentElement.getBoundingClientRect().left;
+        const mouseYPage = mouseY + controlsDiv.parentElement.getBoundingClientRect().top;
+        
+        return (
+            mouseXPage >= rect.left &&
+            mouseXPage <= rect.right &&
+            mouseYPage >= rect.top &&
+            mouseYPage <= rect.bottom
+        );
     }
     
     function resetSketch() {
         const visMode = document.getElementById('visMode').value;
         
+        // UPDATED: Set Max Q based on visualization mode
         if (visMode === 'circle') {
-             document.getElementById('limitQ').max = 250; 
+             document.getElementById('limitQ').max = 350; 
         } else {
-             document.getElementById('limitQ').max = 100;
+             document.getElementById('limitQ').max = 150; // Performance limit for lattice plot
         }
         
         if (Q_current > parseInt(document.getElementById('limitQ').max)) {
@@ -512,7 +554,7 @@
         document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
-        // Since loop() is called in setup, redraw() is handled by the loop.
+        // Redraw is handled by the continuous loop()
     }
     
     function draw() {
@@ -531,6 +573,11 @@
         
         strokeWeight(pointSize);
         
+        // Control camera rotation only if mouse is NOT over controls panel
+        if (!isMouseOverControls) {
+            orbitControl();
+        }
+        
         // 2. Draw Main Visualization
         push();
         translate(0, MAIN_PLOT_Y_OFFSET, 0); 
@@ -540,11 +587,9 @@
         const centerY = MAIN_PLOT_Y_OFFSET;
 
         if (visMode === 'circle') {
-            // RESTORED: Find closest point for highlighting/tooltip
             hoveredPoint = findClosestPoint(data.fractions, centerX, centerY, 'circle');
             drawUnitCircleWebGL(data.fractions);
         } else {
-             // RESTORED: Find closest point for highlighting/tooltip
             hoveredPoint = findClosestPoint(data.latticePoints, centerX, centerY, 'lattice');
             drawCoprimeLatticeWebGL(data.latticePoints);
         }
@@ -555,12 +600,12 @@
         image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
     }
     
-    // --- POINT PICKING LOGIC (RESTORED) ---
+    // --- POINT PICKING LOGIC ---
     function findClosestPoint(dataPoints, centerX, centerY, mode) {
         const mouseXCanvas = mouseX - CANVAS_W / 2;
         const mouseYCanvas = mouseY - CANVAS_H / 2;
         let closestPoint = null;
-        let minDistanceSq = 100; // Search radius squared (adjust this value as needed)
+        let minDistanceSq = 100; // Search radius squared
         
         const plotSize = MAIN_PLOT_SIZE * 0.75; 
         const radius = MAIN_PLOT_RADIUS; 
@@ -570,28 +615,23 @@
             let px, py; 
 
             if (mode === 'circle') {
-                // 3D coordinates of the point on the unit circle (z-plane)
                 const angle = -2 * PI * p.value; 
                 const x_3d = radius * cos(angle);
                 const y_3d = 0; 
                 const z_3d = radius * sin(angle); 
                 
-                // Project 3D coordinate to 2D screen coordinate
                 px = screenX(x_3d, y_3d + centerY, z_3d); 
                 py = screenY(x_3d, y_3d + centerY, z_3d);
                 
             } else { // mode === 'lattice'
-                // 3D coordinates (flat on XZ plane, shifted Y for the plot position)
                 const x_3d = p.a * scaleFactor - plotSize/2;
                 const y_3d = -(p.b * scaleFactor - plotSize/2) + MAIN_PLOT_Y_OFFSET; 
                 const z_3d = 0; 
                 
-                // Project 3D coordinate to 2D screen coordinate
                 px = screenX(x_3d, y_3d, z_3d); 
                 py = screenY(x_3d, y_3d, z_3d);
             }
             
-            // Calculate distance in 2D screen space
             const dx = px - mouseXCanvas;
             const dy = py - mouseYCanvas;
             const distSq = dx * dx + dy * dy;
@@ -599,7 +639,6 @@
             if (distSq < minDistanceSq) {
                 minDistanceSq = distSq;
                 closestPoint = p;
-                // Store screen position for drawing the tooltip in P2D
                 hoveredPointScreenX = px + CANVAS_W / 2; // Convert back to P2D relative coordinates
                 hoveredPointScreenY = py + CANVAS_H / 2;
             }
@@ -629,14 +668,13 @@
         let maxVal = Math.max(...propValues);
         if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
         
-        // Use prop_value for lattice coloring, q for circle coloring unless divisor_sum is selected
         const val = isLattice ? p.prop_value : (scheme === 'divisor_sum' ? p.sigma : p.q);
         
         let hue = map(val, minVal, maxVal, 0, 300);
         return color(hue, sat_val, bright_val);
     }
     
-    // --- VISUALIZATION DRAWING (Highlighted Hovered Point RESTORED) ---
+    // --- VISUALIZATION DRAWING (Highlighted Hovered Point) ---
     function drawUnitCircleWebGL(fractions) {
         push();
         const radius = MAIN_PLOT_RADIUS; 
@@ -732,22 +770,77 @@
         
         // 1. Title and Legend
         drawLegendAndTitleP2D(pg, visMode);
+        
+        // 2. Live Feed (New Feature)
+        drawLiveCoordinatesP2D(pg, visMode);
 
-        // 2. Computational Results Display for Export
+        // 3. Computational Results Display for Export
         drawLiveDataDisplayP2D(pg, data, visMode);
 
-        // 3. Draw dashboard charts 
+        // 4. Draw dashboard charts 
         pg.push(); pg.translate(10, Y_DASHBOARD_AREA_P2D); drawPhiBarChartP2D(pg, data.Q_phi_values); pg.pop();
         pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
         pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
         
-        // 4. Draw Tooltip (RESTORED)
+        // 5. Draw Tooltip
         if (hoveredPoint) {
             drawTooltipP2D(pg, hoveredPoint, visMode);
         }
     }
     
-    // --- TOOLTIP DRAWING (RESTORED) ---
+    // NEW FUNCTION: Draw Live Feed Coordinates
+    function drawLiveCoordinatesP2D(pg, visMode) {
+        const x = CANVAS_W * 0.05;
+        const y = 170; // Position below the legend box
+        const w = CANVAS_W * 0.9;
+        const h = 40;
+        
+        // Retrieve colors from global p5 context
+        const controlBg = color(getComputedStyle(document.body).getPropertyValue('--color-control-bg'));
+        const textColor = color(getComputedStyle(document.body).getPropertyValue('--color-primary'));
+        const accentColor = color(getComputedStyle(document.body).getPropertyValue('--color-accent'));
+        
+        pg.fill(controlBg);
+        pg.stroke(textColor);
+        pg.rect(x, y, w, h, 5);
+        
+        pg.fill(textColor);
+        pg.textSize(14);
+        pg.textAlign(LEFT, CENTER);
+        
+        let label = (visMode === 'circle' ? 'Unit Circle Angles ' : 'Lattice Coordinates ');
+        pg.text(label, x + 10, y + h / 2);
+        
+        pg.fill(accentColor);
+        pg.textAlign(RIGHT, CENTER);
+        
+        let coordText;
+        if (visMode === 'circle') {
+             // In the unit circle mode, coordinates don't map cleanly to (a,q) without point-picking
+             coordText = `(Screen: ${mouseX}, ${mouseY})`;
+        } else {
+             const plotSize = MAIN_PLOT_SIZE * 0.75;
+             const scaleFactor = plotSize / Q_current;
+             
+             // Map mouse coordinates back to conceptual lattice (a, b)
+             // mouseX/Y is relative to the canvas top-left.
+             const plotX_P2D = mouseX - (CANVAS_W / 2 - plotSize / 2);
+             const plotY_P2D = (CANVAS_H / 2 + MAIN_PLOT_Y_OFFSET + plotSize / 2) - mouseY;
+
+             let a_approx = Math.round(plotX_P2D / scaleFactor);
+             let b_approx = Math.round(plotY_P2D / scaleFactor);
+             
+             if (a_approx >= 1 && a_approx <= Q_current && b_approx >= 1 && b_approx <= Q_current) {
+                 coordText = `(a: ${a_approx}, b: ${b_approx})`;
+             } else {
+                 coordText = `(Out of Bounds)`;
+             }
+        }
+        
+        pg.text(`Live Feed ${coordText}`, x + w - 10, y + h / 2);
+    }
+
+    // --- TOOLTIP DRAWING ---
     function drawTooltipP2D(pg, p, mode) {
         let lines = [];
         
@@ -760,19 +853,20 @@
             lines.push(`Value: ${p.value.toFixed(6)}`);
             lines.push(`\u03C6(q): ${p.phi}`); // Unicode phi
             lines.push(`\u03BC(q): ${p.mu}`); // Unicode mu
+            lines.push(`\u03C9(q): ${p.omega}`); // Unicode omega
             lines.push(`\u03C3(q): ${p.sigma}`); // Unicode sigma
         } else { // lattice
             lines.push(`Coordinates: (${p.a}, ${p.b})`);
             lines.push(`GCD(a, b): ${p.gcd_val} ${p.is_coprime ? '(Coprime)' : ''}`);
             lines.push(`\u03C6(b): ${phi(p.b)}`);
-            lines.push(`\u03BC(b): ${mobius(p.b)}`); // Use mobius(b) instead of p.mu from lattice generation
+            lines.push(`\u03BC(b): ${mobius(p.b)}`); 
+            lines.push(`\u03C9(b): ${omega(p.b)}`);
             lines.push(`\u03C3(b): ${divisorSum(p.b)}`);
         }
 
         const padding = 8;
         pg.textSize(12);
         
-        // Measure text width for accurate box sizing
         let maxW = 0;
         for (let line of lines) {
             maxW = Math.max(maxW, pg.textWidth(line));
@@ -1046,16 +1140,15 @@
 
         if (dataType === 'main_points') {
             if (visMode === 'circle') {
-                csvContent = "q,a,Fraction_Value,Angle_Radians,Phi_q,Mu_q,Sigma_q\n";
+                csvContent = "q,a,Fraction_Value,Angle_Radians,Phi_q,Mu_q,Omega_q,Sigma_q\n";
                 for (let p of data.fractions) {
-                    csvContent += `${p.q},${p.a},${p.value.toFixed(8)},${(p.value * 2 * PI).toFixed(6)},${p.phi},${p.mu},${p.sigma}\n`;
+                    csvContent += `${p.q},${p.a},${p.value.toFixed(8)},${(p.value * 2 * PI).toFixed(6)},${p.phi},${p.mu},${p.omega},${p.sigma}\n`;
                 }
                 filename = "Farey_Angles_Q" + Q_current + ".csv";
             } else {
-                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_b,Sigma_b\n";
+                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_b,Omega_b,Sigma_b\n";
                 for (let p of data.latticePoints) {
-                    // Use b's properties, not gcd's properties for consistency with coloring logic
-                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${mobius(p.b)},${divisorSum(p.b)}\n`;
+                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${mobius(p.b)},${omega(p.b)},${divisorSum(p.b)}\n`;
                 }
                 filename = "Coprime_Lattice_Q" + Q_current + ".csv";
             }
