@@ -1,183 +1,164 @@
 
 <html>
 <head>
-    <title>Analytic Number Theory Visualization Framework</title>
+    <title>Analytic Number Theory Visualization (Minimalist Dark Style)</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     
     <style>
-        /* --- Formal Base Styling --- */
+        /* --- Root Variables for Dark Minimalist Theme --- */
         :root {
-            --color-primary: #17202A; 
-            --color-secondary: #0077B6; 
-            --color-accent: #E67E22; 
-            --color-background: #F8F9FA; 
-            --color-control-bg: #FFFFFF;
-            --color-border: #D5DBDB;
-            --color-text: var(--color-primary);
-            --font-family-serif: 'Georgia', 'Times New Roman', serif;
-            --font-family-sans: 'Helvetica Neue', Arial, sans-serif;
+            --color-bg-primary: #121212; /* Dark background */
+            --color-bg-secondary: #1E1E1E; /* Sidebar/control background */
+            --color-text-light: #F0F0F0;
+            --color-text-accent: #BB86FC; /* Bright Purple/Magenta */
+            --color-accent-highlight: #03DAC6; /* Teal/Cyan for controls */
+            --color-border-subtle: #333333;
+            --color-chart-line: #424242;
+            --font-family-mono: 'Roboto Mono', monospace;
+            --font-family-sans: 'Inter', sans-serif;
         }
 
-        /* --- Dark Mode Override --- */
-        body.dark-mode {
-            --color-primary: #D7DBDD; 
-            --color-secondary: #4DA6FF; 
-            --color-accent: #F9E79F; 
-            --color-background: #1C1C1C; 
-            --color-control-bg: #2C2C2C; 
-            --color-border: #444444;
-            --color-text: var(--color-primary);
-        }
-        
+        /* --- Global Reset and Body --- */
         html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
             font-family: var(--font-family-sans);
-            color: var(--color-text);
-            background-color: var(--color-background);
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
+            color: var(--color-text-light);
+            background-color: var(--color-bg-primary);
+            overflow: hidden; /* Prevent scrolling of the body */
         }
 
-        /* --- Page Structure (Adjusted for wider content) --- */
+        /* --- Main Layout: Visualization First --- */
         #container {
             display: flex;
-            min-height: 100vh;
-            max-width: 1800px; /* Increased Max Width */
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        
-        #controls { 
-            width: 380px; 
-            padding: 30px; 
-            background: var(--color-control-bg); 
-            flex-shrink: 0;
-            border-right: 1px solid var(--color-border);
-            overflow-y: auto;
+            height: 100vh;
         }
         
         #content { 
             flex-grow: 1; 
-            padding: 30px;
             display: flex;
             flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        /* --- Typography and Headings --- */
-        #title-section {
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--color-secondary);
+        /* --- Floating Control Panel --- */
+        #controls { 
+            width: 320px; 
+            background: var(--color-bg-secondary); 
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            padding: 20px; 
+            overflow-y: auto;
+            flex-shrink: 0;
+            z-index: 100;
         }
+
+        /* --- Typography --- */
         h1 {
-            font-family: var(--font-family-serif);
-            color: var(--color-secondary);
-            font-size: 2.8em;
-            font-weight: 700;
+            color: var(--color-text-accent);
+            font-size: 2.2em;
             margin: 0 0 5px 0;
+            font-weight: 700;
         }
         h2.subtitle {
-            font-family: var(--font-family-serif);
-            color: var(--color-text);
-            font-size: 1.4em;
-            font-weight: 400;
-            font-style: italic;
-            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            color: #999;
+            margin: 0 0 20px 0;
+            font-weight: 300;
         }
-        #abstract {
-            background-color: color-mix(in srgb, var(--color-background) 80%, var(--color-border));
-            padding: 20px;
-            border-left: 5px solid var(--color-accent);
-            border-radius: 5px;
-            font-size: 0.95em;
-        }
-        
         h3 {
-            color: var(--color-secondary); 
-            font-size: 1.5em;
+            color: var(--color-accent-highlight); 
+            font-size: 1.3em;
             font-weight: 600;
-            margin-top: 30px;
+            margin-top: 25px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border-subtle);
             padding-bottom: 5px;
         }
         
-        /* --- Controls & Data --- */
-        .control-group { 
-            margin-bottom: 25px; 
-            padding: 15px; 
-            border: 1px solid var(--color-border); 
-            border-radius: 5px;
-            background-color: var(--color-control-bg);
-        }
-        
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600;
-            color: var(--color-primary);
-            font-size: 0.95em;
-        }
-        
-        input[type=range] { accent-color: var(--color-secondary); }
-
-        .button-group button { 
-            padding: 10px 15px; 
-            background-color: var(--color-secondary); 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            margin-top: 5px; 
-            width: 100%; 
-        }
-        .button-group button:hover { background-color: #005A99; }
-        
-        .property-label { font-weight: 500; margin-top: 10px;}
-        .property-value { 
-            font-size: 1.1em; 
-            font-weight: 700;
-            color: var(--color-accent); 
-        }
-
         /* --- Visualization Area --- */
         #visualization-area {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         #p5Canvas { 
             display: block; 
-            border: 1px solid var(--color-border); 
-            border-radius: 5px;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         
-        /* Math Prose */
-        #math-prose {
-             max-width: 1000px; /* MATCH NEW CANVAS WIDTH */
-             margin-top: 40px;
-             padding: 20px;
-             background-color: var(--color-control-bg);
-             border-left: 5px solid var(--color-secondary);
-             border-radius: 5px;
-        }
-        .equation-block {
-            font-family: 'Courier New', monospace;
-            background-color: #f0f0f0;
-            padding: 10px;
+        /* --- Controls & Data Widgets --- */
+        .control-group { 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            border: 1px solid var(--color-border-subtle); 
             border-radius: 4px;
-            overflow-x: auto;
-            margin: 15px 0;
         }
-        .dark-mode .equation-block {
-            background-color: #333;
-            color: #ddd;
+        
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 500;
+            font-size: 0.9em;
+            color: var(--color-text-light);
+        }
+        
+        input[type=range] { accent-color: var(--color-text-accent); width: 100%;}
+        select { 
+            width: 100%; 
+            padding: 8px; 
+            background-color: #2D2D2D; 
+            color: var(--color-text-light); 
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 3px;
+        }
+
+        .button-group button { 
+            padding: 8px 10px; 
+            background-color: var(--color-text-accent); 
+            color: var(--color-bg-secondary); 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            margin-top: 8px; 
+            width: 100%; 
+        }
+        .button-group button:hover { background-color: #D3A7FF; }
+        
+        .property-label { font-weight: 400; margin-top: 8px; font-size: 0.85em;}
+        .property-value { 
+            font-size: 1.1em; 
+            font-weight: 700;
+            color: var(--color-accent-highlight); 
+            font-family: var(--font-family-mono);
+        }
+        
+        /* --- Live Feed (New Widget Style) --- */
+        #live-feed {
+            width: 95%; 
+            max-width: 1000px;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 4px;
+            font-family: var(--font-family-mono);
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .live-label { color: #999; font-weight: 400;}
+        .live-coords { color: var(--color-accent-highlight); font-weight: 600;}
+        
+        /* --- Info Section (Hidden by default in this style) --- */
+        #info-section {
+            display: none; 
         }
     </style>
 </head>
@@ -185,18 +166,30 @@
 
 <div id="container">
 
-    <div id="controls">
-        <h3 id="controls-header"><span style="color: var(--color-secondary);">I.</span> Experimental Parameters</h3>
+    <div id="content">
+        
+        <div id="title-section">
+            <h1>Analytic Number Theory Visualizer</h1>
+            <h2 class="subtitle">Density of Coprime Pairs: $\zeta(2)$, Farey Sequences, and Multiplicative Functions</h2>
+        </div>
 
-        <div class="control-group">
-            <label for="darkModeToggle">Theme Control:</label>
-            <div class="button-group">
-                <button id="darkModeToggle" onclick="toggleDarkMode()">Enable Dark Mode</button>
-            </div>
+        <div id="visualization-area">
+            <canvas id="p5Canvas"></canvas> 
+             <div id="live-feed">
+                 <span class="live-label" id="live-label">LIVE FEED | Lattice (a, b) Coordinates:</span>
+                 <span class="live-coords" id="live-coords-value">A: 0, B: 0 | OUT OF RANGE</span>
+             </div>
         </div>
         
+        <div id="info-section">
+             </div>
+    </div>
+    
+    <div id="controls">
+        <h3><span style="color: var(--color-text-accent);">I.</span> Core Parameters</h3>
+
         <div class="control-group">
-            <label for="visMode">Visualization Domain:</label>
+            <label for="visMode">Visualization Domain (Max Q Varies):</label>
             <select id="visMode" onchange="resetSketch()">
                 <option value="circle">Farey Sequence Angles (Unit Circle, Max Q=350)</option>
                 <option value="lattice">Coprime Pairs Density (Lattice Plot, Max Q=150)</option>
@@ -207,9 +200,8 @@
             <label for="limitQ">Limit Q (Maximum Denominator / Axis Extent):</label>
             <input type="range" id="limitQ" min="2" max="350" value="45" step="1" oninput="updateVisualization()">
             <span id="limitQValue" class="property-value">45</span>
-            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with $6/\pi^2 \cdot Q^2$.</p>
 
-            <label for="pointSize">Point Size (WebGL `strokeWeight`):</label>
+            <label for="pointSize" style="margin-top: 15px;">Point Size (WebGL `strokeWeight`):</label>
             <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
         </div>
 
@@ -224,76 +216,30 @@
                 <option value="none">None (Uniform Color)</option>
             </select>
             
-            <label for="saturation">Color Saturation (HSB):</label>
+            <label for="saturation" style="margin-top: 15px;">Color Saturation (HSB):</label>
             <input type="range" id="saturation" min="50" max="100" value="80" step="1" oninput="updateVisualization()">
-
-            <label for="brightness">Color Brightness (HSB):</label>
-            <input type="range" id="brightness" min="50" max="100" value="80" step="1" oninput="updateVisualization()">
         </div>
         
         <div class="control-group">
-            <h3><span style="color: var(--color-secondary);">II.</span> Computational Results (Q=<span id="propQ" class="property-value"></span>)</h3>
+            <h3><span style="color: var(--color-text-accent);">II.</span> Metrics (Q=<span id="propQ" class="property-value">45</span>)</h3>
             
-            <p class="property-label">Farey Sequence Cardinality $|F_Q|$:</p> 
-            <strong id="propFarey" class="property-value"></strong>
+            <p class="property-label">Total Points Plotted:</p> 
+            <strong id="propFarey" class="property-value">0</strong>
             
-            <p class="property-label">Count of Reduced Fractions $B_Q$:</p> 
-            <strong id="propReducedCoprime" class="property-value"></strong>
+            <p class="property-label">Total Coprime Pairs $A_Q$ in $Q \times Q$:</p> 
+            <strong id="propTotalCoprime" class="property-value">0</strong>
             
-            <p class="property-label">Total Coprime Pairs $A_Q$ in $[1, Q] \times [1, Q]$:</p> 
-            <strong id="propTotalCoprime" class="property-value"></strong>
-            
-            <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
+            <hr style="border-top: 1px dashed var(--color-border-subtle); margin: 15px 0;">
             
             <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: $|F_Q| / Q^2$</p> 
-            <strong id="propRatio" class="property-value"></strong>
-            <p style="font-size: 0.9em; color: #555;">Target Asymptote ($3/\pi^2$): 0.30396</p>
+            <strong id="propRatio" class="property-value">0.000000</strong>
         </div>
 
-        <div class="control-group">
-            <label>Image Export:</label>
-            <div class="button-group">
-                <button onclick="exportPNG()">Export Visualization (PNG)</button>
-            </div>
+        <div class="button-group">
+            <button onclick="exportPNG()">Export Visualization (PNG)</button>
+            <button onclick="exportCSV('main_points')">Export Raw Data (CSV)</button>
         </div>
         
-        <div class="control-group">
-            <h3><span style="color: var(--color-secondary);">III.</span> Data Exports by Chart</h3>
-            <div class="button-group">
-                <button onclick="exportCSV('phi')">Export $\phi(q)$ Data (CSV)</button>
-                <button onclick="exportCSV('ratio')">Export Ratio $F_Q/Q^2$ Data (CSV)</button>
-                <button onclick="exportCSV('mobius')">Export Mertens $M(Q)$ Data (CSV)</button>
-                <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
-                <label>Main Data Export (Visualization Points):</label>
-                <button onclick="exportCSV('main_points')">Export Main Visualization Data (CSV)</button>
-            </div>
-        </div>
-        
-    </div>
-    
-    <div id="content">
-        
-        <div id="title-section">
-            <h1>The Asymptotic Density of Coprime Integers</h1>
-            <h2 class="subtitle">A Visual Framework for $\zeta(2)$, Farey Sequences, and Multiplicative Functions</h2>
-            <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs $(a, q)$ where $\text{gcd}(a, q)=1$. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles $2\pi a/q$) and the **coprime lattice** $(a, q)$. Computational results, including the sequence cardinality $|F_Q|$ and the ratio $|F_Q|/Q^2$, are provided to illustrate the convergence toward the fundamental constant $\mathbf{3/\pi^2} = 1/(2\zeta(2))$, connecting geometric patterns to the **Riemann Zeta Function**. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing millions of points.
-            </div>
-        </div>
-
-        <div id="visualization-area">
-             <canvas id="p5Canvas"></canvas> 
-        </div>
-
-        <div id="math-prose">
-            <h3>Theoretical Background: The Constant $6/\pi^2$</h3>
-            <p>The probability $P$ that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at $s=2$.</p>
-            <p>This result is derived from the **Euler product formula** for the Zeta function. The probability $P$ is:</p>
-            <div class="equation-block">
-                $$P(\text{gcd}(a, b) = 1) = 1 / \zeta(2) = 1 / \left[ \sum_{n=1}^{\infty} \frac{1}{n^2} \right] = \frac{6}{\pi^2} \approx 0.6079$$
-            </div>
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the $Q \times Q$ square converges to $\mathbf{6/\pi^2}$; in the unit circle plot, the cardinality of the Farey sequence $|F_Q|$ grows asymptotically as $\mathbf{|F_Q| \sim (3/\pi^2) Q^2}$.</p>
-        </div>
     </div>
 </div> <script>
     //================================================================================================
@@ -301,44 +247,35 @@
     //================================================================================================
     
     const PI = Math.PI;
-    const ZETA2_INV = 6 / (PI * PI); 
-    const ZETA2_INV_HALF = ZETA2_INV / 2; 
+    const ZETA2_INV_HALF = (6 / (PI * PI)) / 2; 
 
-    // Global state
+    // Global state and Configuration
     let Q_current = 45; 
     
-    // UPDATED: Larger Canvas Size
-    const CANVAS_W = 1000; 
-    const CANVAS_H = 1400; 
+    // Canvas dimensions (Dynamically set later)
+    let CANVAS_W = 1; 
+    let CANVAS_H = 1; 
     
-    // Adjusted plot dimensions based on new canvas width
-    const PLOT_W = (CANVAS_W / 3) * 0.9;
-    const PLOT_H = 350;
+    // Plot configuration 
+    const PLOT_W = 300; 
+    const PLOT_H = 300;
+    const CHART_Y_OFFSET = 200; // Vertical space for main chart area
     
-    // Adjusted start Y for 2D charts area
-    const Y_DASHBOARD_AREA_P2D = 1020; // Pushed down for larger main plot
-    const Y_COMPUTATIONAL_AREA_P2D = 650; // New area for computational results
-    const MAIN_PLOT_Y_OFFSET = -CANVAS_H * 0.22; // Adjusted offset for larger canvas
-    const MAIN_PLOT_RADIUS = CANVAS_W * 0.4 / 2; 
-    const MAIN_PLOT_SIZE = CANVAS_W * 0.75; 
-
     let dataCache = {};
     let pointSize = 2.5;
     let axisColor;
     let bgColor;
     let dashboardGraphics; 
     
-    // --- TOOLTIP STATE ---
+    // Tooltip and Live Feed State
     let hoveredPoint = null; 
     let hoveredPointScreenX = 0;
     let hoveredPointScreenY = 0;
-    // ----------------------
 
-    // --- Control Lock State ---
+    // Camera Lock State
     let isMouseOverControls = false;
-    // --------------------------
 
-    // --- Math Utilities (Functions assumed working) ---
+    // --- Math Utilities (Simplified for brevity, assumes p5 is loaded) ---
     function gcd(a, b) { 
         if (a === 0) return b;
         while (b) { [a, b] = [b, a % b]; }
@@ -358,16 +295,9 @@
         for (let p = 2; p <= n; p++) { if (is_prime[p]) primes.push(p); }
         isPrimeCalculatedUpTo = n;
     }
-    function omega(n) {
-        if (n === 1) return 0;
-        let count = 0; let temp = n; sieve(Math.ceil(Math.sqrt(n))); 
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) { count++; while (temp % p === 0) temp /= p; }
-        }
-        if (temp > 1) count++; 
-        return count;
-    }
+    // Note: Other number theory functions (omega, phi, mobius, divisorSum) are included in the full code, 
+    // but simplified/omitted here for conciseness as their implementations are identical to the previous version.
+    
     function phi(n) {
         if (n === 0) return 0;
         let result = n; let temp = n; sieve(Math.ceil(Math.sqrt(n))); 
@@ -388,6 +318,16 @@
         if (temp > 1) factors++; 
         return (factors % 2 === 0) ? 1 : -1;
     }
+    function omega(n) {
+        if (n === 1) return 0;
+        let count = 0; let temp = n; sieve(Math.ceil(Math.sqrt(n))); 
+        for (let p of primes) {
+            if (p * p > temp) break;
+            if (temp % p === 0) { count++; while (temp % p === 0) temp /= p; }
+        }
+        if (temp > 1) count++; 
+        return count;
+    }
     function divisorSum(n) {
         if (n === 1) return 1;
         let sum = 1; let temp = n; sieve(Math.ceil(Math.sqrt(n)));
@@ -406,16 +346,13 @@
     // --- Data Generation ---
     function getPointsAndProperties(Q) {
         let fractions = []; let reducedCoprimeCount = 0; 
-        let Q_phi_values = []; let ratio_history = []; let mobius_history = [];
-        let current_F = 1; let phi_sum_ratio = 0;
+        let ratio_history = [];
+        let current_F = 1; 
         
         for (let q = 1; q <= Q; q++) {
             const phi_q = phi(q);
             current_F += phi_q;
-            phi_sum_ratio += phi_q / q;
-            Q_phi_values.push({ q: q, phi: phi_q });
             ratio_history.push({ q: q, ratio: current_F / (q * q) });
-            mobius_history.push({ q: q, mu: mobius(q), M_q: mobius_history.length > 0 ? mobius_history[mobius_history.length - 1].M_q + mobius(q) : mobius(q) });
 
             for (let a = 1; a < q; a++) { 
                 if (gcd(a, q) === 1) {
@@ -447,78 +384,73 @@
             }
         }
         
-        return { fractions, latticePoints, FareyCount: current_F - 1, B_Q: reducedCoprimeCount, A_Q: A_Q, AvgPhiRatio: phi_sum_ratio / Q, Q_phi_values, ratio_history, mobius_history }; 
+        return { fractions, latticePoints, FareyCount: current_F - 1, B_Q: reducedCoprimeCount, A_Q: A_Q, ratio_history }; 
     }
     
     //================================================================================================
-    // [P5.JS CORE: WEBGL IMPLEMENTATION] 
+    // [P5.JS CORE IMPLEMENTATION] 
     //================================================================================================
 
     function setup() {
+        // Dynamic Canvas Size: Use available space (subtracting some padding/margins)
+        CANVAS_W = document.getElementById('content').clientWidth - 40;
+        CANVAS_H = windowHeight - 200; // Leave space for title and charts
+        
+        // Ensure minimum size for visibility
+        CANVAS_W = Math.max(CANVAS_W, 800); 
+        CANVAS_H = Math.max(CANVAS_H, 700); 
+        
         let canvas = createCanvas(CANVAS_W, CANVAS_H, WEBGL); 
         canvas.id('p5Canvas'); 
         canvas.parent('visualization-area');
         colorMode(HSB, 360, 100, 100);
         
-        // Setup mouse events for camera control lock
-        canvas.mouseOut(stopCameraRotation);
-        
-        loop(); 
-        
+        // Create the P2D graphics buffer for UI (charts, tooltips, axis labels)
         dashboardGraphics = createGraphics(CANVAS_W, CANVAS_H, P2D);
         dashboardGraphics.colorMode(HSB, 360, 100, 100);
 
-        // UPDATED: Set maximums for the range slider
-        document.getElementById('limitQ').max = 350;
-        document.getElementById('limitQ').value = Q_current;
+        // Initial setup
         resetSketch(); 
     }
     
-    function mouseMoved() {
-        // Only allow default P5 camera rotation (orbitControl) if the mouse is outside the controls panel
-        isMouseOverControls = checkMouseOverControls();
-        return !isMouseOverControls;
+    function windowResized() {
+        // Recalculate size and resize canvas on window resize
+        CANVAS_W = document.getElementById('content').clientWidth - 40;
+        CANVAS_H = windowHeight - 200;
+        
+        CANVAS_W = Math.max(CANVAS_W, 800); 
+        CANVAS_H = Math.max(CANVAS_H, 700); 
+        
+        resizeCanvas(CANVAS_W, CANVAS_H);
+        dashboardGraphics.resizeCanvas(CANVAS_W, CANVAS_H);
+        updateVisualization();
     }
     
-    function mouseDragged() {
-        // Only allow default P5 camera rotation (orbitControl) if the mouse is outside the controls panel
-        isMouseOverControls = checkMouseOverControls();
-        return !isMouseOverControls;
-    }
-
-    function stopCameraRotation() {
-        // Stop camera rotation when mouse leaves the canvas
-        isMouseOverControls = true; // Pretend it's over controls to block orbitControl from triggering outside the canvas
-    }
-    
-    // NEW FUNCTION: Check if the mouse is over the controls panel (to lock camera rotation)
     function checkMouseOverControls() {
+        // Check if the mouse is over the floating control sidebar
         const controlsDiv = document.getElementById('controls');
         const rect = controlsDiv.getBoundingClientRect();
         
-        const mouseXPage = mouseX + controlsDiv.parentElement.getBoundingClientRect().left;
-        const mouseYPage = mouseY + controlsDiv.parentElement.getBoundingClientRect().top;
+        const mouseXPage = window.scrollX + mouseX;
+        const mouseYPage = window.scrollY + mouseY;
         
-        return (
-            mouseXPage >= rect.left &&
-            mouseXPage <= rect.right &&
-            mouseYPage >= rect.top &&
-            mouseYPage <= rect.bottom
-        );
+        return (mouseXPage >= rect.left && mouseXPage <= rect.right && mouseYPage >= rect.top && mouseYPage <= rect.bottom);
     }
+    
+    function mouseMoved() { isMouseOverControls = checkMouseOverControls(); return !isMouseOverControls; }
+    function mouseDragged() { isMouseOverControls = checkMouseOverControls(); return !isMouseOverControls; }
+
     
     function resetSketch() {
         const visMode = document.getElementById('visMode').value;
+        const maxQ = (visMode === 'circle') ? 350 : 150;
+        document.getElementById('limitQ').max = maxQ; 
         
-        // UPDATED: Set Max Q based on visualization mode
-        if (visMode === 'circle') {
-             document.getElementById('limitQ').max = 350; 
-        } else {
-             document.getElementById('limitQ').max = 150; // Performance limit for lattice plot
-        }
-        
-        if (Q_current > parseInt(document.getElementById('limitQ').max)) {
-            Q_current = parseInt(document.getElementById('limitQ').max);
+        if (Q_current > maxQ) {
+            Q_current = maxQ;
+            document.getElementById('limitQ').value = Q_current;
+        } else if (Q_current < 2) {
+            Q_current = 2;
             document.getElementById('limitQ').value = Q_current;
         }
         
@@ -533,10 +465,10 @@
         document.getElementById('limitQValue').textContent = Q_current;
         document.getElementById('propQ').textContent = Q_current;
         
-        const style = getComputedStyle(document.body);
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const textColorHex = isDarkMode ? '#D7DBDD' : '#17202A';
-        const controlBgHex = isDarkMode ? '#2C2C2C' : '#FFFFFF';
+        // Get colors from CSS variables for P5
+        const rootStyles = getComputedStyle(document.documentElement);
+        const textColorHex = rootStyles.getPropertyValue('--color-text-light');
+        const controlBgHex = rootStyles.getPropertyValue('--color-bg-secondary');
         
         axisColor = color(textColorHex);
         bgColor = color(controlBgHex);
@@ -550,11 +482,12 @@
 
         // Update data panel (HTML)
         document.getElementById('propFarey').textContent = data.FareyCount.toLocaleString();
-        document.getElementById('propReducedCoprime').textContent = data.B_Q.toLocaleString();
         document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
         document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
 
-        // Redraw is handled by the continuous loop()
+        // Update live feed label
+        document.getElementById('live-label').textContent = (document.getElementById('visMode').value === 'circle' ? 
+            'LIVE FEED | Farey Angle Coordinates:' : 'LIVE FEED | Lattice (a, b) Coordinates:');
     }
     
     function draw() {
@@ -572,44 +505,42 @@
         pop();
         
         strokeWeight(pointSize);
-        
-        // Control camera rotation only if mouse is NOT over controls panel
-        if (!isMouseOverControls) {
-            orbitControl();
-        }
+        if (!isMouseOverControls) { orbitControl(); }
         
         // 2. Draw Main Visualization
-        push();
-        translate(0, MAIN_PLOT_Y_OFFSET, 0); 
+        const mainPlotYOffset = 0; // Use the center of the canvas for this minimalist style
+        const mainPlotRadius = CANVAS_H * 0.45; 
+        const mainPlotSize = CANVAS_W * 0.8; 
         
-        // Calculate the center coordinates for projection reference
+        push();
+        translate(0, mainPlotYOffset, 0); 
+        
         const centerX = 0;
-        const centerY = MAIN_PLOT_Y_OFFSET;
+        const centerY = mainPlotYOffset;
 
         if (visMode === 'circle') {
-            hoveredPoint = findClosestPoint(data.fractions, centerX, centerY, 'circle');
-            drawUnitCircleWebGL(data.fractions);
+            hoveredPoint = findClosestPoint(data.fractions, centerX, centerY, 'circle', mainPlotRadius);
+            drawUnitCircleWebGL(data.fractions, mainPlotRadius);
         } else {
-            hoveredPoint = findClosestPoint(data.latticePoints, centerX, centerY, 'lattice');
-            drawCoprimeLatticeWebGL(data.latticePoints);
+            hoveredPoint = findClosestPoint(data.latticePoints, centerX, centerY, 'lattice', mainPlotSize);
+            drawCoprimeLatticeWebGL(data.latticePoints, mainPlotSize);
         }
         pop();
         
-        // 3. Draw 2D UI Overlay (Title, Legend, Live Metrics, Charts, and Tooltip)
+        // 3. Draw 2D UI Overlay 
         drawUIOverlay(dashboardGraphics, data, visMode);
         image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
     }
     
     // --- POINT PICKING LOGIC ---
-    function findClosestPoint(dataPoints, centerX, centerY, mode) {
+    function findClosestPoint(dataPoints, centerX, centerY, mode, plotDim) {
         const mouseXCanvas = mouseX - CANVAS_W / 2;
         const mouseYCanvas = mouseY - CANVAS_H / 2;
         let closestPoint = null;
-        let minDistanceSq = 100; // Search radius squared
+        let minDistanceSq = 100; 
         
-        const plotSize = MAIN_PLOT_SIZE * 0.75; 
-        const radius = MAIN_PLOT_RADIUS; 
-        const scaleFactor = plotSize / Q_current;
+        const radius = plotDim; 
+        const scaleFactor = plotDim / Q_current;
 
         for (let p of dataPoints) {
             let px, py; 
@@ -620,12 +551,12 @@
                 const y_3d = 0; 
                 const z_3d = radius * sin(angle); 
                 
-                px = screenX(x_3d, y_3d + centerY, z_3d); 
-                py = screenY(x_3d, y_3d + centerY, z_3d);
+                px = screenX(x_3d, y_3d, z_3d); 
+                py = screenY(x_3d, y_3d, z_3d);
                 
             } else { // mode === 'lattice'
-                const x_3d = p.a * scaleFactor - plotSize/2;
-                const y_3d = -(p.b * scaleFactor - plotSize/2) + MAIN_PLOT_Y_OFFSET; 
+                const x_3d = p.a * scaleFactor - plotDim/2;
+                const y_3d = -(p.b * scaleFactor - plotDim/2); 
                 const z_3d = 0; 
                 
                 px = screenX(x_3d, y_3d, z_3d); 
@@ -639,22 +570,27 @@
             if (distSq < minDistanceSq) {
                 minDistanceSq = distSq;
                 closestPoint = p;
-                hoveredPointScreenX = px + CANVAS_W / 2; // Convert back to P2D relative coordinates
+                hoveredPointScreenX = px + CANVAS_W / 2; 
                 hoveredPointScreenY = py + CANVAS_H / 2;
             }
         }
         return closestPoint;
     }
     
-    // --- COLORING LOGIC (Unchanged) ---
+    // --- COLORING LOGIC ---
     function getPointColor(p, scheme, isLattice) {
-        if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) { return axisColor; }
+        if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime' && p.gcd_val !== 1)) { 
+            // Use accent color for coprime points when color mapping is turned off or on gcd filter
+            return isLattice && p.gcd_val === 1 ? color(270, 80, 100) : color(300, 10, 50); 
+        }
+        
         const sat_val = parseInt(document.getElementById('saturation').value);
-        const bright_val = parseInt(document.getElementById('brightness').value);
+        const bright_val = 90; // Fixed high brightness for dark mode visibility
 
+        // Standard coloring logic remains the same (HSB hue mapping)
         if (scheme === 'mobius') {
-            if (p.mu === 1) return color(220, 80, 95); 
-            if (p.mu === -1) return color(0, 80, 95);  
+            if (p.mu === 1) return color(220, sat_val, bright_val); 
+            if (p.mu === -1) return color(0, sat_val, bright_val);  
             return color(0, 0, 50); 
         }
         if (scheme === 'omega') {
@@ -663,21 +599,20 @@
             return color(hue, sat_val, bright_val);
         }
         
-        let propValues = isLattice ? dataCache[Q_current].latticePoints.map(p => p.prop_value) : dataCache[Q_current].fractions.map(p => p.q);
+        let propValues = isLattice ? dataCache[Q_current].latticePoints.map(p => p.prop_value) : (scheme === 'divisor_sum' ? dataCache[Q_current].fractions.map(p => p.sigma) : dataCache[Q_current].fractions.map(p => p.q));
         let minVal = Math.min(...propValues.filter(v => v > 0)); 
         let maxVal = Math.max(...propValues);
         if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
         
         const val = isLattice ? p.prop_value : (scheme === 'divisor_sum' ? p.sigma : p.q);
         
-        let hue = map(val, minVal, maxVal, 0, 300);
+        let hue = map(val, minVal, maxVal, 200, 360); // Hue from cyan/blue to magenta/red
         return color(hue, sat_val, bright_val);
     }
     
-    // --- VISUALIZATION DRAWING (Highlighted Hovered Point) ---
-    function drawUnitCircleWebGL(fractions) {
+    // --- VISUALIZATION DRAWING ---
+    function drawUnitCircleWebGL(fractions, radius) {
         push();
-        const radius = MAIN_PLOT_RADIUS; 
         const scheme = document.getElementById('colorScheme').value;
         
         // Draw the circle guide
@@ -687,13 +622,13 @@
         torus(radius, 1, 100, 100); 
         pop();
 
+        // Draw points
         beginShape(POINTS);
         for (let p of fractions) {
             const angle = -2 * PI * p.value; 
             const x = radius * cos(angle);
             const z = radius * sin(angle); 
             
-            // Draw regular point
             stroke(getPointColor(p, scheme, false));
             vertex(x, 0, z); 
         }
@@ -707,7 +642,7 @@
             const z = radius * sin(angle);
             
             push();
-            stroke(color(0, 100, 100)); // Bright yellow-red highlight (HSB)
+            stroke(color(300, 100, 100)); // Bright magenta highlight
             strokeWeight(pointSize * 2.5);
             point(x, 0, z);
             pop();
@@ -716,32 +651,26 @@
         pop();
     }
 
-    function drawCoprimeLatticeWebGL(latticePoints) {
+    function drawCoprimeLatticeWebGL(latticePoints, plotSize) {
         push();
-        const plotSize = MAIN_PLOT_SIZE * 0.75; 
         
+        // Center the 1st quadrant plot
         translate(-plotSize/2, plotSize/2, 0); 
         
         // Draw Axes
         stroke(axisColor); strokeWeight(1);
         line(0, 0, plotSize, 0); // X-axis (a)
         line(0, 0, 0, -plotSize); // Y-axis (b)
-        // Label axes 
-        const axisOffset = 10;
-        textSize(16); textAlign(LEFT, CENTER);
-        text('a', plotSize + axisOffset, 0);
-        textAlign(CENTER, BOTTOM);
-        text('b', 0, -plotSize - axisOffset);
         
         const scheme = document.getElementById('colorScheme').value;
         const scaleFactor = plotSize / Q_current;
         
+        // Plot points
         beginShape(POINTS);
         for (let p of latticePoints) {
             const x = p.a * scaleFactor;
             const y = -p.b * scaleFactor; 
             
-            // Draw regular point
             stroke(getPointColor(p, scheme, true));
             vertex(x, y, 0); 
         }
@@ -754,7 +683,7 @@
             const y = -p.b * scaleFactor; 
             
             push();
-            stroke(color(0, 100, 100)); // Bright yellow-red highlight
+            stroke(color(300, 100, 100)); // Bright magenta highlight
             strokeWeight(pointSize * 2.5);
             point(x, y, 0);
             pop();
@@ -768,125 +697,92 @@
         pg.clear();
         pg.background(0, 0, 0, 0); 
         
-        // 1. Title and Legend
-        drawLegendAndTitleP2D(pg, visMode);
-        
-        // 2. Live Feed (New Feature)
-        drawLiveCoordinatesP2D(pg, visMode);
+        // 1. Update HTML Live Feed
+        updateHTMLLiveFeed(visMode);
 
-        // 3. Computational Results Display for Export
-        drawLiveDataDisplayP2D(pg, data, visMode);
-
-        // 4. Draw dashboard charts 
-        pg.push(); pg.translate(10, Y_DASHBOARD_AREA_P2D); drawPhiBarChartP2D(pg, data.Q_phi_values); pg.pop();
-        pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
-        pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
+        // 2. Draw Dashboard Charts below visualization area
+        const chartY = CANVAS_H * 0.75; // Position charts lower in the frame
+        pg.push(); pg.translate(10, chartY); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
+        pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, chartY); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
         
-        // 5. Draw Tooltip
+        // 3. Draw Tooltip
         if (hoveredPoint) {
             drawTooltipP2D(pg, hoveredPoint, visMode);
         }
     }
     
-    // NEW FUNCTION: Draw Live Feed Coordinates
-    function drawLiveCoordinatesP2D(pg, visMode) {
-        const x = CANVAS_W * 0.05;
-        const y = 170; // Position below the legend box
-        const w = CANVAS_W * 0.9;
-        const h = 40;
-        
-        // Retrieve colors from global p5 context
-        const controlBg = color(getComputedStyle(document.body).getPropertyValue('--color-control-bg'));
-        const textColor = color(getComputedStyle(document.body).getPropertyValue('--color-primary'));
-        const accentColor = color(getComputedStyle(document.body).getPropertyValue('--color-accent'));
-        
-        pg.fill(controlBg);
-        pg.stroke(textColor);
-        pg.rect(x, y, w, h, 5);
-        
-        pg.fill(textColor);
-        pg.textSize(14);
-        pg.textAlign(LEFT, CENTER);
-        
-        let label = (visMode === 'circle' ? 'Unit Circle Angles ' : 'Lattice Coordinates ');
-        pg.text(label, x + 10, y + h / 2);
-        
-        pg.fill(accentColor);
-        pg.textAlign(RIGHT, CENTER);
+    // NEW: Update HTML Live Feed Widget
+    function updateHTMLLiveFeed(visMode) {
+        const liveCoordsElement = document.getElementById('live-coords-value');
         
         let coordText;
-        if (visMode === 'circle') {
-             // In the unit circle mode, coordinates don't map cleanly to (a,q) without point-picking
-             coordText = `(Screen: ${mouseX}, ${mouseY})`;
-        } else {
-             const plotSize = MAIN_PLOT_SIZE * 0.75;
-             const scaleFactor = plotSize / Q_current;
-             
-             // Map mouse coordinates back to conceptual lattice (a, b)
-             // mouseX/Y is relative to the canvas top-left.
-             const plotX_P2D = mouseX - (CANVAS_W / 2 - plotSize / 2);
-             const plotY_P2D = (CANVAS_H / 2 + MAIN_PLOT_Y_OFFSET + plotSize / 2) - mouseY;
+        const plotSize = CANVAS_W * 0.8;
+        const scaleFactor = plotSize / Q_current;
+        
+        // P2D coordinates of the plot origin (0,0 of the lattice/circle center)
+        const plotOriginX = CANVAS_W / 2 - plotSize / 2;
+        const plotOriginY = CANVAS_H / 2 + plotSize / 2;
 
-             let a_approx = Math.round(plotX_P2D / scaleFactor);
-             let b_approx = Math.round(plotY_P2D / scaleFactor);
-             
-             if (a_approx >= 1 && a_approx <= Q_current && b_approx >= 1 && b_approx <= Q_current) {
-                 coordText = `(a: ${a_approx}, b: ${b_approx})`;
-             } else {
-                 coordText = `(Out of Bounds)`;
-             }
+        const plotX_P2D = mouseX - plotOriginX;
+        const plotY_P2D = plotOriginY - mouseY; 
+
+        let a_approx = Math.round(plotX_P2D / scaleFactor);
+        let b_approx = Math.round(plotY_P2D / scaleFactor);
+        
+        if (a_approx >= 1 && a_approx <= Q_current && b_approx >= 1 && b_approx <= Q_current) {
+            if (visMode === 'circle') {
+                 // For circle, we just show screen position when in bounds, as (a,q) is hard to map in reverse
+                 coordText = `X: ${mouseX}, Y: ${mouseY}`;
+            } else {
+                 coordText = `A: ${a_approx}, B: ${b_approx}`;
+            }
+        } else {
+             coordText = `A: 0, B: 0 | OUT OF RANGE`;
         }
         
-        pg.text(`Live Feed ${coordText}`, x + w - 10, y + h / 2);
+        liveCoordsElement.textContent = coordText;
     }
 
     // --- TOOLTIP DRAWING ---
     function drawTooltipP2D(pg, p, mode) {
         let lines = [];
         
-        // Retrieve colors from global p5 context
-        const controlBg = color(getComputedStyle(document.body).getPropertyValue('--color-control-bg'));
-        const textColor = color(getComputedStyle(document.body).getPropertyValue('--color-primary'));
-        
+        const rootStyles = getComputedStyle(document.documentElement);
+        const controlBg = color(rootStyles.getPropertyValue('--color-bg-secondary'));
+        const textColor = color(rootStyles.getPropertyValue('--color-text-light'));
+
         if (mode === 'circle') {
             lines.push(`Fraction: ${p.a}/${p.q}`);
             lines.push(`Value: ${p.value.toFixed(6)}`);
-            lines.push(`\u03C6(q): ${p.phi}`); // Unicode phi
-            lines.push(`\u03BC(q): ${p.mu}`); // Unicode mu
-            lines.push(`\u03C9(q): ${p.omega}`); // Unicode omega
-            lines.push(`\u03C3(q): ${p.sigma}`); // Unicode sigma
+            lines.push(`\u03C6(q): ${p.phi}`); 
+            lines.push(`\u03BC(q): ${p.mu}`); 
         } else { // lattice
-            lines.push(`Coordinates: (${p.a}, ${p.b})`);
-            lines.push(`GCD(a, b): ${p.gcd_val} ${p.is_coprime ? '(Coprime)' : ''}`);
+            lines.push(`Coords: (${p.a}, ${p.b})`);
+            lines.push(`GCD: ${p.gcd_val} ${p.is_coprime ? '(\u2713 Coprime)' : ''}`);
             lines.push(`\u03C6(b): ${phi(p.b)}`);
             lines.push(`\u03BC(b): ${mobius(p.b)}`); 
-            lines.push(`\u03C9(b): ${omega(p.b)}`);
-            lines.push(`\u03C3(b): ${divisorSum(p.b)}`);
         }
 
         const padding = 8;
         pg.textSize(12);
         
         let maxW = 0;
-        for (let line of lines) {
-            maxW = Math.max(maxW, pg.textWidth(line));
-        }
+        for (let line of lines) { maxW = Math.max(maxW, pg.textWidth(line)); }
 
         const boxW = maxW + padding * 2;
         const boxH = lines.length * 15 + padding * 2; 
 
-        // Screen position (relative to the top-left of the P2D canvas)
         let x = hoveredPointScreenX + 10;
         let y = hoveredPointScreenY - boxH / 2;
         
-        // Boundary checks to keep tooltip on screen
+        // Boundary checks
         if (x + boxW > CANVAS_W) x = hoveredPointScreenX - boxW - 10;
         if (y < 0) y = 0;
-        if (y + boxH > Y_COMPUTATIONAL_AREA_P2D) y = Y_COMPUTATIONAL_AREA_P2D - boxH;
+        if (y + boxH > CANVAS_H * 0.70) y = CANVAS_H * 0.70 - boxH;
 
-        // Draw box
+        // Draw box (use the dark secondary background)
         pg.fill(controlBg); 
-        pg.stroke(textColor);
+        pg.stroke(color(300, 100, 100)); // Magenta border
         pg.rect(x, y, boxW, boxH, 3);
         
         // Draw text
@@ -897,148 +793,7 @@
         }
     }
 
-    function drawLegendAndTitleP2D(pg, visMode) {
-        const scheme = document.getElementById('colorScheme').value;
-        const Q = Q_current;
-        
-        // --- 1. Title ---
-        pg.fill(axisColor);
-        pg.textSize(28);
-        pg.textAlign(CENTER, TOP);
-        
-        let titleText;
-        if (visMode === 'circle') {
-            titleText = 'Farey Sequence Angles on the Unit Circle (q \u2264 Q)'; 
-        } else {
-            titleText = 'Coprime Pairs Density (Lattice Plot gcd(a, b)=g)';
-        }
-        pg.text(titleText, CANVAS_W / 2, 20);
-
-        // --- 2. Legend Box ---
-        const legendX = CANVAS_W * 0.05;
-        const legendY = 60;
-        const legendW = CANVAS_W * 0.9;
-        const legendH = 100;
-
-        pg.fill(bgColor);
-        pg.stroke(axisColor);
-        pg.rect(legendX, legendY, legendW, legendH, 5);
-
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(LEFT, TOP);
-
-        // Left Column (Parameters)
-        pg.text(`Visualization Parameters:`, legendX + 10, legendY + 10);
-        pg.textSize(16);
-        pg.text(`Max Limit Q: ${Q}`, legendX + 10, legendY + 35);
-        
-        let pointCount = visMode === 'circle' ? dataCache[Q].FareyCount : dataCache[Q].latticePoints.length;
-        pg.textSize(14);
-        pg.text(`Total Points Plotted: ${pointCount.toLocaleString()}`, legendX + 10, legendY + 65);
-
-
-        // Right Column (Color Scheme Details)
-        pg.textSize(14);
-        pg.text(`Color Map Details:`, CANVAS_W / 2 + 10, legendY + 10);
-        pg.textSize(16);
-        pg.text(`Scheme: ${document.getElementById('colorScheme').options[document.getElementById('colorScheme').selectedIndex].text}`, CANVAS_W / 2 + 10, legendY + 35);
-        
-        let colorRangeText = `Range: Varies by selected function (q: 1 to ${Q})`;
-        if (scheme === 'gcd_coprime') {
-            colorRangeText = 'Range: Coprime (V=1) vs. Not Coprime (V>1)';
-        } else if (scheme === 'mobius') {
-            colorRangeText = 'Range: Mu(q) = 1, -1, or 0';
-        }
-        pg.textSize(14);
-        pg.text(colorRangeText, CANVAS_W / 2 + 10, legendY + 65);
-    }
-
-    // Corrected with Unicode for Export
-    function drawLiveDataDisplayP2D(pg, data, visMode) {
-        const x = CANVAS_W * 0.05;
-        const y = Y_COMPUTATIONAL_AREA_P2D; 
-        const w = CANVAS_W * 0.9;
-        const h = 75;
-        const colW = w / 4;
-        
-        pg.fill(bgColor);
-        pg.stroke(axisColor);
-        pg.rect(x, y, w, h, 5);
-        
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-
-        // --- Box 1: Farey Sequence Cardinality |F_Q| ---
-        pg.textStyle(NORMAL);
-        pg.text(`Farey Sequence |F\u208B${Q_current}\u208C|:`, x + colW/2, y + 10); 
-        pg.textStyle(NORMAL);
-        pg.fill(color('#E67E22'));
-        pg.text(data.FareyCount.toLocaleString(), x + colW/2, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 2: Count of Reduced Fractions B_Q ---
-        pg.textStyle(NORMAL);
-        pg.text(`Reduced Fractions B\u208B${Q_current}\u208C:`, x + colW*1.5, y + 10);
-        pg.textStyle(NORMAL);
-        pg.fill(color('#0077B6'));
-        pg.text(data.B_Q.toLocaleString(), x + colW*1.5, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 3: Total Coprime Pairs A_Q ---
-        pg.textStyle(NORMAL);
-        pg.text(`Coprime Pairs A\u208B${Q_current}\u208C:`, x + colW*2.5, y + 10);
-        pg.textStyle(NORMAL);
-        pg.fill(color('#9B59B6'));
-        pg.text(data.A_Q.toLocaleString(), x + colW*2.5, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 4: Asymptotic Ratio |F_Q| / Q² ---
-        pg.textStyle(NORMAL);
-        pg.text(`Ratio |F\u208B${Q_current}\u208C| / Q\u00B2:`, x + colW*3.5, y + 10); 
-        pg.textStyle(NORMAL);
-        pg.fill(color('#2ECC71'));
-        pg.text(data.ratio_history[data.ratio_history.length - 1].ratio.toFixed(6), x + colW*3.5, y + 35);
-        pg.fill(axisColor);
-        pg.textSize(10);
-        pg.text(`Target: 3 / \u03C0\u00B2 \u2248 ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55); 
-
-        // Draw vertical separators
-        pg.stroke(axisColor);
-        pg.line(x + colW, y + 5, x + colW, y + h - 5);
-        pg.line(x + colW*2, y + 5, x + colW*2, y + h - 5);
-        pg.line(x + colW*3, y + 5, x + colW*3, y + h - 5);
-    }
-    
-    // --- CHART DRAWING FUNCTIONS (Positions relative to Y_DASHBOARD_AREA_P2D) ---
-    
-    function drawPhiBarChartP2D(pg, phiData) {
-        const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
-        pg.noFill(); pg.stroke(axisColor); pg.rect(0, 0, chartW, chartH);
-        
-        const maxPhi = Math.max(...phiData.map(d => d.phi), 1);
-        const plotAreaH = chartH - margin * 2;
-        const barW = chartW / Q_current;
-        
-        pg.stroke(axisColor); pg.line(0, chartH - margin, chartW, chartH - margin); 
-        pg.push(); pg.translate(0, chartH - margin);
-        
-        for (let i = 0; i < phiData.length; i++) {
-            const data = phiData[i];
-            const barHeight = map(data.phi, 0, maxPhi, 0, plotAreaH);
-            let hue = map(data.phi / data.q, 0, 1, 30, 100); 
-            pg.fill(hue, 80, 80); pg.noStroke();
-            pg.rect(i * barW, 0, barW * 0.9, -barHeight);
-        }
-        pg.pop();
-        
-        // Title for the chart: Replaced \phi with \u03C6
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-        pg.text("Euler's Totient \u03C6(q) Distribution", chartW / 2, 5); 
-    }
+    // --- CHART DRAWING FUNCTIONS (Only 2 charts for minimalist style) ---
     
     function drawRatioConvergenceP2D(pg, ratioHistory) {
         const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
@@ -1048,14 +803,15 @@
         const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
         
         // Asymptotic Line
-        pg.stroke(color('#E67E22')); pg.strokeWeight(2);
+        pg.stroke(color(180, 80, 80)); // Cyan/Teal line
+        pg.strokeWeight(2);
         pg.line(0, asymptoticY, chartW, asymptoticY);
         pg.fill(axisColor); pg.textSize(10); pg.textAlign(RIGHT, CENTER);
-        // Replaced \pi^2 with \u03C0\u00B2
-        pg.text(`Target ${ZETA2_INV_HALF.toFixed(4)}`, chartW - 5, asymptoticY);
+        pg.text(`Target 3 / \u03C0\u00B2`, chartW - 5, asymptoticY - 8);
 
         // Data Line
-        pg.noFill(); pg.stroke(color('#0077B6')); pg.strokeWeight(2); 
+        pg.noFill(); pg.stroke(color(300, 80, 80)); // Magenta line
+        pg.strokeWeight(2); 
         
         pg.beginShape();
         for (let i = 0; i < ratioHistory.length; i++) {
@@ -1066,11 +822,10 @@
         }
         pg.endShape();
         
-        // Title for the chart: Replaced \pi^2 and Q^2 with \u03C0\u00B2 and Q\u00B2
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
-        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2 \u2192 3 / \u03C0\u00B2", chartW / 2, 5); 
+        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2", chartW / 2, 5); 
     }
     
     function drawMobiusSequenceP2D(pg, mobiusData) {
@@ -1081,52 +836,34 @@
         pg.noFill(); pg.stroke(axisColor); pg.rect(0, 0, chartW, chartH);
         pg.stroke(axisColor); pg.line(0, midpointY, chartW, midpointY);
         
-        const pointDiameter = 4;
-        
-        for (let i = 0; i < mobiusData.length; i++) {
+        // M(Q) summation line
+        pg.stroke(color(60, 80, 80)); 
+        for (let i = 1; i < mobiusData.length; i++) {
             const data = mobiusData[i];
+            const prevData = mobiusData[i-1];
+            
             const x = map(data.q, 1, Q_current, 0, chartW);
-            let y;
+            const prevX = map(prevData.q, 1, Q_current, 0, chartW);
             
-            // Plot mu(q) points
-            if (data.mu === 1) { y = midpointY - plotAreaH / 2; pg.fill(220, 80, 95); } 
-            else if (data.mu === -1) { y = midpointY + plotAreaH / 2; pg.fill(0, 80, 95); } 
-            else { y = midpointY; pg.fill(0, 0, 50); }
-            
-            pg.noStroke();
-            pg.ellipse(x, y, pointDiameter, pointDiameter);
-            
-            // Plot M(Q) summation
             const M_y = map(data.M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
-            pg.stroke(60, 80, 80); 
-            if (i > 0) {
-                const prevX = map(mobiusData[i-1].q, 1, Q_current, 0, chartW);
-                const prevM_y = map(mobiusData[i-1].M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
-                pg.line(prevX, prevM_y, x, M_y);
-            }
+            const prevM_y = map(prevData.M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
+            
+            pg.line(prevX, prevM_y, x, M_y);
         }
         
-        // Title for the chart: Replaced \Sigma and \mu(q) with \u03A3 and \u03BC(q)
         pg.fill(axisColor);
         pg.textSize(14);
         pg.textAlign(CENTER, TOP);
         pg.text("Mertens Function M(Q) = \u03A3\u03BC(q)", chartW / 2, 5); 
     }
     
-    // --- UI Control and Export Functions ---
-    function toggleDarkMode() {
-        const isDarkMode = document.body.classList.toggle('dark-mode');
-        document.getElementById('darkModeToggle').textContent = isDarkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
-        updateVisualization();
-    }
-    
+    // --- Export Functions ---
     function exportPNG() { 
         const visMode = document.getElementById('visMode').value;
-        const filename = visMode + '_Q' + Q_current + '_Export_WithResults.png';
+        const filename = visMode + '_Q' + Q_current + '_Minimalist.png';
         saveCanvas(filename, 'png'); 
     }
     
-    // **MODIFIED: Now accepts a dataType argument to export specific data sets.**
     function exportCSV(dataType) { 
         const data = dataCache[Q_current];
         let csvContent = "";
@@ -1152,24 +889,12 @@
                 }
                 filename = "Coprime_Lattice_Q" + Q_current + ".csv";
             }
-        } else if (dataType === 'phi') {
-            csvContent = "q,Euler_Phi_q\n";
-            for (let d of data.Q_phi_values) {
-                csvContent += `${d.q},${d.phi}\n`;
-            }
-            filename = "Totient_Function_Q" + Q_current + ".csv";
         } else if (dataType === 'ratio') {
             csvContent = "Q,Farey_Count_FQ,Ratio_FQ_div_Q2\n";
             for (let d of data.ratio_history) {
                 csvContent += `${d.q},${(d.q * d.q * d.ratio).toFixed(0)},${d.ratio.toFixed(8)}\n`;
             }
             filename = "Ratio_Convergence_Q" + Q_current + ".csv";
-        } else if (dataType === 'mobius') {
-            csvContent = "q,Mobius_Mu_q,Mertens_MQ\n";
-            for (let d of data.mobius_history) {
-                csvContent += `${d.q},${d.mu},${d.M_q}\n`;
-            }
-            filename = "Mertens_Function_Q" + Q_current + ".csv";
         } else {
             alert("Invalid data type specified for export.");
             return;
