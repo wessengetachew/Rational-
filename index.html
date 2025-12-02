@@ -27,6 +27,20 @@
             --text: #e8f1f5;
             --text-dim: #8899aa;
             --border: rgba(255, 215, 0, 0.3);
+            
+            /* 12 Canvas Colors */
+            --c1-gold: #ffd700;
+            --c2-teal: #1abc9c;
+            --c3-blue: #3498db;
+            --c4-orange: #e67e22;
+            --c5-purple: #9b59b6;
+            --c6-pink: #e91e63;
+            --c7-green: #2ecc71;
+            --c8-yellow: #f1c40f;
+            --c9-red: #e74c3c;
+            --c10-indigo: #6366f1;
+            --c11-lime: #27ae60;
+            --c12-magenta: #9c27b0;
         }
 
         body {
@@ -162,22 +176,8 @@
             margin-bottom: 30px;
         }
         
-        @media (max-width: 1800px) {
-            .viz-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 1400px) {
-            .viz-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 900px) {
-            .viz-grid {
-                grid-template-columns: 1fr;
-            }
+        .viz-grid.four-panel {
+            grid-template-columns: repeat(2, 1fr);
         }
 
         .canvas-panel {
@@ -802,9 +802,15 @@
             cursor: pointer;
         }
 
-        @media (max-width: 1800px) {
+        @media (max-width: 2000px) {
             .viz-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 1400px) {
+            .viz-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1125,7 +1131,7 @@
             </div>
             <div class="research-meta-item">
                 <span class="research-meta-label">Topics:</span>
-                <span>Farey Sequences | Cayley Transforms | Primes | Primitive Roots | Coprime Density | Dirichlet Characters</span>
+                <span>Farey Sequences | Cayley Transforms | Prime Distribution | Primitive Roots | Coprime Density | Dirichlet Characters</span>
             </div>
         </div>
     </div>
@@ -1380,8 +1386,8 @@
             <div class="canvas-panel" id="primitiveRootsPanel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">⚙ Primitive Roots Power Sequence</div>
-                        <div class="panel-subtitle">g^n mod M: Order & Cyclic Structure</div>
+                        <div class="panel-title" style="color: var(--c6-pink);">6. ⚙ Primitive Roots</div>
+                        <div class="panel-subtitle">Power Sequence g^n mod M</div>
                     </div>
                     <button class="btn btn-small" onclick="exportPixiCanvas()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
@@ -1392,87 +1398,87 @@
             </div>
 
             <!-- Canvas 7: Coprime Circle -->
-            <div class="canvas-panel" id="coprimeCirclePanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">🔵 Coprime Circle</div>
-                        <div class="panel-subtitle">Visual Coprimality on Unit Circle</div>
+                        <div class="panel-title" style="color: var(--c7-green);">7. 🔵 Coprime Circle</div>
+                        <div class="panel-subtitle">Visual Coprimality Patterns</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('coprimeCircleCanvas', 'coprime_circle_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas7()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="coprimeCircleCanvas" width="1000" height="1000"></canvas>
+                <canvas id="canvas7" width="1000" height="1000"></canvas>
             </div>
 
             <!-- Canvas 8: Phi Ratios Chart -->
-            <div class="canvas-panel" id="phiRatiosPanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">📊 Phi Ratios Chart</div>
-                        <div class="panel-subtitle">φ(n)/n Convergence Analysis</div>
+                        <div class="panel-title" style="color: var(--c8-yellow);">8. 📊 Phi Ratios</div>
+                        <div class="panel-subtitle">φ(n)/n Convergence Chart</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('phiRatiosCanvas', 'phi_ratios_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas8()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="phiRatiosCanvas" width="1000" height="800"></canvas>
+                <canvas id="canvas8" width="1000" height="800"></canvas>
             </div>
 
             <!-- Canvas 9: Convergence to 6/π² -->
-            <div class="canvas-panel" id="convergencePanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">📈 Convergence to 6/π²</div>
-                        <div class="panel-subtitle">Average Coprime Density Limit</div>
+                        <div class="panel-title" style="color: var(--c9-red);">9. 📈 Convergence</div>
+                        <div class="panel-subtitle">Limit to 6/π² ≈ 0.6079</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('convergenceCanvas', 'convergence_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas9()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="convergenceCanvas" width="1000" height="800"></canvas>
+                <canvas id="canvas9" width="1000" height="800"></canvas>
             </div>
 
             <!-- Canvas 10: Coprime Pairs Grid -->
-            <div class="canvas-panel" id="coprimeGridPanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">🎯 Coprime Pairs Grid</div>
-                        <div class="panel-subtitle">GCD Matrix Visualization</div>
+                        <div class="panel-title" style="color: var(--c10-indigo);">10. 🎯 Coprime Grid</div>
+                        <div class="panel-subtitle">GCD Pairs Matrix View</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('coprimeGridCanvas', 'coprime_grid_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas10()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="coprimeGridCanvas" width="1000" height="1000"></canvas>
+                <canvas id="canvas10" width="1000" height="1000"></canvas>
             </div>
 
             <!-- Canvas 11: Nested Density Rings -->
-            <div class="canvas-panel" id="densityRingsPanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">🔢 Nested Density Rings</div>
-                        <div class="panel-subtitle">Sequential φ(n)/n from 1→N</div>
+                        <div class="panel-title" style="color: var(--c11-lime);">11. 🔢 Density Rings</div>
+                        <div class="panel-subtitle">Nested 1→n Coprime View</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('densityRingsCanvas', 'density_rings_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas11()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="densityRingsCanvas" width="1000" height="1000"></canvas>
+                <canvas id="canvas11" width="1000" height="1000"></canvas>
             </div>
 
             <!-- Canvas 12: Dirichlet Characters -->
-            <div class="canvas-panel" id="dirichletPanel">
+            <div class="canvas-panel">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title">🌟 Dirichlet Characters</div>
-                        <div class="panel-subtitle">χ(n) mod M: Multiplicative Characters</div>
+                        <div class="panel-title" style="color: var(--c12-magenta);">12. 🌟 Dirichlet Characters</div>
+                        <div class="panel-subtitle">χ(n) mod M Character Visualization</div>
                     </div>
-                    <button class="btn btn-small" onclick="exportSingleCanvas('dirichletCanvas', 'dirichlet_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
+                    <button class="btn btn-small" onclick="exportCanvas12()" style="padding: 6px 12px; font-size: 0.85em;">
                         📥 Export 4K
                     </button>
                 </div>
-                <canvas id="dirichletCanvas" width="1000" height="1000"></canvas>
+                <canvas id="canvas12" width="1000" height="1000"></canvas>
             </div>
         </div>
 
@@ -2965,6 +2971,7 @@
             filterModulusRange: [1, 100],
             filterResidueClass: null,
             plotOrder: 'angular',  // 'angular' or 'sequential'
+            showConnections: false,  // For canvas 7 coprime connections
             fareyPoints: [
                 {num: 1, den: 1},
                 {num: 0, den: 1},
@@ -3044,6 +3051,7 @@
         }
 
         function initCanvases() {
+            // Original 6 canvases
             canvases.disk = document.getElementById('diskCanvas');
             canvases.cayley = document.getElementById('cayleyCanvas');
             canvases.nested = document.getElementById('nestedCanvas');
@@ -3051,16 +3059,35 @@
             canvases.primitiveRoots = document.getElementById('primitiveRootsCanvas');
             canvases.fullPlane = document.getElementById('fullPlaneCanvas');
             
+            // New 6 canvases
+            canvases.canvas7 = document.getElementById('canvas7');
+            canvases.canvas8 = document.getElementById('canvas8');
+            canvases.canvas9 = document.getElementById('canvas9');
+            canvases.canvas10 = document.getElementById('canvas10');
+            canvases.canvas11 = document.getElementById('canvas11');
+            canvases.canvas12 = document.getElementById('canvas12');
+            
             const dpr = window.devicePixelRatio || 1;
             
-            [canvases.disk, canvases.cayley, canvases.nested, canvases.reduction, canvases.primitiveRoots, canvases.fullPlane].forEach(canvas => {
-                const rect = canvas.getBoundingClientRect();
-                canvas.width = canvas.width * dpr;
-                canvas.height = canvas.height * dpr;
-                const ctx = canvas.getContext('2d');
-                ctx.scale(dpr, dpr);
+            // Scale all 12 canvases
+            const allCanvases = [
+                canvases.disk, canvases.cayley, canvases.nested, canvases.reduction, 
+                canvases.primitiveRoots, canvases.fullPlane,
+                canvases.canvas7, canvases.canvas8, canvases.canvas9,
+                canvases.canvas10, canvases.canvas11, canvases.canvas12
+            ];
+            
+            allCanvases.forEach(canvas => {
+                if (canvas) {
+                    const rect = canvas.getBoundingClientRect();
+                    canvas.width = canvas.width * dpr;
+                    canvas.height = canvas.height * dpr;
+                    const ctx = canvas.getContext('2d');
+                    ctx.scale(dpr, dpr);
+                }
             });
             
+            // Store contexts
             canvases.diskCtx = canvases.disk.getContext('2d');
             canvases.cayleyCtx = canvases.cayley.getContext('2d');
             canvases.nestedCtx = canvases.nested.getContext('2d');
@@ -8752,30 +8779,28 @@ Generated: ${new Date().toLocaleString()}
         }
 
         function updateAll() {
-            // Draw original 6 canvases
+            // Draw canvases 1-6
             drawDisk();
             drawCayley();
             drawNested();
             drawReduction();
-            
-            // Always draw Pixi primitive roots (6th canvas)
             drawPixiPrimitiveRoots();
             
             // Draw full plane if visible
-            if (document.getElementById('toggleFullPlane').checked) {
+            if (document.getElementById('toggleFullPlane') && document.getElementById('toggleFullPlane').checked) {
                 drawFullPlane();
             }
             
-            // Draw new 6 canvases (7-12)
-            drawCoprimeCircle();
-            drawPhiRatios();
-            drawConvergence();
-            drawCoprimeGrid();
-            drawDensityRings();
-            drawDirichlet();
+            // Draw canvases 7-12
+            drawCanvas7();
+            drawCanvas8();
+            drawCanvas9();
+            drawCanvas10();
+            drawCanvas11();
+            drawCanvas12();
             
             // Update stats if panel is visible
-            if (document.getElementById('statsPanel').style.display !== 'none') {
+            if (document.getElementById('statsPanel') && document.getElementById('statsPanel').style.display !== 'none') {
                 updateStats();
             }
             
@@ -9094,472 +9119,6 @@ Generated: ${new Date().toLocaleString()}
             6: '#1abc9c',  // Teal
             default: '#95a5a6'  // Gray
         };
-
-        // ============================================================
-        // CANVAS 7: COPRIME CIRCLE
-        // ============================================================
-        
-        function drawCoprimeCircle() {
-            const canvas = document.getElementById('coprimeCircleCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const cx = width / 2;
-            const cy = height / 2;
-            const radius = Math.min(width, height) * 0.4;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const M = state.modulus;
-            const phase = state.phase * Math.PI / 180;
-            
-            // Draw circle
-            ctx.strokeStyle = CONFIG.colors.axes;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-            ctx.stroke();
-            
-            // Draw coprime points
-            for (let n = 1; n < M; n++) {
-                if (gcd(n, M) === 1) {
-                    const angle = getPlotAngle(n, M, 2 * Math.PI * n / M, 0) + phase;
-                    const x = cx + radius * Math.cos(angle);
-                    const y = cy + radius * Math.sin(angle);
-                    
-                    ctx.fillStyle = CONFIG.colors.prime;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = CONFIG.colors.prime;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                    
-                    // Connect consecutive coprimes
-                    if (n > 1) {
-                        let prev = n - 1;
-                        while (prev > 0 && gcd(prev, M) !== 1) prev--;
-                        if (prev > 0) {
-                            const prevAngle = getPlotAngle(prev, M, 2 * Math.PI * prev / M, 0) + phase;
-                            const px = cx + radius * Math.cos(prevAngle);
-                            const py = cy + radius * Math.sin(prevAngle);
-                            
-                            ctx.strokeStyle = 'rgba(0, 255, 255, 0.3)';
-                            ctx.lineWidth = 1;
-                            ctx.beginPath();
-                            ctx.moveTo(px, py);
-                            ctx.lineTo(x, y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-            
-            // Draw title
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 24px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText(`Coprime Circle: M = ${M}, φ(${M}) = ${eulerPhi(M)}`, cx, 40);
-        }
-        
-        // ============================================================
-        // CANVAS 8: PHI RATIOS CHART
-        // ============================================================
-        
-        function drawPhiRatios() {
-            const canvas = document.getElementById('phiRatiosCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const padding = 80;
-            const chartWidth = width - 2 * padding;
-            const chartHeight = height - 2 * padding;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const maxN = Math.min(state.modulus, 200);
-            const data = [];
-            for (let n = 2; n <= maxN; n++) {
-                data.push({ n, ratio: eulerPhi(n) / n });
-            }
-            
-            // Draw axes
-            ctx.strokeStyle = CONFIG.colors.axes;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, height - padding);
-            ctx.lineTo(width - padding, height - padding);
-            ctx.stroke();
-            
-            // Draw grid
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 10; i++) {
-                const y = padding + (chartHeight * i / 10);
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(width - padding, y);
-                ctx.stroke();
-                
-                // Y-axis labels
-                ctx.fillStyle = CONFIG.colors.text;
-                ctx.font = '12px "Fira Code"';
-                ctx.textAlign = 'right';
-                ctx.fillText((1 - i / 10).toFixed(1), padding - 10, y + 4);
-            }
-            
-            // Draw data points
-            data.forEach((point, i) => {
-                const x = padding + (chartWidth * i / (data.length - 1));
-                const y = height - padding - (chartHeight * point.ratio);
-                
-                ctx.fillStyle = CONFIG.colors.prime;
-                ctx.beginPath();
-                ctx.arc(x, y, 2, 0, 2 * Math.PI);
-                ctx.fill();
-                
-                if (i > 0) {
-                    const prevPoint = data[i - 1];
-                    const px = padding + (chartWidth * (i - 1) / (data.length - 1));
-                    const py = height - padding - (chartHeight * prevPoint.ratio);
-                    
-                    ctx.strokeStyle = CONFIG.colors.cyan;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(px, py);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                }
-            });
-            
-            // Draw title and labels
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 20px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText('φ(n)/n Ratio Chart', width / 2, 40);
-            
-            ctx.font = '14px "Fira Code"';
-            ctx.fillText('n', width / 2, height - 20);
-            
-            ctx.save();
-            ctx.translate(30, height / 2);
-            ctx.rotate(-Math.PI / 2);
-            ctx.fillText('φ(n)/n', 0, 0);
-            ctx.restore();
-        }
-        
-        // ============================================================
-        // CANVAS 9: CONVERGENCE TO 6/π²
-        // ============================================================
-        
-        function drawConvergence() {
-            const canvas = document.getElementById('convergenceCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const padding = 80;
-            const chartWidth = width - 2 * padding;
-            const chartHeight = height - 2 * padding;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const maxN = Math.min(state.modulus, 200);
-            const target = 6 / (Math.PI * Math.PI);
-            const data = [];
-            let sum = 0;
-            for (let n = 1; n <= maxN; n++) {
-                sum += eulerPhi(n) / n;
-                data.push({ n, avg: sum / n });
-            }
-            
-            // Draw axes
-            ctx.strokeStyle = CONFIG.colors.axes;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, height - padding);
-            ctx.lineTo(width - padding, height - padding);
-            ctx.stroke();
-            
-            // Draw target line
-            const targetY = height - padding - (chartHeight * (target / 0.8));
-            ctx.strokeStyle = CONFIG.colors.gold;
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]);
-            ctx.beginPath();
-            ctx.moveTo(padding, targetY);
-            ctx.lineTo(width - padding, targetY);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            ctx.fillStyle = CONFIG.colors.gold;
-            ctx.font = '14px "Fira Code"';
-            ctx.textAlign = 'left';
-            ctx.fillText(`6/π² ≈ ${target.toFixed(6)}`, width - padding + 10, targetY + 4);
-            
-            // Draw data
-            data.forEach((point, i) => {
-                const x = padding + (chartWidth * i / (data.length - 1));
-                const y = height - padding - (chartHeight * (point.avg / 0.8));
-                
-                if (i > 0) {
-                    const prevPoint = data[i - 1];
-                    const px = padding + (chartWidth * (i - 1) / (data.length - 1));
-                    const py = height - padding - (chartHeight * (prevPoint.avg / 0.8));
-                    
-                    ctx.strokeStyle = CONFIG.colors.cyan;
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(px, py);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                }
-            });
-            
-            // Draw title
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 20px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText('Average Coprime Density Convergence', width / 2, 40);
-            
-            ctx.font = '14px "Fira Code"';
-            const lastAvg = data[data.length - 1].avg;
-            const error = Math.abs(lastAvg - target);
-            ctx.fillText(`Current: ${lastAvg.toFixed(6)} | Error: ${error.toFixed(6)}`, width / 2, height - 20);
-        }
-        
-        // ============================================================
-        // CANVAS 10: COPRIME PAIRS GRID
-        // ============================================================
-        
-        function drawCoprimeGrid() {
-            const canvas = document.getElementById('coprimeGridCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const M = Math.min(state.modulus, 50);
-            const cellSize = Math.min(width, height) / (M + 2);
-            const offsetX = (width - M * cellSize) / 2;
-            const offsetY = (height - M * cellSize) / 2;
-            
-            // Draw grid
-            for (let i = 1; i <= M; i++) {
-                for (let j = 1; j <= M; j++) {
-                    const x = offsetX + (i - 1) * cellSize;
-                    const y = offsetY + (j - 1) * cellSize;
-                    const g = gcd(i, j);
-                    
-                    if (g === 1) {
-                        ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
-                    } else {
-                        ctx.fillStyle = `rgba(255, 100, 100, ${0.1 + 0.1 * Math.log(g)})`;
-                    }
-                    
-                    ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
-                    
-                    // Draw GCD value for small grids
-                    if (M <= 20 && cellSize > 20) {
-                        ctx.fillStyle = CONFIG.colors.text;
-                        ctx.font = `${cellSize * 0.4}px "Fira Code"`;
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText(g, x + cellSize / 2, y + cellSize / 2);
-                    }
-                }
-            }
-            
-            // Draw title
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 24px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText(`Coprime Pairs Grid: GCD(i,j) for 1≤i,j≤${M}`, width / 2, 40);
-        }
-        
-        // ============================================================
-        // CANVAS 11: NESTED DENSITY RINGS
-        // ============================================================
-        
-        function drawDensityRings() {
-            const canvas = document.getElementById('densityRingsCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const cx = width / 2;
-            const cy = height / 2;
-            const maxRadius = Math.min(width, height) * 0.45;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const maxN = Math.min(state.modulus, 50);
-            const phase = state.phase * Math.PI / 180;
-            
-            // Draw rings from 1 to maxN
-            for (let m = 1; m <= maxN; m++) {
-                const radius = maxRadius * m / maxN;
-                const phi_m = eulerPhi(m);
-                const density = phi_m / m;
-                
-                // Draw ring circle
-                ctx.strokeStyle = `hsla(${180 + density * 60}, 70%, 50%, 0.3)`;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-                ctx.stroke();
-                
-                // Draw coprime points on this ring
-                for (let k = 1; k < m; k++) {
-                    if (gcd(k, m) === 1) {
-                        const angle = getPlotAngle(k, m, 2 * Math.PI * k / m, 0) + phase;
-                        const x = cx + radius * Math.cos(angle);
-                        const y = cy + radius * Math.sin(angle);
-                        
-                        const hue = 180 + density * 60;
-                        ctx.fillStyle = `hsla(${hue}, 80%, 60%, 0.8)`;
-                        ctx.shadowBlur = 5;
-                        ctx.shadowColor = ctx.fillStyle;
-                        ctx.beginPath();
-                        ctx.arc(x, y, 2, 0, 2 * Math.PI);
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                    }
-                }
-            }
-            
-            // Draw title
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 24px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText(`Nested Density Rings: 1 → ${maxN}`, cx, 40);
-            
-            ctx.font = '14px "Fira Code"';
-            ctx.fillText(`Color = φ(m)/m density`, cx, height - 20);
-        }
-        
-        // ============================================================
-        // CANVAS 12: DIRICHLET CHARACTERS
-        // ============================================================
-        
-        function drawDirichlet() {
-            const canvas = document.getElementById('dirichletCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const cx = width / 2;
-            const cy = height / 2;
-            const radius = Math.min(width, height) * 0.4;
-            
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = CONFIG.colors.background;
-            ctx.fillRect(0, 0, width, height);
-            
-            const M = state.modulus;
-            const phase = state.phase * Math.PI / 180;
-            const phi_M = eulerPhi(M);
-            
-            // Draw unit circle
-            ctx.strokeStyle = CONFIG.colors.axes;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-            ctx.stroke();
-            
-            // Principal character χ₀: 1 if gcd(n,M)=1, else 0
-            for (let n = 1; n < M; n++) {
-                if (gcd(n, M) === 1) {
-                    const angle = getPlotAngle(n, M, 2 * Math.PI * n / M, 0) + phase;
-                    const x = cx + radius * Math.cos(angle);
-                    const y = cy + radius * Math.sin(angle);
-                    
-                    ctx.fillStyle = CONFIG.colors.gold;
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = CONFIG.colors.gold;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
-            }
-            
-            // For primes, show χ(p) for quadratic character
-            if (isPrime(M) && M > 2) {
-                const colors = generateColors(M);
-                for (let a = 1; a < M; a++) {
-                    if (gcd(a, M) !== 1) continue;
-                    
-                    // Compute Legendre symbol (a/p)
-                    const legendre = modPow(a, (M - 1) / 2, M);
-                    const isQR = legendre === 1;
-                    
-                    const angle = getPlotAngle(a, M, 2 * Math.PI * a / M, 0) + phase;
-                    const r = radius * (isQR ? 0.7 : 1.0);
-                    const x = cx + r * Math.cos(angle);
-                    const y = cy + r * Math.sin(angle);
-                    
-                    ctx.fillStyle = isQR ? '#00ff00' : '#ff00ff';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                    
-                    // Connect quadratic residues
-                    if (isQR) {
-                        for (let b = a + 1; b < M; b++) {
-                            if (gcd(b, M) !== 1) continue;
-                            const legB = modPow(b, (M - 1) / 2, M);
-                            if (legB === 1) {
-                                const angle2 = getPlotAngle(b, M, 2 * Math.PI * b / M, 0) + phase;
-                                const x2 = cx + radius * 0.7 * Math.cos(angle2);
-                                const y2 = cy + radius * 0.7 * Math.sin(angle2);
-                                
-                                ctx.strokeStyle = 'rgba(0, 255, 0, 0.2)';
-                                ctx.lineWidth = 1;
-                                ctx.beginPath();
-                                ctx.moveTo(x, y);
-                                ctx.lineTo(x2, y2);
-                                ctx.stroke();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Draw title
-            ctx.fillStyle = CONFIG.colors.text;
-            ctx.font = 'bold 24px "Fira Code"';
-            ctx.textAlign = 'center';
-            ctx.fillText(`Dirichlet Characters mod ${M}`, cx, 40);
-            
-            ctx.font = '14px "Fira Code"';
-            if (isPrime(M) && M > 2) {
-                ctx.fillStyle = '#00ff00';
-                ctx.fillText(`● Quadratic Residues (${phi_M / 2})`, cx - 150, height - 40);
-                ctx.fillStyle = '#ff00ff';
-                ctx.fillText(`● Non-Residues (${phi_M / 2})`, cx + 100, height - 40);
-            } else {
-                ctx.fillStyle = CONFIG.colors.gold;
-                ctx.fillText(`Principal character χ₀: φ(${M}) = ${phi_M} points`, cx, height - 40);
-            }
-        }
 
         // ============================================================
         // ANIMATION
@@ -9893,85 +9452,6 @@ Generated: ${new Date().toLocaleString()}
                 a.download = 'primitive_roots.png';
                 a.click();
             }
-        }
-
-        // Export individual canvas by number (1-12)
-        function exportCanvas(num) {
-            const canvasMap = {
-                1: { id: 'diskCanvas', name: 'unit_disk_4k.png' },
-                2: { id: 'cayleyCanvas', name: 'cayley_plane_4k.png' },
-                3: { id: 'nestedCanvas', name: 'nested_rings_4k.png' },
-                4: { id: 'reductionCanvas', name: 'modular_reduction_4k.png' },
-                5: { id: 'fullPlaneCanvas', name: 'full_plane_4k.png' },
-                6: null, // Pixi canvas - handled separately
-                7: { id: 'coprimeCircleCanvas', name: 'coprime_circle_4k.png' },
-                8: { id: 'phiRatiosCanvas', name: 'phi_ratios_4k.png' },
-                9: { id: 'convergenceCanvas', name: 'convergence_4k.png' },
-                10: { id: 'coprimeGridCanvas', name: 'coprime_grid_4k.png' },
-                11: { id: 'densityRingsCanvas', name: 'density_rings_4k.png' },
-                12: { id: 'dirichletCanvas', name: 'dirichlet_4k.png' }
-            };
-            
-            if (num === 6) {
-                exportPixiCanvas();
-            } else if (canvasMap[num]) {
-                exportSingleCanvas(canvasMap[num].id, canvasMap[num].name);
-            } else {
-                console.error('Invalid canvas number:', num);
-            }
-        }
-
-        // Export all 12 canvases as individual files
-        function exportAll() {
-            console.log('Exporting all 12 canvases...');
-            for (let i = 1; i <= 12; i++) {
-                setTimeout(() => exportCanvas(i), i * 500); // Stagger exports
-            }
-        }
-
-        // Export selected canvases
-        function exportSelected() {
-            const selected = [];
-            for (let i = 1; i <= 12; i++) {
-                const checkbox = document.getElementById(`exportCanvas${i}`);
-                if (checkbox && checkbox.checked) {
-                    selected.push(i);
-                }
-            }
-            
-            if (selected.length === 0) {
-                alert('Please select at least one canvas to export');
-                return;
-            }
-            
-            selected.forEach((num, idx) => {
-                setTimeout(() => exportCanvas(num), idx * 500);
-            });
-        }
-
-        // Export CSV data for all relevant canvases
-        function exportCSV() {
-            let csv = 'Canvas,Type,Data\n';
-            
-            // Add data from each canvas
-            csv += `"1","Primes","${state.primes.slice(0, state.numPrimes).join(',')}"\n`;
-            csv += `"1","Farey Points","${state.fareyPoints.map(fp => `${fp.num}/${fp.den}`).join(',')}"\n`;
-            csv += `"3","Nested Rings","Moduli ${state.minRing} to ${state.maxRing}"\n`;
-            
-            // Phi ratios data
-            csv += '"8","Phi Ratios","n,φ(n)/n"\n';
-            for (let n = 2; n <= Math.min(state.modulus, 100); n++) {
-                csv += `"8","","${n},${(eulerPhi(n) / n).toFixed(6)}"\n`;
-            }
-            
-            // Download CSV
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `12canvas_data_M${state.modulus}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
         }
 
         function exportVisualization() {
@@ -11804,6 +11284,477 @@ Generated: ${new Date().toLocaleString()}
             
             console.log('\n=====================================================');
         }
+
+        // ========================================
+        // CANVAS 7: Coprime Circle
+        // ========================================
+        function drawCanvas7() {
+            const canvas = document.getElementById('canvas7');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) * 0.4;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const n = state.modulus;
+            const phase = state.phase * Math.PI / 180;
+            
+            // Draw circle
+            ctx.strokeStyle = 'rgba(46, 204, 113, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Draw points colored by coprimality
+            for (let i = 1; i < n; i++) {
+                const angle = 2 * Math.PI * i / n + phase;
+                const x = cx + radius * Math.cos(angle);
+                const y = cy + radius * Math.sin(angle);
+                
+                const isCoprime = gcd(i, n) === 1;
+                ctx.fillStyle = isCoprime ? '#2ecc71' : 'rgba(231, 76, 60, 0.5)';
+                ctx.beginPath();
+                ctx.arc(x, y, isCoprime ? 5 : 3, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw connections between coprimes
+                if (isCoprime && state.showConnections) {
+                    for (let j = i + 1; j < n; j++) {
+                        if (gcd(j, n) === 1) {
+                            const angle2 = 2 * Math.PI * j / n + phase;
+                            const x2 = cx + radius * Math.cos(angle2);
+                            const y2 = cy + radius * Math.sin(angle2);
+                            
+                            ctx.strokeStyle = 'rgba(46, 204, 113, 0.1)';
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(x, y);
+                            ctx.lineTo(x2, y2);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Center label
+            ctx.fillStyle = '#2ecc71';
+            ctx.font = 'bold 24px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`φ(${n}) = ${phi(n)}`, cx, cy - 20);
+            ctx.font = '16px monospace';
+            ctx.fillText(`${phi(n)}/${n} = ${(phi(n)/n).toFixed(4)}`, cx, cy + 10);
+        }
+
+        // ========================================
+        // CANVAS 8: Phi Ratios Chart
+        // ========================================
+        function drawCanvas8() {
+            const canvas = document.getElementById('canvas8');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const maxN = Math.min(state.modulus, 200);
+            const margin = 80;
+            const chartWidth = w - 2 * margin;
+            const chartHeight = h - 2 * margin;
+            
+            // Draw axes
+            ctx.strokeStyle = '#f1c40f';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, h - margin);
+            ctx.lineTo(w - margin, h - margin);
+            ctx.stroke();
+            
+            // Draw phi(n)/n values
+            ctx.strokeStyle = '#f1c40f';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            let firstPoint = true;
+            for (let n = 2; n <= maxN; n++) {
+                const ratio = phi(n) / n;
+                const x = margin + (n / maxN) * chartWidth;
+                const y = h - margin - ratio * chartHeight;
+                
+                if (firstPoint) {
+                    ctx.moveTo(x, y);
+                    firstPoint = false;
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Mark primes
+                if (isPrime(n)) {
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#f1c40f';
+            ctx.font = 'bold 20px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('φ(n)/n Ratio Chart', w / 2, 40);
+            
+            ctx.font = '14px monospace';
+            ctx.fillText('n', w - margin + 20, h - margin + 5);
+            ctx.save();
+            ctx.translate(margin - 50, h / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('φ(n)/n', 0, 0);
+            ctx.restore();
+        }
+
+        // ========================================
+        // CANVAS 9: Convergence to 6/π²
+        // ========================================
+        function drawCanvas9() {
+            const canvas = document.getElementById('canvas9');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const maxN = Math.min(state.modulus, 500);
+            const margin = 80;
+            const chartWidth = w - 2 * margin;
+            const chartHeight = h - 2 * margin;
+            const target = 6 / (Math.PI * Math.PI);
+            
+            // Draw axes
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, h - margin);
+            ctx.lineTo(w - margin, h - margin);
+            ctx.stroke();
+            
+            // Draw target line
+            const targetY = h - margin - (target / 1.0) * chartHeight;
+            ctx.strokeStyle = 'rgba(46, 204, 113, 0.5)';
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(margin, targetY);
+            ctx.lineTo(w - margin, targetY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Calculate cumulative coprime density
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            let coprimeCount = 0;
+            let totalCount = 0;
+            let firstPoint = true;
+            
+            for (let n = 1; n <= maxN; n++) {
+                for (let k = 1; k < n; k++) {
+                    totalCount++;
+                    if (gcd(k, n) === 1) coprimeCount++;
+                }
+                
+                const density = coprimeCount / totalCount;
+                const x = margin + (n / maxN) * chartWidth;
+                const y = h - margin - (density / 1.0) * chartHeight;
+                
+                if (firstPoint) {
+                    ctx.moveTo(x, y);
+                    firstPoint = false;
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#e74c3c';
+            ctx.font = 'bold 20px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('Convergence to 6/π²', w / 2, 40);
+            
+            ctx.font = '14px monospace';
+            ctx.fillStyle = '#2ecc71';
+            ctx.fillText(`Target: ${target.toFixed(6)}`, w / 2, 65);
+        }
+
+        // ========================================
+        // CANVAS 10: Coprime Pairs Grid
+        // ========================================
+        function drawCanvas10() {
+            const canvas = document.getElementById('canvas10');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const n = Math.min(state.modulus, 50);
+            const margin = 60;
+            const gridSize = Math.min((w - 2 * margin) / n, (h - 2 * margin) / n);
+            
+            // Draw grid
+            for (let i = 1; i < n; i++) {
+                for (let j = 1; j < n; j++) {
+                    const x = margin + i * gridSize;
+                    const y = margin + j * gridSize;
+                    
+                    const g = gcd(i, j);
+                    const isCoprime = g === 1;
+                    
+                    ctx.fillStyle = isCoprime ? 
+                        'rgba(99, 102, 241, 0.8)' : 
+                        `rgba(99, 102, 241, ${0.1 + (1 / g) * 0.3})`;
+                    ctx.fillRect(x, y, gridSize - 1, gridSize - 1);
+                    
+                    // Mark diagonal
+                    if (i === j) {
+                        ctx.strokeStyle = '#f1c40f';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(x, y, gridSize - 1, gridSize - 1);
+                    }
+                }
+            }
+            
+            // Title
+            ctx.fillStyle = '#6366f1';
+            ctx.font = 'bold 20px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('Coprime Pairs Matrix', w / 2, 35);
+            ctx.font = '14px monospace';
+            ctx.fillText('Brighter = Coprime', w / 2, 55);
+        }
+
+        // ========================================
+        // CANVAS 11: Nested Density Rings
+        // ========================================
+        function drawCanvas11() {
+            const canvas = document.getElementById('canvas11');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            const cx = w / 2;
+            const cy = h / 2;
+            const maxRadius = Math.min(w, h) * 0.45;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const maxN = Math.min(state.modulus, 30);
+            const phase = state.phase * Math.PI / 180;
+            
+            // Draw rings from 1 to maxN
+            for (let n = 2; n <= maxN; n++) {
+                const radius = (n / maxN) * maxRadius;
+                const phiN = phi(n);
+                
+                // Draw ring circle
+                ctx.strokeStyle = `rgba(39, 174, 96, ${0.2 + (phiN / n) * 0.5})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Draw coprime points on this ring
+                for (let k = 1; k < n; k++) {
+                    if (gcd(k, n) === 1) {
+                        const angle = 2 * Math.PI * k / n + phase;
+                        const x = cx + radius * Math.cos(angle);
+                        const y = cy + radius * Math.sin(angle);
+                        
+                        ctx.fillStyle = '#27ae60';
+                        ctx.beginPath();
+                        ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+                
+                // Label every 5th ring
+                if (n % 5 === 0) {
+                    ctx.fillStyle = '#27ae60';
+                    ctx.font = '12px monospace';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(`n=${n}`, cx + radius + 10, cy);
+                }
+            }
+            
+            // Center label
+            ctx.fillStyle = '#27ae60';
+            ctx.font = 'bold 18px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('Nested Density Rings', cx, cy);
+            ctx.font = '14px monospace';
+            ctx.fillText(`Showing 1 to ${maxN}`, cx, cy + 25);
+        }
+
+        // ========================================
+        // CANVAS 12: Dirichlet Characters
+        // ========================================
+        function drawCanvas12() {
+            const canvas = document.getElementById('canvas12');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) * 0.4;
+            
+            // Clear
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, w, h);
+            
+            const m = state.modulus;
+            const phase = state.phase * Math.PI / 180;
+            
+            // Draw main circle
+            ctx.strokeStyle = 'rgba(156, 39, 176, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Calculate principal Dirichlet character mod m
+            // χ(n) = 1 if gcd(n,m)=1, 0 otherwise (principal character)
+            const phiM = phi(m);
+            const colors = ['#9c27b0', '#e91e63', '#f44336', '#ff9800', '#ffc107', '#8bc34a', '#4caf50', '#00bcd4'];
+            
+            // For each residue class, calculate character value
+            for (let n = 1; n < m; n++) {
+                const g = gcd(n, m);
+                const angle = 2 * Math.PI * n / m + phase;
+                const x = cx + radius * Math.cos(angle);
+                const y = cy + radius * Math.sin(angle);
+                
+                if (g === 1) {
+                    // Coprime - part of character group
+                    // Calculate order of n in (Z/mZ)*
+                    let order = 1;
+                    let power = n % m;
+                    while (power !== 1 && order < m) {
+                        power = (power * n) % m;
+                        order++;
+                    }
+                    
+                    const colorIndex = order % colors.length;
+                    ctx.fillStyle = colors[colorIndex];
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                    ctx.fill();
+                    
+                    // Draw ray for character
+                    ctx.strokeStyle = colors[colorIndex] + '40';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                } else {
+                    // Not coprime - χ(n) = 0
+                    ctx.fillStyle = 'rgba(156, 39, 176, 0.2)';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+            
+            // Center labels
+            ctx.fillStyle = '#9c27b0';
+            ctx.font = 'bold 20px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Dirichlet Characters', cx, cy - 30);
+            ctx.font = '16px monospace';
+            ctx.fillText(`mod ${m}`, cx, cy);
+            ctx.font = '14px monospace';
+            ctx.fillText(`φ(${m}) = ${phiM}`, cx, cy + 25);
+        }
+
+        // ========================================
+        // Export Functions for Canvases 7-12
+        // ========================================
+        function exportCanvas7() { exportSingleCanvas('canvas7', 'coprime_circle_4k.png'); }
+        function exportCanvas8() { exportSingleCanvas('canvas8', 'phi_ratios_4k.png'); }
+        function exportCanvas9() { exportSingleCanvas('canvas9', 'convergence_4k.png'); }
+        function exportCanvas10() { exportSingleCanvas('canvas10', 'coprime_grid_4k.png'); }
+        function exportCanvas11() { exportSingleCanvas('canvas11', 'density_rings_4k.png'); }
+        function exportCanvas12() { exportSingleCanvas('canvas12', 'dirichlet_characters_4k.png'); }
+
+        // ========================================
+        // Master Draw Function - All 12 Canvases
+        // ========================================
+        function drawAll() {
+            drawDisk();
+            drawCayley();
+            drawNested();
+            drawReduction();
+            drawFullPlane();
+            // Canvas 6 (Pixi) draws itself
+            drawCanvas7();
+            drawCanvas8();
+            drawCanvas9();
+            drawCanvas10();
+            drawCanvas11();
+            drawCanvas12();
+        }
+
+        // Add to existing animate function
+        const originalAnimate = animate;
+        animate = function() {
+            originalAnimate();
+            if (state.animate) {
+                drawCanvas7();
+                drawCanvas11(); // Rings also rotate
+                drawCanvas12(); // Dirichlet also rotates
+            }
+        };
+
+        console.log('✅ 12-Canvas Mega Research Tool Initialized');
+        console.log('By Wessen Getachew');
+        console.log('Canvases 1-6: Farey & Transform Suite');
+        console.log('Canvases 7-11: Coprime Density Analysis');
+        console.log('Canvas 12: Dirichlet Characters (NEW)');
     </script>
 </body>
 </html>
