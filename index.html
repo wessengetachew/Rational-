@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             padding: 40px;
@@ -94,6 +94,10 @@
         .canvas-container {
             margin: 30px 0;
             text-align: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
         }
         
         canvas {
@@ -105,72 +109,205 @@
         }
         
         .controls {
-            background: #f8f9fa;
+            background: #e8f4f8;
             padding: 25px;
             margin: 20px 0;
-            border-radius: 5px;
-            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+
+        .controls-header {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
         }
         
         .control-group {
             margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         label {
             display: inline-block;
-            width: 180px;
+            min-width: 200px;
             font-weight: 600;
             color: #495057;
         }
         
         input[type="range"] {
-            width: 300px;
-            vertical-align: middle;
+            flex: 1;
+            max-width: 400px;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         
         input[type="number"] {
-            width: 80px;
-            padding: 5px;
-            border: 1px solid #ced4da;
-            border-radius: 3px;
+            width: 100px;
+            padding: 8px;
+            border: 2px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
         }
         
         button {
             background: #3498db;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             margin: 5px;
             cursor: pointer;
             font-size: 1em;
-            border-radius: 4px;
-            transition: background 0.3s;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         button:hover {
             background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
         
         button:active {
             background: #21618c;
+            transform: translateY(0);
+        }
+
+        button.reset-btn {
+            background: #e74c3c;
+        }
+
+        button.reset-btn:hover {
+            background: #c0392b;
+        }
+
+        button.export-all {
+            background: #27ae60;
+            font-size: 1.1em;
+            padding: 14px 30px;
+        }
+
+        button.export-all:hover {
+            background: #229954;
         }
         
         .export-buttons {
             text-align: center;
             margin: 20px 0;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 6px;
+        }
+
+        .export-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #fff9e6;
+            border: 2px solid #f39c12;
+            border-radius: 8px;
+        }
+
+        .export-section h3 {
+            color: #d68910;
+            margin-top: 0;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .checkbox-item input:checked + label {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .color-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #333;
+            flex-shrink: 0;
         }
         
         .stats-panel {
             background: #e8f4f8;
-            padding: 20px;
+            padding: 25px;
             margin: 20px 0;
-            border-radius: 5px;
-            border: 1px solid #b8dae5;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+
+        .stats-panel h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4em;
         }
         
         .stat-item {
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 1.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
         }
         
         .stat-label {
@@ -179,8 +316,10 @@
         }
         
         .stat-value {
-            color: #2980b9;
+            color: #e74c3c;
             font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.1em;
         }
         
         .math {
@@ -195,30 +334,131 @@
         
         .interpretation {
             background: #f0f7ff;
-            padding: 20px;
+            padding: 25px;
             margin: 20px 0;
             border-left: 4px solid #5dade2;
+            border-radius: 4px;
         }
         
         .value-display {
             display: inline-block;
-            min-width: 60px;
+            min-width: 80px;
             text-align: center;
-            font-weight: 600;
-            color: #2980b9;
+            font-weight: 700;
+            color: #e74c3c;
+            font-size: 1.1em;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 2px solid #e74c3c;
+        }
+
+        .zoom-controls {
+            background: #fff3cd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 2px solid #ffc107;
+        }
+
+        .zoom-controls h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .multi-canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 30px 50px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
+    <div class="loading" id="loading">Generating export...</div>
+    
     <div class="container">
         <header>
             <h1>Infinite Moduli, Roots of Unity, and the Density of Coprime Channels</h1>
             <div class="subtitle">An Interactive Exploration of Classical Results in Analytic Number Theory</div>
-            <div class="author">by Wessen Getachew</div>
+            <div class="author">by Wessen Getachew (@7dview)</div>
         </header>
 
         <div class="abstract">
             <strong>Abstract:</strong> This interactive document explores the classical connection between rational points on the unit circle arising from roots of unity, the density of coprime integer pairs, and the asymptotic behavior of Farey sequences. We demonstrate that while the set of all rational angles is dense on the unit circle, the subset corresponding to reduced fractions (coprime numerator and denominator) has natural density 3/π². The global average of φ(m)/m over all moduli converges to 6/π², reconciling the fact that prime moduli individually approach density 1 while having measure zero in the integers.
+        </div>
+
+        <!-- Multi-Canvas Export Section -->
+        <div class="export-section">
+            <h3>🎯 Multi-Canvas Export System</h3>
+            <p style="margin-bottom: 20px;">Select any combination of visualizations to export together. The system will automatically arrange them in an optimal grid layout with a comprehensive legend.</p>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="circle" checked>
+                    <span class="color-indicator" style="background: #e74c3c;"></span>
+                    <span>Unit Circle</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="pairs" checked>
+                    <span class="color-indicator" style="background: #3498db;"></span>
+                    <span>Coprime Pairs Grid</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="phi" checked>
+                    <span class="color-indicator" style="background: #27ae60;"></span>
+                    <span>φ(m)/m Ratios</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="convergence" checked>
+                    <span class="color-indicator" style="background: #f39c12;"></span>
+                    <span>Convergence Chart</span>
+                </label>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <div style="margin-bottom: 15px;">
+                    <button onclick="selectAllCanvasExports()">Select All</button>
+                    <button onclick="deselectAllCanvasExports()">Deselect All</button>
+                </div>
+                <div id="exportCount" style="color: #27ae60; font-weight: 700; font-size: 1.1em; margin-bottom: 15px;">
+                    4 canvases selected
+                </div>
+                <label style="margin-right: 20px;">
+                    <input type="checkbox" id="includeExportLegend" checked> Include Legend
+                </label>
+                <label style="margin-right: 20px;">
+                    <input type="checkbox" id="includeExportParameters" checked> Include Parameters
+                </label>
+                <label>
+                    Export Resolution:
+                    <select id="exportResolution" style="padding: 8px; margin-left: 10px; font-size: 1em;">
+                        <option value="1080">Full HD (1920×1080)</option>
+                        <option value="1440">2K (2560×1440)</option>
+                        <option value="4k" selected>4K UHD (3840×2160)</option>
+                        <option value="8k">8K UHD (7680×4320)</option>
+                    </select>
+                </label>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="export-all" onclick="exportMultipleCanvases()">
+                    📊 Export Selected Canvases
+                </button>
+            </div>
         </div>
 
         <h2>1. Unit Circle and Rational Angles</h2>
@@ -227,10 +467,11 @@
         </div>
 
         <div class="controls">
+            <div class="controls-header">Unit Circle Controls</div>
             <div class="control-group">
                 <label>Maximum Modulus:</label>
-                <input type="range" id="maxModulus" min="1" max="50" value="12" oninput="updateModulusDisplay(this.value); renderAll()">
-                <span class="value-display" id="maxModulusValue">12</span>
+                <input type="range" id="maxModulus" min="1" max="100" value="20" oninput="updateModulusDisplay(this.value); renderAll()">
+                <span class="value-display" id="maxModulusValue">20</span>
             </div>
             <div class="control-group">
                 <label>Show Coprime Only:</label>
@@ -238,8 +479,17 @@
             </div>
             <div class="control-group">
                 <label>Point Size:</label>
-                <input type="range" id="pointSize" min="1" max="8" value="3" oninput="updatePointSizeDisplay(this.value); renderAll()">
-                <span class="value-display" id="pointSizeValue">3</span>
+                <input type="range" id="pointSize" min="1" max="12" value="4" oninput="updatePointSizeDisplay(this.value); renderAll()">
+                <span class="value-display" id="pointSizeValue">4</span>
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>Unit Circle Zoom:</label>
+                <input type="range" id="circleZoom" min="50" max="300" value="100" step="5" oninput="updateCircleZoom(this.value); renderUnitCircle()">
+                <span class="value-display" id="circleZoomValue">100%</span>
             </div>
         </div>
 
@@ -252,7 +502,7 @@
         </div>
 
         <div class="stats-panel" id="circleStats">
-            <h3>Statistics for Unit Circle Visualization</h3>
+            <h3>Unit Circle Statistics</h3>
             <div class="stat-item">
                 <span class="stat-label">Total Points Plotted:</span>
                 <span class="stat-value" id="totalPoints">0</span>
@@ -264,6 +514,10 @@
             <div class="stat-item">
                 <span class="stat-label">Coprime Ratio:</span>
                 <span class="stat-value" id="coprimeRatio">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Canvas Zoom Level:</span>
+                <span class="stat-value" id="circleZoomStat">100%</span>
             </div>
         </div>
 
@@ -278,10 +532,20 @@
         </div>
 
         <div class="controls">
+            <div class="controls-header">Coprime Pairs Controls</div>
             <div class="control-group">
                 <label>Grid Size N:</label>
-                <input type="range" id="gridSize" min="10" max="200" value="50" step="10" oninput="updateGridSizeDisplay(this.value); renderCoprimePairs()">
-                <span class="value-display" id="gridSizeValue">50</span>
+                <input type="range" id="gridSize" min="10" max="200" value="60" step="10" oninput="updateGridSizeDisplay(this.value); renderCoprimePairs()">
+                <span class="value-display" id="gridSizeValue">60</span>
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>Coprime Pairs Zoom:</label>
+                <input type="range" id="pairsZoom" min="50" max="300" value="100" step="5" oninput="updatePairsZoom(this.value); renderCoprimePairs()">
+                <span class="value-display" id="pairsZoomValue">100%</span>
             </div>
         </div>
 
@@ -319,6 +583,10 @@
                 <span class="stat-label">Error from Limit:</span>
                 <span class="stat-value" id="pairsError">0</span>
             </div>
+            <div class="stat-item">
+                <span class="stat-label">Canvas Zoom Level:</span>
+                <span class="stat-value" id="pairsZoomStat">100%</span>
+            </div>
         </div>
 
         <h2>3. Average φ(m)/m Over All Moduli</h2>
@@ -332,6 +600,7 @@
         </div>
 
         <div class="controls">
+            <div class="controls-header">φ(m)/m Ratio Controls</div>
             <div class="control-group">
                 <label>Maximum Modulus:</label>
                 <input type="range" id="phiMaxModulus" min="10" max="500" value="100" step="10" oninput="updatePhiMaxDisplay(this.value); renderPhiRatios()">
@@ -340,6 +609,15 @@
             <div class="control-group">
                 <label>Show Primes Only:</label>
                 <input type="checkbox" id="primesOnly" onchange="renderPhiRatios()">
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>φ Ratios Zoom:</label>
+                <input type="range" id="phiZoom" min="50" max="300" value="100" step="5" oninput="updatePhiZoom(this.value); renderPhiRatios()">
+                <span class="value-display" id="phiZoomValue">100%</span>
             </div>
         </div>
 
@@ -373,6 +651,10 @@
                 <span class="stat-label">Prime Average (if checked):</span>
                 <span class="stat-value" id="primeAvg">N/A</span>
             </div>
+            <div class="stat-item">
+                <span class="stat-label">Canvas Zoom Level:</span>
+                <span class="stat-value" id="phiZoomStat">100%</span>
+            </div>
         </div>
 
         <h2>4. Convergence Visualization</h2>
@@ -380,11 +662,21 @@
             <p>This chart shows how the running average of φ(<span class="math">m</span>)/<span class="math">m</span> converges to 6/π² as we increase the maximum modulus. The horizontal line represents the theoretical limit.</p>
         </div>
 
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>Convergence Chart Zoom:</label>
+                <input type="range" id="convergenceZoom" min="50" max="300" value="100" step="5" oninput="updateConvergenceZoom(this.value); renderConvergence()">
+                <span class="value-display" id="convergenceZoomValue">100%</span>
+            </div>
+        </div>
+
         <div class="canvas-container">
             <canvas id="convergenceCanvas" width="1200" height="600"></canvas>
             <div class="export-buttons">
                 <button onclick="exportCanvas('convergenceCanvas', '4k')">Export as 4K PNG</button>
                 <button onclick="exportConvergenceData()">Export Data as CSV</button>
+                <button class="reset-btn" onclick="resetAllZoom()">Reset All Zoom</button>
             </div>
         </div>
 
@@ -423,6 +715,14 @@
     </div>
 
     <script>
+        // Global state for zoom levels
+        const zoomState = {
+            circle: 1.0,
+            pairs: 1.0,
+            phi: 1.0,
+            convergence: 1.0
+        };
+
         // Mathematical utilities
         function gcd(a, b) {
             a = Math.abs(a);
@@ -479,6 +779,67 @@
             document.getElementById('phiMaxValue').textContent = val;
         }
 
+        // Zoom update functions
+        function updateCircleZoom(val) {
+            zoomState.circle = parseFloat(val) / 100;
+            document.getElementById('circleZoomValue').textContent = val + '%';
+            document.getElementById('circleZoomStat').textContent = val + '%';
+        }
+
+        function updatePairsZoom(val) {
+            zoomState.pairs = parseFloat(val) / 100;
+            document.getElementById('pairsZoomValue').textContent = val + '%';
+            document.getElementById('pairsZoomStat').textContent = val + '%';
+        }
+
+        function updatePhiZoom(val) {
+            zoomState.phi = parseFloat(val) / 100;
+            document.getElementById('phiZoomValue').textContent = val + '%';
+            document.getElementById('phiZoomStat').textContent = val + '%';
+        }
+
+        function updateConvergenceZoom(val) {
+            zoomState.convergence = parseFloat(val) / 100;
+            document.getElementById('convergenceZoomValue').textContent = val + '%';
+        }
+
+        function resetAllZoom() {
+            document.getElementById('circleZoom').value = 100;
+            document.getElementById('pairsZoom').value = 100;
+            document.getElementById('phiZoom').value = 100;
+            document.getElementById('convergenceZoom').value = 100;
+            
+            updateCircleZoom(100);
+            updatePairsZoom(100);
+            updatePhiZoom(100);
+            updateConvergenceZoom(100);
+            
+            renderAll();
+        }
+
+        // Multi-canvas export selection
+        function updateExportCount() {
+            const count = document.querySelectorAll('.canvas-export-checkbox:checked').length;
+            document.getElementById('exportCount').textContent = `${count} canvas${count !== 1 ? 'es' : ''} selected`;
+        }
+
+        function selectAllCanvasExports() {
+            document.querySelectorAll('.canvas-export-checkbox').forEach(cb => cb.checked = true);
+            updateExportCount();
+        }
+
+        function deselectAllCanvasExports() {
+            document.querySelectorAll('.canvas-export-checkbox').forEach(cb => cb.checked = false);
+            updateExportCount();
+        }
+
+        // Add event listeners to checkboxes
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.canvas-export-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateExportCount);
+            });
+        });
+
         // Render Unit Circle
         function renderUnitCircle() {
             const canvas = document.getElementById('unitCircleCanvas');
@@ -486,10 +847,11 @@
             const maxM = parseInt(document.getElementById('maxModulus').value);
             const coprimeOnly = document.getElementById('coprimeOnly').checked;
             const pointSize = parseInt(document.getElementById('pointSize').value);
+            const zoom = zoomState.circle;
 
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
-            const radius = Math.min(cx, cy) - 50;
+            const radius = (Math.min(cx, cy) - 50) * zoom;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -550,8 +912,11 @@
             const canvas = document.getElementById('coprimePairsCanvas');
             const ctx = canvas.getContext('2d');
             const N = parseInt(document.getElementById('gridSize').value);
+            const zoom = zoomState.pairs;
 
-            const cellSize = Math.min(canvas.width, canvas.height) / (N + 2);
+            const cellSize = (Math.min(canvas.width, canvas.height) / (N + 2)) * zoom;
+            const offsetX = (canvas.width - cellSize * (N + 2)) / 2;
+            const offsetY = (canvas.height - cellSize * (N + 2)) / 2;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -559,8 +924,8 @@
 
             for (let a = 1; a <= N; a++) {
                 for (let b = 1; b <= N; b++) {
-                    const x = a * cellSize;
-                    const y = canvas.height - b * cellSize;
+                    const x = offsetX + a * cellSize;
+                    const y = canvas.height - offsetY - b * cellSize;
                     
                     if (gcd(a, b) === 1) {
                         ctx.fillStyle = '#e74c3c';
@@ -574,19 +939,22 @@
             }
 
             // Draw axes
+            const axisX = offsetX + cellSize;
+            const axisY = canvas.height - offsetY - cellSize;
+            
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(cellSize, 0);
-            ctx.lineTo(cellSize, canvas.height - cellSize);
-            ctx.lineTo(canvas.width, canvas.height - cellSize);
+            ctx.moveTo(axisX, offsetY);
+            ctx.lineTo(axisX, axisY);
+            ctx.lineTo(canvas.width - offsetX, axisY);
             ctx.stroke();
 
             // Labels
             ctx.fillStyle = '#333';
-            ctx.font = '14px Arial';
-            ctx.fillText('a', canvas.width - 20, canvas.height - cellSize + 20);
-            ctx.fillText('b', cellSize - 20, 20);
+            ctx.font = '16px Arial';
+            ctx.fillText('a', canvas.width - offsetX - 30, axisY + 25);
+            ctx.fillText('b', axisX - 30, offsetY + 20);
 
             // Update statistics
             const totalPairs = N * N;
@@ -606,10 +974,13 @@
             const ctx = canvas.getContext('2d');
             const maxM = parseInt(document.getElementById('phiMaxModulus').value);
             const primesOnly = document.getElementById('primesOnly').checked;
+            const zoom = zoomState.phi;
 
             const padding = 60;
-            const plotWidth = canvas.width - 2 * padding;
-            const plotHeight = canvas.height - 2 * padding;
+            const plotWidth = (canvas.width - 2 * padding) * zoom;
+            const plotHeight = (canvas.height - 2 * padding) * zoom;
+            const offsetX = (canvas.width - plotWidth) / 2;
+            const offsetY = (canvas.height - plotHeight) / 2;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -617,26 +988,26 @@
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.moveTo(padding, canvas.height - padding);
-            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.moveTo(offsetX, offsetY);
+            ctx.moveTo(offsetX, canvas.height - offsetY);
+            ctx.lineTo(canvas.width - offsetX, canvas.height - offsetY);
             ctx.stroke();
 
             // Draw theoretical limit line
             ctx.strokeStyle = '#27ae60';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
-            const limitY = canvas.height - padding - (SIX_OVER_PI_SQUARED * plotHeight);
+            const limitY = canvas.height - offsetY - (SIX_OVER_PI_SQUARED * plotHeight);
             ctx.beginPath();
-            ctx.moveTo(padding, limitY);
-            ctx.lineTo(canvas.width - padding, limitY);
+            ctx.moveTo(offsetX, limitY);
+            ctx.lineTo(canvas.width - offsetX, limitY);
             ctx.stroke();
             ctx.setLineDash([]);
 
             // Label for limit
             ctx.fillStyle = '#27ae60';
-            ctx.font = '12px Arial';
-            ctx.fillText('6/π² ≈ 0.6079', canvas.width - padding + 10, limitY + 5);
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('6/π² ≈ 0.6079', canvas.width - offsetX + 10, limitY + 5);
 
             // Plot points
             let sum = 0;
@@ -649,12 +1020,12 @@
                 if (primesOnly && !isPrimeNum) continue;
 
                 const ratio = euler_phi(m) / m;
-                const x = padding + (m / maxM) * plotWidth;
-                const y = canvas.height - padding - ratio * plotHeight;
+                const x = offsetX + (m / maxM) * plotWidth;
+                const y = canvas.height - offsetY - ratio * plotHeight;
 
                 ctx.fillStyle = isPrimeNum ? '#e74c3c' : '#3498db';
                 ctx.beginPath();
-                ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
                 ctx.fill();
 
                 sum += ratio;
@@ -668,7 +1039,7 @@
 
             // Axes labels
             ctx.fillStyle = '#333';
-            ctx.font = '14px Arial';
+            ctx.font = 'bold 16px Arial';
             ctx.fillText('Modulus m', canvas.width / 2, canvas.height - 20);
             ctx.save();
             ctx.translate(20, canvas.height / 2);
@@ -696,10 +1067,13 @@
             const canvas = document.getElementById('convergenceCanvas');
             const ctx = canvas.getContext('2d');
             const maxM = 500;
+            const zoom = zoomState.convergence;
 
             const padding = 60;
-            const plotWidth = canvas.width - 2 * padding;
-            const plotHeight = canvas.height - 2 * padding;
+            const plotWidth = (canvas.width - 2 * padding) * zoom;
+            const plotHeight = (canvas.height - 2 * padding) * zoom;
+            const offsetX = (canvas.width - plotWidth) / 2;
+            const offsetY = (canvas.height - plotHeight) / 2;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -707,19 +1081,19 @@
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.moveTo(padding, canvas.height - padding);
-            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.moveTo(offsetX, offsetY);
+            ctx.moveTo(offsetX, canvas.height - offsetY);
+            ctx.lineTo(canvas.width - offsetX, canvas.height - offsetY);
             ctx.stroke();
 
             // Draw theoretical limit line
             ctx.strokeStyle = '#27ae60';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
-            const limitY = canvas.height - padding - (SIX_OVER_PI_SQUARED * plotHeight);
+            const limitY = canvas.height - offsetY - (SIX_OVER_PI_SQUARED * plotHeight);
             ctx.beginPath();
-            ctx.moveTo(padding, limitY);
-            ctx.lineTo(canvas.width - padding, limitY);
+            ctx.moveTo(offsetX, limitY);
+            ctx.lineTo(canvas.width - offsetX, limitY);
             ctx.stroke();
             ctx.setLineDash([]);
 
@@ -732,12 +1106,12 @@
             }
 
             // Plot running average
-            ctx.strokeStyle = '#3498db';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#f39c12';
+            ctx.lineWidth = 3;
             ctx.beginPath();
             for (let i = 0; i < runningAvgs.length; i++) {
-                const x = padding + ((i + 1) / maxM) * plotWidth;
-                const y = canvas.height - padding - runningAvgs[i] * plotHeight;
+                const x = offsetX + ((i + 1) / maxM) * plotWidth;
+                const y = canvas.height - offsetY - runningAvgs[i] * plotHeight;
                 if (i === 0) {
                     ctx.moveTo(x, y);
                 } else {
@@ -748,7 +1122,7 @@
 
             // Axes labels
             ctx.fillStyle = '#333';
-            ctx.font = '14px Arial';
+            ctx.font = 'bold 16px Arial';
             ctx.fillText('Maximum Modulus N', canvas.width / 2, canvas.height - 20);
             ctx.save();
             ctx.translate(20, canvas.height / 2);
@@ -758,9 +1132,10 @@
 
             // Legend
             ctx.fillStyle = '#27ae60';
-            ctx.fillText('Theoretical: 6/π²', canvas.width - 200, padding + 20);
-            ctx.fillStyle = '#3498db';
-            ctx.fillText('Running Average', canvas.width - 200, padding + 40);
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Theoretical: 6/π²', canvas.width - 200, offsetY + 30);
+            ctx.fillStyle = '#f39c12';
+            ctx.fillText('Running Average', canvas.width - 200, offsetY + 55);
         }
 
         // Export functions
@@ -790,6 +1165,195 @@
                 a.click();
                 URL.revokeObjectURL(url);
             });
+        }
+
+        // Multi-canvas export function
+        function exportMultipleCanvases() {
+            const selectedCheckboxes = document.querySelectorAll('.canvas-export-checkbox:checked');
+            const selected = Array.from(selectedCheckboxes).map(cb => cb.value);
+            
+            if (selected.length === 0) {
+                alert('Please select at least one canvas to export.');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+
+            setTimeout(() => {
+                const resolution = document.getElementById('exportResolution').value;
+                const includeLegend = document.getElementById('includeExportLegend').checked;
+                const includeParameters = document.getElementById('includeExportParameters').checked;
+
+                let width, height;
+                switch(resolution) {
+                    case '1080': width = 1920; height = 1080; break;
+                    case '1440': width = 2560; height = 1440; break;
+                    case '4k': width = 3840; height = 2160; break;
+                    case '8k': width = 7680; height = 4320; break;
+                }
+
+                const canvasInfo = {
+                    'circle': { canvas: document.getElementById('unitCircleCanvas'), title: 'Unit Circle', color: '#e74c3c', subtitle: 'Roots of Unity' },
+                    'pairs': { canvas: document.getElementById('coprimePairsCanvas'), title: 'Coprime Pairs', color: '#3498db', subtitle: 'GCD Grid' },
+                    'phi': { canvas: document.getElementById('phiRatiosCanvas'), title: 'φ(m)/m Ratios', color: '#27ae60', subtitle: 'Totient Function' },
+                    'convergence': { canvas: document.getElementById('convergenceCanvas'), title: 'Convergence', color: '#f39c12', subtitle: 'Running Average' }
+                };
+
+                const count = selected.length;
+                let cols, rows;
+                if (count <= 2) { cols = count; rows = 1; }
+                else { cols = 2; rows = 2; }
+
+                const baseSize = Math.min(width, height);
+                const canvasSize = baseSize / Math.max(rows, cols);
+                const legendSpace = includeLegend ? 500 : 0;
+                const gridWidth = canvasSize * cols;
+                const gridHeight = canvasSize * rows;
+
+                const exportCanvas = document.createElement('canvas');
+                exportCanvas.width = gridWidth + legendSpace;
+                exportCanvas.height = gridHeight;
+                const ctx = exportCanvas.getContext('2d');
+
+                // Background
+                ctx.fillStyle = '#0a0e27';
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+                // Draw canvases
+                selected.forEach((key, idx) => {
+                    const info = canvasInfo[key];
+                    if (!info) return;
+
+                    const col = idx % cols;
+                    const row = Math.floor(idx / cols);
+                    const x = col * canvasSize;
+                    const y = row * canvasSize;
+
+                    ctx.drawImage(info.canvas, 
+                        0, 0, info.canvas.width, info.canvas.height,
+                        x, y, canvasSize, canvasSize);
+
+                    // Colored border
+                    ctx.strokeStyle = info.color;
+                    ctx.lineWidth = 6;
+                    ctx.strokeRect(x, y, canvasSize, canvasSize);
+
+                    // Title
+                    ctx.fillStyle = info.color;
+                    ctx.font = `bold ${28}px "Fira Code"`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(info.title, x + canvasSize / 2, y + 40);
+
+                    // Subtitle
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.font = `${18}px "Fira Code"`;
+                    ctx.fillText(info.subtitle, x + canvasSize / 2, y + 70);
+                });
+
+                // Draw legend
+                if (includeLegend) {
+                    const legendX = gridWidth + 20;
+                    const legendWidth = legendSpace - 40;
+                    const padding = 20;
+
+                    // Background
+                    ctx.fillStyle = 'rgba(10, 14, 39, 0.95)';
+                    ctx.fillRect(legendX, 20, legendWidth, gridHeight - 40);
+                    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(legendX, 20, legendWidth, gridHeight - 40);
+
+                    let currentY = 60;
+                    const baseFont = 22;
+                    const titleFont = 28;
+                    const squareSize = 24;
+
+                    // Title
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = `bold ${titleFont}px "Fira Code"`;
+                    ctx.textAlign = 'left';
+                    ctx.fillText('LEGEND', legendX + padding, currentY);
+                    currentY += titleFont * 2.5;
+
+                    // Canvases
+                    ctx.fillStyle = '#00ffff';
+                    ctx.font = `bold ${baseFont * 1.2}px "Fira Code"`;
+                    ctx.fillText('Visualizations', legendX + padding, currentY);
+                    currentY += baseFont * 2;
+
+                    selected.forEach(key => {
+                        const info = canvasInfo[key];
+                        if (!info) return;
+
+                        // Color square
+                        ctx.fillStyle = info.color;
+                        ctx.fillRect(legendX + padding, currentY - squareSize * 0.8, squareSize, squareSize);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(legendX + padding, currentY - squareSize * 0.8, squareSize, squareSize);
+
+                        // Title
+                        ctx.fillStyle = info.color;
+                        ctx.font = `bold ${baseFont}px "Fira Code"`;
+                        ctx.fillText(info.title, legendX + padding + squareSize + 12, currentY);
+
+                        // Subtitle
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                        ctx.font = `${baseFont * 0.75}px "Fira Code"`;
+                        ctx.fillText(info.subtitle, legendX + padding + squareSize + 12, currentY + baseFont * 1.1);
+
+                        currentY += baseFont * 3;
+                    });
+
+                    // Parameters
+                    if (includeParameters) {
+                        currentY += baseFont;
+                        ctx.fillStyle = '#00ffff';
+                        ctx.font = `bold ${baseFont * 1.2}px "Fira Code"`;
+                        ctx.fillText('Parameters', legendX + padding, currentY);
+                        currentY += baseFont * 2;
+
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                        ctx.font = `${baseFont * 0.9}px "Fira Code"`;
+
+                        const maxM = document.getElementById('maxModulus').value;
+                        const gridSize = document.getElementById('gridSize').value;
+                        const phiMax = document.getElementById('phiMaxModulus').value;
+
+                        const params = [
+                            `Max Modulus: ${maxM}`,
+                            `Grid Size: ${gridSize}`,
+                            `φ Range: 1-${phiMax}`,
+                            `Target: 6/π² ≈ 0.608`
+                        ];
+
+                        params.forEach(param => {
+                            ctx.fillText('• ' + param, legendX + padding, currentY);
+                            currentY += baseFont * 1.4;
+                        });
+                    }
+
+                    // Footer
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                    ctx.font = `italic ${baseFont * 0.8}px "Fira Code"`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Coprime Density Explorer', legendX + legendWidth / 2, gridHeight - 60);
+                    ctx.fillText('Wessen Getachew (@7dview)', legendX + legendWidth / 2, gridHeight - 35);
+                }
+
+                // Download
+                exportCanvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Coprime_Density_${selected.length}_Canvases_${resolution}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    alert(`Successfully exported ${selected.length} canvas${selected.length > 1 ? 'es' : ''}!`);
+                });
+            }, 100);
         }
 
         function exportCircleData() {
@@ -880,6 +1444,7 @@
         // Initialize on load
         window.onload = function() {
             renderAll();
+            updateExportCount();
         };
     </script>
 </body>
