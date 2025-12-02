@@ -1123,15 +1123,27 @@
     <div class="research-header">
         <h1 class="research-title">Interactive Modular Arithmetic & Number Theory Research Suite</h1>
         <h2 class="research-subtitle">Comprehensive 12-Canvas Visualization Tool for Advanced Mathematical Exploration</h2>
-        <p class="research-author">Research & Development by <strong>Wessen Getachew</strong></p>
+        <p class="research-author">Research & Development by <strong>Wessen Getachew</strong> · Twitter <a href="https://twitter.com/7dview" target="_blank" rel="noopener" style="color: #00ffff; text-decoration: none;">@7dview</a></p>
         <div class="research-meta">
             <div class="research-meta-item">
                 <span class="research-meta-label">Features:</span>
-                <span>12 Interactive Canvases | Unlimited Parameters | 4K Export | Statistical Analysis | CSV Data</span>
+                <span>12 Interactive Canvases | Unlimited Parameters | 2K Export | Statistical Analysis | CSV Data</span>
             </div>
             <div class="research-meta-item">
                 <span class="research-meta-label">Topics:</span>
                 <span>Farey Sequences | Cayley Transforms | Prime Distribution | Primitive Roots | Coprime Density | Dirichlet Characters</span>
+            </div>
+            <div class="research-meta-item" style="margin-top: 10px;">
+                <span class="research-meta-label">More Tools:</span>
+                <span style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 5px;">
+                    <a href="https://wessengetachew.github.io/Transform/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Transform Explorer</a>
+                    <a href="https://wessengetachew.github.io/Composite/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Composite Analysis</a>
+                    <a href="https://wessengetachew.github.io/Gemini/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Gemini Explorer</a>
+                    <a href="https://wessengetachew.github.io/Goldbach/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Goldbach Conjecture</a>
+                    <a href="https://wessengetachew.github.io/Primes/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Prime Explorer</a>
+                    <a href="https://wessengetachew.github.io/Farey/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">Farey Sequences</a>
+                    <a href="https://wessengetachew.github.io/2pir/" target="_blank" style="color: #00ffff; text-decoration: none; padding: 4px 8px; background: rgba(0,255,255,0.1); border-radius: 4px; font-size: 0.9em; transition: all 0.3s;" onmouseover="this.style.background='rgba(0,255,255,0.2)'" onmouseout="this.style.background='rgba(0,255,255,0.1)'">2πr Analysis</a>
+                </span>
             </div>
         </div>
     </div>
@@ -1154,15 +1166,6 @@
     </div>
 
     <div class="main-container">
-        <header>
-            <h1>
-                <span class="title-main">Farey Triangle & Cayley Transform</span>
-            </h1>
-            <p class="subtitle">Hyperbolic Geometry · Number Theory · Modular Forms</p>
-            <p style="font-family: 'Fira Code', monospace; font-size: 0.85em; color: rgba(255, 255, 255, 0.5); margin-top: 10px;">
-                by Wessen Getachew · Twitter <a href="https://twitter.com/7dview" target="_blank" rel="noopener" style="color: #00ffff; text-decoration: none; transition: all 0.3s;">@7dview</a>
-            </p>
-        </header>
 
         <!-- Introduction Panel -->
         <div class="controls-section" style="margin-bottom: 20px;">
@@ -1650,7 +1653,7 @@
                         <div class="panel-subtitle">Custom Farey Configuration</div>
                     </div>
                     <button class="btn btn-small" onclick="exportSingleCanvas('diskCanvas', 'unit_disk_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="diskCanvas" width="1000" height="1000"></canvas>
@@ -1663,7 +1666,7 @@
                         <div class="panel-subtitle">Cayley Transform & Geodesics</div>
                     </div>
                     <button class="btn btn-small" onclick="exportSingleCanvas('cayleyCanvas', 'cayley_plane_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="cayleyCanvas" width="1000" height="1000"></canvas>
@@ -1676,7 +1679,7 @@
                         <div class="panel-subtitle">Unlimited GCD Structure</div>
                     </div>
                     <button class="btn btn-small" onclick="exportSingleCanvas('nestedCanvas', 'nested_rings_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="nestedCanvas" width="1000" height="1000"></canvas>
@@ -1689,7 +1692,7 @@
                         <div class="panel-subtitle">Farey Channel Decomposition: r/M → r'/M' where M' = M/gcd(r,M)</div>
                     </div>
                     <button class="btn btn-small" onclick="exportSingleCanvas('reductionCanvas', 'modular_reduction_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="reductionCanvas" width="1000" height="1000"></canvas>
@@ -1702,7 +1705,7 @@
                         <div class="panel-subtitle">Complete Cayley Transform View (Interior + Exterior)</div>
                     </div>
                     <button class="btn btn-small" onclick="exportSingleCanvas('fullPlaneCanvas', 'full_plane_4k.png')" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="fullPlaneCanvas" width="1000" height="1000"></canvas>
@@ -1715,7 +1718,7 @@
                         <div class="panel-subtitle">Power Sequence g^n mod M</div>
                     </div>
                     <button class="btn btn-small" onclick="exportPixiCanvas()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <div id="pixiPrimitiveRootsContainer" style="width: 100%; height: 1000px; display: flex; justify-content: center; align-items: center;"></div>
@@ -1730,7 +1733,7 @@
                         <div class="panel-subtitle">Visual Coprimality Patterns</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas7()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas7" width="1000" height="1000"></canvas>
@@ -1744,7 +1747,7 @@
                         <div class="panel-subtitle">φ(n)/n Convergence Chart</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas8()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas8" width="1000" height="800"></canvas>
@@ -1758,7 +1761,7 @@
                         <div class="panel-subtitle">Limit to 6/π² ≈ 0.6079</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas9()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas9" width="1000" height="800"></canvas>
@@ -1772,7 +1775,7 @@
                         <div class="panel-subtitle">GCD Pairs Matrix View</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas10()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas10" width="1000" height="1000"></canvas>
@@ -1786,7 +1789,7 @@
                         <div class="panel-subtitle">Nested 1→n Coprime View</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas11()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas11" width="1000" height="1000"></canvas>
@@ -1800,7 +1803,7 @@
                         <div class="panel-subtitle">χ(n) mod M Character Visualization</div>
                     </div>
                     <button class="btn btn-small" onclick="exportCanvas12()" style="padding: 6px 12px; font-size: 0.85em;">
-                        📥 Export 4K
+                        📥 Export 2K
                     </button>
                 </div>
                 <canvas id="canvas12" width="1000" height="1000"></canvas>
@@ -9711,24 +9714,87 @@ Generated: ${new Date().toLocaleString()}
                 return;
             }
 
-            // Create a high-resolution version
+            // Canvas metadata for titles
+            const canvasInfo = {
+                'diskCanvas': { title: '1. Unit Disk - Farey & Primes', color: '#ffd700' },
+                'cayleyCanvas': { title: '2. Cayley Plane - Hyperbolic Geometry', color: '#1abc9c' },
+                'nestedCanvas': { title: '3. Nested Modular Rings', color: '#3498db' },
+                'reductionCanvas': { title: '4. Modular Reduction', color: '#e67e22' },
+                'fullPlaneCanvas': { title: '5. Full Complex Plane', color: '#9b59b6' },
+                'primitiveRootsCanvas': { title: '6. Primitive Roots', color: '#e91e63' },
+                'canvas7': { title: '7. Coprime Circle', color: '#2ecc71' },
+                'canvas8': { title: '8. Phi Ratios Chart', color: '#f1c40f' },
+                'canvas9': { title: '9. Convergence to 6/π²', color: '#e74c3c' },
+                'canvas10': { title: '10. Coprime Pairs Grid', color: '#6366f1' },
+                'canvas11': { title: '11. Nested Density Rings', color: '#27ae60' },
+                'canvas12': { title: '12. Dirichlet Characters', color: '#9c27b0' }
+            };
+
+            const info = canvasInfo[canvasId] || { title: 'Canvas Export', color: '#ffd700' };
+
+            // Create a 2K export canvas with space for title and legend
             const exportCanvas = document.createElement('canvas');
-            const scale = 4; // 4K resolution (4x current)
-            exportCanvas.width = canvas.width * scale;
-            exportCanvas.height = canvas.height * scale;
+            const exportWidth = 2000;
+            const exportHeight = 2200; // Extra space for title and legend
+            exportCanvas.width = exportWidth;
+            exportCanvas.height = exportHeight;
             
             const ctx = exportCanvas.getContext('2d');
-            ctx.scale(scale, scale);
             
-            // Draw the current canvas content
-            ctx.drawImage(canvas, 0, 0);
+            // Fill background
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, exportWidth, exportHeight);
+            
+            // Draw title at top
+            ctx.fillStyle = info.color;
+            ctx.font = 'bold 48px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(info.title, exportWidth / 2, 60);
+            
+            // Draw subtitle
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '28px Arial';
+            ctx.fillText(`Modulus M = ${state.modulus} | Phase = ${state.phase.toFixed(1)}°`, exportWidth / 2, 105);
+            
+            // Draw author credit
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.fillText('By Wessen Getachew', exportWidth / 2, 140);
+            
+            // Calculate scaling to fit canvas content
+            const contentTop = 170;
+            const contentHeight = exportHeight - contentTop - 50;
+            const canvasAspect = canvas.width / canvas.height;
+            
+            let drawWidth = exportWidth - 100;
+            let drawHeight = drawWidth / canvasAspect;
+            
+            if (drawHeight > contentHeight) {
+                drawHeight = contentHeight;
+                drawWidth = drawHeight * canvasAspect;
+            }
+            
+            const drawX = (exportWidth - drawWidth) / 2;
+            const drawY = contentTop;
+            
+            // Draw the canvas content
+            ctx.drawImage(canvas, drawX, drawY, drawWidth, drawHeight);
+            
+            // Draw legend/info box at bottom
+            ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            ctx.fillRect(50, exportHeight - 40, exportWidth - 100, 35);
+            ctx.fillStyle = info.color;
+            ctx.font = '18px Arial';
+            ctx.textAlign = 'center';
+            const timestamp = new Date().toISOString().split('T')[0];
+            ctx.fillText(`Interactive Modular Arithmetic Research Suite | ${timestamp}`, exportWidth / 2, exportHeight - 15);
             
             // Download
             exportCanvas.toBlob(blob => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = filename;
+                a.download = filename.replace('4k', '2k');
                 a.click();
                 URL.revokeObjectURL(url);
             });
@@ -9809,32 +9875,62 @@ Generated: ${new Date().toLocaleString()}
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="disk" checked>
                                     <span style="width: 16px; height: 16px; background: #ffd700; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Unit Disk 𝔻</span>
+                                    <span style="flex: 1;">1. Unit Disk 𝔻</span>
                                 </label>
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="cayley" checked>
-                                    <span style="width: 16px; height: 16px; background: #00ffff; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Upper Half-Plane ℍ</span>
+                                    <span style="width: 16px; height: 16px; background: #1abc9c; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">2. Cayley Plane ℍ</span>
                                 </label>
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="nested" checked>
-                                    <span style="width: 16px; height: 16px; background: #1abc9c; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Nested Rings ⊚</span>
+                                    <span style="width: 16px; height: 16px; background: #3498db; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">3. Nested Rings ⊚</span>
                                 </label>
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="reduction" checked>
                                     <span style="width: 16px; height: 16px; background: #e67e22; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Modular Reduction ⊗</span>
+                                    <span style="flex: 1;">4. Reduction ⊗</span>
                                 </label>
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="fullplane" checked>
-                                    <span style="width: 16px; height: 16px; background: #3498db; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Full Complex Plane ℂ</span>
+                                    <span style="width: 16px; height: 16px; background: #9b59b6; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">5. Full Plane ℂ</span>
                                 </label>
                                 <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
                                     <input type="checkbox" class="canvas-checkbox" value="primitiveroots" checked>
-                                    <span style="width: 16px; height: 16px; background: #ff00ff; border-radius: 2px; flex-shrink: 0;"></span>
-                                    <span style="flex: 1;">Primitive Roots ⚙</span>
+                                    <span style="width: 16px; height: 16px; background: #e91e63; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">6. Primitive Roots ⚙</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas7" checked>
+                                    <span style="width: 16px; height: 16px; background: #2ecc71; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">7. Coprime Circle</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas8" checked>
+                                    <span style="width: 16px; height: 16px; background: #f1c40f; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">8. Phi Ratios</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas9" checked>
+                                    <span style="width: 16px; height: 16px; background: #e74c3c; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">9. Convergence</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas10" checked>
+                                    <span style="width: 16px; height: 16px; background: #6366f1; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">10. Coprime Grid</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas11" checked>
+                                    <span style="width: 16px; height: 16px; background: #27ae60; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">11. Density Rings</span>
+                                </label>
+                                <label class="export-checkbox" style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 4px; cursor: pointer;">
+                                    <input type="checkbox" class="canvas-checkbox" value="canvas12" checked>
+                                    <span style="width: 16px; height: 16px; background: #9c27b0; border-radius: 2px; flex-shrink: 0;"></span>
+                                    <span style="flex: 1;">12. Dirichlet Chars</span>
                                 </label>
                             </div>
                             <div style="display: flex; gap: 8px;">
@@ -9846,7 +9942,7 @@ Generated: ${new Date().toLocaleString()}
                                 </button>
                             </div>
                             <div id="canvasSelectionCount" style="margin-top: 8px; color: var(--cyan); font-size: 0.9em; text-align: center;">
-                                6 canvases selected
+                                12 canvases selected
                             </div>
                         </div>
                         
@@ -9978,17 +10074,23 @@ Generated: ${new Date().toLocaleString()}
             
             // Canvas metadata with colors
             const canvasInfo = {
-                'disk': { canvas: canvases.disk, title: 'Unit Disk 𝔻', color: '#ffd700', subtitle: 'Farey Configuration' },
-                'cayley': { canvas: canvases.cayley, title: 'Upper Half-Plane ℍ', color: '#00ffff', subtitle: 'Cayley Transform' },
-                'nested': { canvas: canvases.nested, title: 'Nested Rings ⊚', color: '#1abc9c', subtitle: 'Multi-Modulus' },
-                'reduction': { canvas: canvases.reduction, title: 'Modular Reduction ⊗', color: '#e67e22', subtitle: 'Channel Projection' },
-                'fullplane': { canvas: canvases.fullPlane, title: 'Full Complex Plane ℂ', color: '#3498db', subtitle: 'Complete View' },
+                'disk': { canvas: canvases.disk, title: '1. Unit Disk 𝔻', color: '#ffd700', subtitle: 'Farey & Primes' },
+                'cayley': { canvas: canvases.cayley, title: '2. Cayley Plane ℍ', color: '#1abc9c', subtitle: 'Hyperbolic Geometry' },
+                'nested': { canvas: canvases.nested, title: '3. Nested Rings ⊚', color: '#3498db', subtitle: 'Modular Structure' },
+                'reduction': { canvas: canvases.reduction, title: '4. Reduction ⊗', color: '#e67e22', subtitle: 'Channel Projection' },
+                'fullplane': { canvas: canvases.fullPlane, title: '5. Full Plane ℂ', color: '#9b59b6', subtitle: 'Complete View' },
                 'primitiveroots': { 
                     canvas: canvases.pixiApp ? canvases.pixiApp.renderer.view : null, 
-                    title: 'Primitive Roots ⚙', 
-                    color: '#ff00ff',
+                    title: '6. Primitive Roots ⚙', 
+                    color: '#e91e63',
                     subtitle: 'Cyclic Structure'
-                }
+                },
+                'canvas7': { canvas: canvases.canvas7, title: '7. Coprime Circle', color: '#2ecc71', subtitle: 'φ(M)/M Density' },
+                'canvas8': { canvas: canvases.canvas8, title: '8. Phi Ratios', color: '#f1c40f', subtitle: 'φ(n)/n Chart' },
+                'canvas9': { canvas: canvases.canvas9, title: '9. Convergence', color: '#e74c3c', subtitle: 'Limit to 6/π²' },
+                'canvas10': { canvas: canvases.canvas10, title: '10. Coprime Grid', color: '#6366f1', subtitle: 'GCD Matrix' },
+                'canvas11': { canvas: canvases.canvas11, title: '11. Density Rings', color: '#27ae60', subtitle: 'Nested View' },
+                'canvas12': { canvas: canvases.canvas12, title: '12. Dirichlet', color: '#9c27b0', subtitle: 'Characters mod M' }
             };
             
             // Determine grid layout
@@ -9997,7 +10099,9 @@ Generated: ${new Date().toLocaleString()}
             if (count <= 2) { cols = count; rows = 1; }
             else if (count <= 4) { cols = 2; rows = 2; }
             else if (count <= 6) { cols = 3; rows = 2; }
-            else { cols = 3; rows = Math.ceil(count / 3); }
+            else if (count <= 9) { cols = 3; rows = 3; }
+            else if (count <= 12) { cols = 4; rows = 3; }
+            else { cols = 4; rows = Math.ceil(count / 4); }
             
             const canvasSize = baseSize / Math.max(rows, cols);
             const gridWidth = canvasSize * cols;
