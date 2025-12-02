@@ -1,919 +1,886 @@
 
-<html>
+<html lang="en">
 <head>
-    <title>Analytic Number Theory Visualization Framework</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Moduli, Roots of Unity, and Coprime Density</title>
     <style>
-        /* --- Formal Base Styling --- */
-        :root {
-            --color-primary: #17202A; 
-            --color-secondary: #0077B6; 
-            --color-accent: #E67E22; 
-            --color-background: #F8F9FA; 
-            --color-control-bg: #FFFFFF;
-            --color-border: #D5DBDB;
-            --color-text: var(--color-primary);
-            --font-family-serif: 'Georgia', 'Times New Roman', serif;
-            --font-family-sans: 'Helvetica Neue', Arial, sans-serif;
-        }
-
-        /* --- Dark Mode Override --- */
-        body.dark-mode {
-            --color-primary: #D7DBDD; 
-            --color-secondary: #4DA6FF; 
-            --color-accent: #F9E79F; 
-            --color-background: #1C1C1C; 
-            --color-control-bg: #2C2C2C; 
-            --color-border: #444444;
-            --color-text: var(--color-primary);
-        }
-        
-        html, body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: var(--font-family-sans);
-            color: var(--color-text);
-            background-color: var(--color-background);
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            background: #fafafa;
+            color: #1a1a1a;
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* --- Page Structure (Adjusted for wider content) --- */
-        #container {
-            display: flex;
-            min-height: 100vh;
-            max-width: 1600px; 
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        
-        #controls { 
-            width: 380px; 
-            padding: 30px; 
-            background: var(--color-control-bg); 
-            flex-shrink: 0;
-            border-right: 1px solid var(--color-border);
-            overflow-y: auto;
-        }
-        
-        #content { 
-            flex-grow: 1; 
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- Typography and Headings --- */
-        #title-section {
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--color-secondary);
-        }
-        h1 {
-            font-family: var(--font-family-serif);
-            color: var(--color-secondary);
-            font-size: 2.8em;
-            font-weight: 700;
-            margin: 0 0 5px 0;
-        }
-        h2.subtitle {
-            font-family: var(--font-family-serif);
-            color: var(--color-text);
-            font-size: 1.4em;
-            font-weight: 400;
-            font-style: italic;
-            margin: 0 0 15px 0;
-        }
-        #abstract {
-            background-color: color-mix(in srgb, var(--color-background) 80%, var(--color-border));
             padding: 20px;
-            border-left: 5px solid var(--color-accent);
-            border-radius: 5px;
-            font-size: 0.95em;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .author {
+            font-size: 1.1em;
+            color: #333;
+            margin-top: 20px;
+        }
+        
+        h2 {
+            font-size: 1.6em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
         }
         
         h3 {
-            color: var(--color-secondary); 
-            font-size: 1.5em;
-            font-weight: 600;
+            font-size: 1.3em;
             margin-top: 30px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--color-border);
-            padding-bottom: 5px;
+            color: #34495e;
         }
         
-        /* --- Controls & Data --- */
-        .control-group { 
-            margin-bottom: 25px; 
-            padding: 15px; 
-            border: 1px solid var(--color-border); 
-            border-radius: 5px;
-            background-color: var(--color-control-bg);
+        .abstract {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid #3498db;
+            font-size: 1.05em;
         }
         
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600;
-            color: var(--color-primary);
-            font-size: 0.95em;
+        .theorem {
+            background: #fff9e6;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
         }
         
-        input[type=range] { accent-color: var(--color-secondary); }
-
-        .button-group button { 
-            padding: 10px 15px; 
-            background-color: var(--color-secondary); 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            margin-top: 5px; /* Added spacing */
-            width: 100%; /* Make buttons full width for better touch targets */
-        }
-        .button-group button:hover { background-color: #005A99; }
-        
-        .property-label { font-weight: 500; margin-top: 10px;}
-        .property-value { 
-            font-size: 1.1em; 
+        .theorem-title {
             font-weight: 700;
-            color: var(--color-accent); 
-        }
-
-        /* --- Visualization Area --- */
-        #visualization-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #p5Canvas { 
-            display: block; 
-            border: 1px solid var(--color-border); 
-            border-radius: 5px;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: #d68910;
+            margin-bottom: 10px;
         }
         
-        /* Math Prose */
-        #math-prose {
-             max-width: 900px; /* MATCH CANVAS WIDTH */
-             margin-top: 40px;
-             padding: 20px;
-             background-color: var(--color-control-bg);
-             border-left: 5px solid var(--color-secondary);
-             border-radius: 5px;
+        .canvas-container {
+            margin: 30px 0;
+            text-align: center;
         }
-        .equation-block {
-            font-family: 'Courier New', monospace;
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
+        
+        canvas {
+            border: 1px solid #ddd;
+            background: white;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .control-group {
             margin: 15px 0;
         }
-        .dark-mode .equation-block {
-            background-color: #333;
-            color: #ddd;
+        
+        label {
+            display: inline-block;
+            width: 180px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        input[type="range"] {
+            width: 300px;
+            vertical-align: middle;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button:active {
+            background: #21618c;
+        }
+        
+        .export-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .stats-panel {
+            background: #e8f4f8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #b8dae5;
+        }
+        
+        .stat-item {
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+        
+        .stat-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .stat-value {
+            color: #2980b9;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .math {
+            font-style: italic;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .section-content {
+            margin: 20px 0;
+            text-align: justify;
+        }
+        
+        .interpretation {
+            background: #f0f7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #5dade2;
+        }
+        
+        .value-display {
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+            font-weight: 600;
+            color: #2980b9;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Infinite Moduli, Roots of Unity, and the Density of Coprime Channels</h1>
+            <div class="subtitle">An Interactive Exploration of Classical Results in Analytic Number Theory</div>
+            <div class="author">by Wessen Getachew</div>
+        </header>
 
-<div id="container">
+        <div class="abstract">
+            <strong>Abstract:</strong> This interactive document explores the classical connection between rational points on the unit circle arising from roots of unity, the density of coprime integer pairs, and the asymptotic behavior of Farey sequences. We demonstrate that while the set of all rational angles is dense on the unit circle, the subset corresponding to reduced fractions (coprime numerator and denominator) has natural density 3/π². The global average of φ(m)/m over all moduli converges to 6/π², reconciling the fact that prime moduli individually approach density 1 while having measure zero in the integers.
+        </div>
 
-    <div id="controls">
-        <h3><span style="color: var(--color-secondary);">I.</span> Experimental Parameters</h3>
+        <h2>1. Unit Circle and Rational Angles</h2>
+        <div class="section-content">
+            <p>For each modulus <span class="math">m</span>, the reduced residue system Φ(<span class="math">m</span>) = {<span class="math">r</span> : gcd(<span class="math">r</span>, <span class="math">m</span>) = 1, 0 ≤ <span class="math">r</span> < <span class="math">m</span>} maps to points on the unit circle via <span class="math">r</span> → exp(2π<span class="math">i r</span>/<span class="math">m</span>). The visualization below shows these points for varying moduli.</p>
+        </div>
 
-        <div class="control-group">
-            <label for="darkModeToggle">Theme Control:</label>
-            <div class="button-group">
-                <button id="darkModeToggle" onclick="toggleDarkMode()">Enable Dark Mode</button>
+        <div class="controls">
+            <div class="control-group">
+                <label>Maximum Modulus:</label>
+                <input type="range" id="maxModulus" min="1" max="50" value="12" oninput="updateModulusDisplay(this.value); renderAll()">
+                <span class="value-display" id="maxModulusValue">12</span>
+            </div>
+            <div class="control-group">
+                <label>Show Coprime Only:</label>
+                <input type="checkbox" id="coprimeOnly" checked onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Point Size:</label>
+                <input type="range" id="pointSize" min="1" max="8" value="3" oninput="updatePointSizeDisplay(this.value); renderAll()">
+                <span class="value-display" id="pointSizeValue">3</span>
             </div>
         </div>
-        
-        <div class="control-group">
-            <label for="visMode">Visualization Domain:</label>
-            <select id="visMode" onchange="resetSketch()">
-                <option value="circle">Farey Sequence Angles (Unit Circle)</option>
-                <option value="lattice">Coprime Pairs Density (Lattice Plot)</option>
-            </select>
-        </div>
 
-        <div class="control-group">
-            <label for="limitQ">Limit Q (Maximum Denominator / Axis Extent):</label>
-            <input type="range" id="limitQ" min="2" max="250" value="45" step="1" oninput="updateVisualization()">
-            <span id="limitQValue" class="property-value">45</span>
-            <p style="font-size: 0.85em; margin-top: 5px; color: #555;">The total number of points scales asymptotically with 6 / $\pi^2$ * Q².</p>
-
-            <label for="pointSize">Point Size (WebGL `strokeWeight`):</label>
-            <input type="range" id="pointSize" min="0.5" max="5" value="2.5" step="0.1" oninput="updateVisualization()">
-        </div>
-
-        <div class="control-group">
-            <label for="colorScheme">Color Mapping Function:</label>
-            <select id="colorScheme" onchange="updateVisualization()">
-                <option value="denominator">By Denominator (q)</option>
-                <option value="gcd_coprime">By GCD (=1 vs >1)</option>
-                <option value="mobius">By Möbius mu(q)</option>
-                <option value="omega">By Distinct Prime Count omega(q)</option>
-                <option value="divisor_sum">By Divisor Sum sigma(q)</option>
-                <option value="none">None (Uniform Color)</option>
-            </select>
-            
-            <label for="saturation">Color Saturation (HSB):</label>
-            <input type="range" id="saturation" min="50" max="100" value="80" step="1" oninput="updateVisualization()">
-
-            <label for="brightness">Color Brightness (HSB):</label>
-            <input type="range" id="brightness" min="50" max="100" value="80" step="1" oninput="updateVisualization()">
-        </div>
-        
-        <div class="control-group">
-            <h3><span style="color: var(--color-secondary);">II.</span> Computational Results (Q=<span id="propQ" class="property-value"></span>)</h3>
-            
-            <p class="property-label">Farey Sequence Cardinality |F_Q|:</p> 
-            <strong id="propFarey" class="property-value"></strong>
-            
-            <p class="property-label">Count of Reduced Fractions B_Q:</p> 
-            <strong id="propReducedCoprime" class="property-value"></strong>
-            
-            <p class="property-label">Total Coprime Pairs A_Q in [1, Q] x [1, Q]:</p> 
-            <strong id="propTotalCoprime" class="property-value"></strong>
-            
-            <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
-            
-            <p class="property-label" style="font-weight: 600;">Asymptotic Ratio: |F_Q| / Q²</p> 
-            <strong id="propRatio" class="property-value"></strong>
-            <p style="font-size: 0.9em; color: #555;">Target Asymptote (3 / $\pi^2$): 0.30396</p>
-        </div>
-
-        <div class="control-group">
-            <label>Image Export:</label>
-            <div class="button-group">
-                <button onclick="exportPNG()">Export Visualization (PNG)</button>
+        <div class="canvas-container">
+            <canvas id="unitCircleCanvas" width="800" height="800"></canvas>
+            <div class="export-buttons">
+                <button onclick="exportCanvas('unitCircleCanvas', '4k')">Export as 4K PNG</button>
+                <button onclick="exportCircleData()">Export Data as CSV</button>
             </div>
         </div>
-        
-        <div class="control-group">
-            <h3><span style="color: var(--color-secondary);">III.</span> Data Exports by Chart</h3>
-            <div class="button-group">
-                <button onclick="exportCSV('phi')">Export $\phi(q)$ Data (CSV)</button>
-                <button onclick="exportCSV('ratio')">Export Ratio $F_Q/Q^2$ Data (CSV)</button>
-                <button onclick="exportCSV('mobius')">Export Mertens $M(Q)$ Data (CSV)</button>
-                <hr style="border-top: 1px dashed var(--color-border); margin: 15px 0;">
-                <label>Main Data Export (Visualization Points):</label>
-                <button onclick="exportCSV('main_points')">Export Main Visualization Data (CSV)</button>
+
+        <div class="stats-panel" id="circleStats">
+            <h3>Statistics for Unit Circle Visualization</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total Points Plotted:</span>
+                <span class="stat-value" id="totalPoints">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Coprime Points:</span>
+                <span class="stat-value" id="coprimePoints">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Coprime Ratio:</span>
+                <span class="stat-value" id="coprimeRatio">0</span>
             </div>
         </div>
-        
+
+        <h2>2. Density of Coprime Pairs</h2>
+        <div class="section-content">
+            <p>Let <span class="math">A<sub>N</sub></span> = #{(<span class="math">a</span>, <span class="math">b</span>) : 1 ≤ <span class="math">a</span>, <span class="math">b</span> ≤ <span class="math">N</span>, gcd(<span class="math">a</span>, <span class="math">b</span>) = 1} be the count of coprime pairs in an <span class="math">N</span> × <span class="math">N</span> grid.</p>
+        </div>
+
+        <div class="theorem">
+            <div class="theorem-title">Theorem (Coprime Pair Density):</div>
+            lim<sub><span class="math">N</span>→∞</sub> <span class="math">A<sub>N</sub></span> / <span class="math">N</span>² = 6/π² ≈ 0.6079
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Grid Size N:</label>
+                <input type="range" id="gridSize" min="10" max="200" value="50" step="10" oninput="updateGridSizeDisplay(this.value); renderCoprimePairs()">
+                <span class="value-display" id="gridSizeValue">50</span>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="coprimePairsCanvas" width="800" height="800"></canvas>
+            <div class="export-buttons">
+                <button onclick="exportCanvas('coprimePairsCanvas', '4k')">Export as 4K PNG</button>
+                <button onclick="exportCoprimePairsData()">Export Data as CSV</button>
+            </div>
+        </div>
+
+        <div class="stats-panel" id="pairsStats">
+            <h3>Coprime Pairs Statistics</h3>
+            <div class="stat-item">
+                <span class="stat-label">Grid Size (N):</span>
+                <span class="stat-value" id="pairsN">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Pairs (N²):</span>
+                <span class="stat-value" id="totalPairs">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Coprime Pairs (A<sub>N</sub>):</span>
+                <span class="stat-value" id="coprimePairsCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Ratio A<sub>N</sub>/N²:</span>
+                <span class="stat-value" id="pairsRatio">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Theoretical Limit (6/π²):</span>
+                <span class="stat-value">0.607927</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Error from Limit:</span>
+                <span class="stat-value" id="pairsError">0</span>
+            </div>
+        </div>
+
+        <h2>3. Average φ(m)/m Over All Moduli</h2>
+        <div class="section-content">
+            <p>For each modulus <span class="math">m</span>, the ratio φ(<span class="math">m</span>)/<span class="math">m</span> represents the fraction of residues coprime to <span class="math">m</span>. The average of these ratios converges to the same constant 6/π².</p>
+        </div>
+
+        <div class="theorem">
+            <div class="theorem-title">Theorem (Average Totient Ratio):</div>
+            lim<sub><span class="math">N</span>→∞</sub> (1/<span class="math">N</span>) Σ<sub><span class="math">m</span>=1</sub><sup><span class="math">N</span></sup> φ(<span class="math">m</span>)/<span class="math">m</span> = 6/π² ≈ 0.6079
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Maximum Modulus:</label>
+                <input type="range" id="phiMaxModulus" min="10" max="500" value="100" step="10" oninput="updatePhiMaxDisplay(this.value); renderPhiRatios()">
+                <span class="value-display" id="phiMaxValue">100</span>
+            </div>
+            <div class="control-group">
+                <label>Show Primes Only:</label>
+                <input type="checkbox" id="primesOnly" onchange="renderPhiRatios()">
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="phiRatiosCanvas" width="1200" height="600"></canvas>
+            <div class="export-buttons">
+                <button onclick="exportCanvas('phiRatiosCanvas', '4k')">Export as 4K PNG</button>
+                <button onclick="exportPhiData()">Export Data as CSV</button>
+            </div>
+        </div>
+
+        <div class="stats-panel" id="phiStats">
+            <h3>Totient Ratio Statistics</h3>
+            <div class="stat-item">
+                <span class="stat-label">Maximum Modulus:</span>
+                <span class="stat-value" id="phiMaxMod">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Average φ(m)/m:</span>
+                <span class="stat-value" id="avgPhiRatio">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Theoretical Limit (6/π²):</span>
+                <span class="stat-value">0.607927</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Error from Limit:</span>
+                <span class="stat-value" id="phiError">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Prime Average (if checked):</span>
+                <span class="stat-value" id="primeAvg">N/A</span>
+            </div>
+        </div>
+
+        <h2>4. Convergence Visualization</h2>
+        <div class="section-content">
+            <p>This chart shows how the running average of φ(<span class="math">m</span>)/<span class="math">m</span> converges to 6/π² as we increase the maximum modulus. The horizontal line represents the theoretical limit.</p>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="convergenceCanvas" width="1200" height="600"></canvas>
+            <div class="export-buttons">
+                <button onclick="exportCanvas('convergenceCanvas', '4k')">Export as 4K PNG</button>
+                <button onclick="exportConvergenceData()">Export Data as CSV</button>
+            </div>
+        </div>
+
+        <h2>5. Interpretation and Key Results</h2>
+        <div class="interpretation">
+            <h3>Summary of Findings:</h3>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li style="margin: 10px 0;">The set of all rational angles from roots of unity is dense on the unit circle (Theorem 1).</li>
+                <li style="margin: 10px 0;">The natural density of coprime integer pairs is 6/π² ≈ 0.6079 (Theorem 2).</li>
+                <li style="margin: 10px 0;">The average value of φ(m)/m over all moduli converges to 6/π² (Theorem 3).</li>
+                <li style="margin: 10px 0;">For prime moduli p, φ(p)/p = (p-1)/p → 1, but primes have density zero among integers.</li>
+                <li style="margin: 10px 0;">The count of reduced fractions (Farey sequence) with denominator ≤ N grows as (3/π²)N² + O(N log N).</li>
+            </ul>
+        </div>
+
+        <div class="interpretation" style="margin-top: 30px;">
+            <h3>Why There Is No Contradiction:</h3>
+            <p style="margin-top: 15px;">
+                Prime moduli have φ(p)/p → 1, suggesting "almost all" residues are coprime. However, this does not contradict the global average of 6/π² because:
+            </p>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li style="margin: 10px 0;">Primes become increasingly sparse (density zero by the Prime Number Theorem).</li>
+                <li style="margin: 10px 0;">Composite numbers dominate, and highly composite numbers have small φ(m)/m ratios.</li>
+                <li style="margin: 10px 0;">The average is weighted by all integers, not just primes.</li>
+            </ul>
+            <p style="margin-top: 15px;">
+                This phenomenon is analogous to how the average value can differ substantially from the behavior of a sparse subsequence.
+            </p>
+        </div>
+
+        <footer style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #333; text-align: center; color: #666;">
+            <p>Interactive Research Document - 2024</p>
+            <p>All results are classical theorems in analytic number theory.</p>
+            <p style="margin-top: 10px;">Wessen Getachew | <a href="https://github.com/wessengetachew" style="color: #3498db;">GitHub</a> | <a href="https://twitter.com/7dview" style="color: #3498db;">@7dview</a></p>
+        </footer>
     </div>
-    
-    <div id="content">
-        
-        <div id="title-section">
-            <h1>The Asymptotic Density of Coprime Integers</h1>
-            <h2 class="subtitle">A Visual Framework for $\zeta$(2), Farey Sequences, and Multiplicative Functions</h2>
-            <div id="abstract">
-                **Abstract:** This interactive tool employs a **WebGL renderer** to analyze and display the geometric distribution of coprime integer pairs (a, q) where **gcd(a, q)=1**. The visualization focuses on two domains: the **Farey sequence** mapped onto the unit circle (angles 2 * $\pi$ * a/q) and the **coprime lattice** (a x q). Computational results, including the sequence cardinality **|F_Q|** and the ratio **|F_Q| / Q²**, are provided to illustrate the convergence toward the fundamental constant **3 / $\pi^2$** = 1 / (2 * $\zeta$(2)), connecting geometric patterns to the Riemann Zeta Function. The high-performance WebGL implementation ensures stability and responsiveness for datasets containing up to millions of points.
-            </div>
-        </div>
 
-        <div id="visualization-area">
-             <canvas id="p5Canvas"></canvas> 
-        </div>
-
-        <div id="math-prose">
-            <h3>Theoretical Background: The Constant 6 / $\pi^2$</h3>
-            <p>The probability P that two positive integers selected uniformly at random are **coprime** is given by the reciprocal of the **Riemann Zeta function** evaluated at s=2.</p>
-            <p>This result is derived from the **Euler product formula** for the Zeta function. The probability P is:</p>
-            <div class="equation-block">
-                P(gcd(a, b) = 1) = 1 / $\zeta$(2) = 1 / [ Sum from n=1 to infinity of (1 / n²) ] = 6 / $\pi^2$ $\approx$ 0.6079
-            </div>
-            <p>The visual framework directly explores this density: in the lattice plot, the proportion of coprime points within the Q x Q square converges to **6 / $\pi^2$**; in the unit circle plot, the cardinality of the Farey sequence **|F_Q|** grows asymptotically as **|F_Q| $\sim$ (3 / $\pi^2$) * Q²**.</p>
-        </div>
-    </div>
-</div> <script>
-    //================================================================================================
-    // [JAVASCRIPT UTILITY LIBRARY: MATH AND NUMBER THEORY] 
-    //================================================================================================
-    
-    const PI = Math.PI;
-    const ZETA2_INV = 6 / (PI * PI); 
-    const ZETA2_INV_HALF = ZETA2_INV / 2; 
-
-    // Global state
-    let Q_current = 45; 
-    const CANVAS_W = 900; 
-    const CANVAS_H = 1200; 
-    
-    // Adjusted plot dimensions based on new canvas width
-    const PLOT_W = (CANVAS_W / 3) * 0.9;
-    const PLOT_H = 350;
-    
-    // Adjusted start Y for 2D charts area
-    const Y_DASHBOARD_AREA_P2D = 820; 
-    const Y_COMPUTATIONAL_AREA_P2D = 550; // New area for computational results
-    const MAIN_PLOT_Y_OFFSET = -CANVAS_H * 0.17; 
-    const MAIN_PLOT_RADIUS = CANVAS_W * 0.4 / 2; 
-    const MAIN_PLOT_SIZE = CANVAS_W * 0.75; 
-
-    let dataCache = {};
-    let pointSize = 2.5;
-    let axisColor;
-    let bgColor;
-    let dashboardGraphics; 
-    
-    // --- Math Utilities (Functions assumed working) ---
-    function gcd(a, b) { 
-        if (a === 0) return b;
-        while (b) { [a, b] = [b, a % b]; }
-        return a;
-    }
-    let primes = []; let isPrimeCalculatedUpTo = 0;
-    function sieve(n) {
-        if (n <= isPrimeCalculatedUpTo) return;
-        const is_prime = new Array(n + 1).fill(true);
-        is_prime[0] = is_prime[1] = false;
-        for (let p = 2; p * p <= n; p++) {
-            if (is_prime[p]) {
-                for (let i = p * p; i <= n; i += p) is_prime[i] = false;
+    <script>
+        // Mathematical utilities
+        function gcd(a, b) {
+            a = Math.abs(a);
+            b = Math.abs(b);
+            while (b !== 0) {
+                let t = b;
+                b = a % b;
+                a = t;
             }
+            return a;
         }
-        primes = [];
-        for (let p = 2; p <= n; p++) { if (is_prime[p]) primes.push(p); }
-        isPrimeCalculatedUpTo = n;
-    }
-    function omega(n) {
-        if (n === 1) return 0;
-        let count = 0; let temp = n; sieve(Math.ceil(Math.sqrt(n))); 
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) { count++; while (temp % p === 0) temp /= p; }
-        }
-        if (temp > 1) count++; 
-        return count;
-    }
-    function phi(n) {
-        if (n === 0) return 0;
-        let result = n; let temp = n; sieve(Math.ceil(Math.sqrt(n))); 
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) { while (temp % p === 0) temp /= p; result -= result / p; }
-        }
-        if (temp > 1) result -= result / temp;
-        return Math.round(result);
-    }
-    function mobius(n) {
-        if (n === 1) return 1;
-        let factors = 0; let temp = n; sieve(Math.ceil(Math.sqrt(n)));
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) { factors++; temp /= p; if (temp % p === 0) return 0; }
-        }
-        if (temp > 1) factors++; 
-        return (factors % 2 === 0) ? 1 : -1;
-    }
-    function divisorSum(n) {
-        if (n === 1) return 1;
-        let sum = 1; let temp = n; sieve(Math.ceil(Math.sqrt(n)));
-        for (let p of primes) {
-            if (p * p > temp) break;
-            if (temp % p === 0) {
-                let p_pow = p; let term_sum = 1;
-                while (temp % p === 0) { term_sum += p_pow; p_pow *= p; temp /= p; }
-                sum *= term_sum;
+
+        function euler_phi(n) {
+            if (n === 1) return 1;
+            let result = n;
+            let p = 2;
+            while (p * p <= n) {
+                if (n % p === 0) {
+                    while (n % p === 0) n /= p;
+                    result -= result / p;
+                }
+                p++;
             }
+            if (n > 1) result -= result / n;
+            return Math.round(result);
         }
-        if (temp > 1) sum *= (1 + temp);
-        return sum;
-    }
 
-    // --- Data Generation ---
-    function getPointsAndProperties(Q) {
-        let fractions = []; let reducedCoprimeCount = 0; 
-        let Q_phi_values = []; let ratio_history = []; let mobius_history = [];
-        let current_F = 1; let phi_sum_ratio = 0;
-        
-        for (let q = 1; q <= Q; q++) {
-            const phi_q = phi(q);
-            current_F += phi_q;
-            phi_sum_ratio += phi_q / q;
-            Q_phi_values.push({ q: q, phi: phi_q });
-            ratio_history.push({ q: q, ratio: current_F / (q * q) });
-            mobius_history.push({ q: q, mu: mobius(q), M_q: mobius_history.length > 0 ? mobius_history[mobius_history.length - 1].M_q + mobius(q) : mobius(q) });
+        function isPrime(n) {
+            if (n < 2) return false;
+            if (n === 2) return true;
+            if (n % 2 === 0) return false;
+            for (let i = 3; i * i <= n; i += 2) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
 
-            for (let a = 1; a < q; a++) { 
-                if (gcd(a, q) === 1) {
-                    fractions.push({ a: a, q: q, value: a / q, phi: phi_q, mu: mobius(q), sigma: divisorSum(q), omega: omega(q) });
-                    reducedCoprimeCount++;
+        const SIX_OVER_PI_SQUARED = 6 / (Math.PI * Math.PI);
+
+        // Display update functions
+        function updateModulusDisplay(val) {
+            document.getElementById('maxModulusValue').textContent = val;
+        }
+
+        function updatePointSizeDisplay(val) {
+            document.getElementById('pointSizeValue').textContent = val;
+        }
+
+        function updateGridSizeDisplay(val) {
+            document.getElementById('gridSizeValue').textContent = val;
+        }
+
+        function updatePhiMaxDisplay(val) {
+            document.getElementById('phiMaxValue').textContent = val;
+        }
+
+        // Render Unit Circle
+        function renderUnitCircle() {
+            const canvas = document.getElementById('unitCircleCanvas');
+            const ctx = canvas.getContext('2d');
+            const maxM = parseInt(document.getElementById('maxModulus').value);
+            const coprimeOnly = document.getElementById('coprimeOnly').checked;
+            const pointSize = parseInt(document.getElementById('pointSize').value);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = Math.min(cx, cy) - 50;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw circle
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cx - radius - 20, cy);
+            ctx.lineTo(cx + radius + 20, cy);
+            ctx.moveTo(cx, cy - radius - 20);
+            ctx.lineTo(cx, cy + radius + 20);
+            ctx.stroke();
+
+            let totalPoints = 0;
+            let coprimeCount = 0;
+            const points = new Set();
+
+            // Plot points
+            for (let m = 1; m <= maxM; m++) {
+                for (let r = 0; r < m; r++) {
+                    const iscoprime = gcd(r, m) === 1;
+                    if (coprimeOnly && !iscoprime) continue;
+
+                    totalPoints++;
+                    if (iscoprime) coprimeCount++;
+
+                    const angle = 2 * Math.PI * r / m;
+                    const x = cx + radius * Math.cos(angle);
+                    const y = cy - radius * Math.sin(angle);
+
+                    const key = Math.round(x * 10) + ',' + Math.round(y * 10);
+                    if (points.has(key)) continue;
+                    points.add(key);
+
+                    ctx.fillStyle = iscoprime ? '#e74c3c' : '#3498db';
+                    ctx.beginPath();
+                    ctx.arc(x, y, pointSize, 0, 2 * Math.PI);
+                    ctx.fill();
                 }
             }
-            if (q === 1) {
-                fractions.push({ a: 0, q: 1, value: 0, phi: 1, mu: 1, sigma: 1, omega: 0 });
-                fractions.push({ a: 1, q: 1, value: 1, phi: 1, mu: 1, sigma: 1, omega: 0 });
-            }
-        }
-        
-        let A_Q = 0;
-        sieve(Q);
-        for (let d = 1; d <= Q; d++) {
-            A_Q += mobius(d) * Math.floor(Q / d) * Math.floor(Q / d);
-        }
-        
-        let latticePoints = [];
-        for (let a = 1; a <= Q; a++) {
-            for (let b = 1; b <= Q; b++) {
-                const g = gcd(a, b);
-                latticePoints.push({
-                    a: a, b: b, gcd_val: g, is_coprime: (g === 1),
-                    prop_value: g, mu: mobius(g), omega: omega(g), sigma: divisorSum(g),
-                });
-            }
-        }
-        
-        return { fractions, latticePoints, FareyCount: current_F - 1, B_Q: reducedCoprimeCount, A_Q: A_Q, AvgPhiRatio: phi_sum_ratio / Q, Q_phi_values, ratio_history, mobius_history }; 
-    }
-    
-    //================================================================================================
-    // [P5.JS CORE: WEBGL IMPLEMENTATION] 
-    //================================================================================================
 
-    function setup() {
-        let canvas = createCanvas(CANVAS_W, CANVAS_H, WEBGL); 
-        canvas.id('p5Canvas'); 
-        canvas.parent('visualization-area');
-        colorMode(HSB, 360, 100, 100);
-        noLoop(); 
-        
-        dashboardGraphics = createGraphics(CANVAS_W, CANVAS_H, P2D);
-        dashboardGraphics.colorMode(HSB, 360, 100, 100);
-
-        document.getElementById('limitQ').max = 250;
-        document.getElementById('limitQ').value = Q_current;
-        resetSketch(); 
-    }
-    
-    function resetSketch() {
-        const visMode = document.getElementById('visMode').value;
-        
-        if (visMode === 'circle') {
-             document.getElementById('limitQ').max = 250; 
-        } else {
-             document.getElementById('limitQ').max = 100;
-        }
-        
-        if (Q_current > parseInt(document.getElementById('limitQ').max)) {
-            Q_current = parseInt(document.getElementById('limitQ').max);
-            document.getElementById('limitQ').value = Q_current;
-        }
-        
-        dataCache = {}; 
-        updateVisualization();
-    }
-    
-    function updateVisualization() {
-        Q_current = parseInt(document.getElementById('limitQ').value);
-        pointSize = parseFloat(document.getElementById('pointSize').value);
-
-        document.getElementById('limitQValue').textContent = Q_current;
-        document.getElementById('propQ').textContent = Q_current;
-        
-        const style = getComputedStyle(document.body);
-        axisColor = color(style.getPropertyValue('--color-text'));
-        bgColor = color(style.getPropertyValue('--color-control-bg'));
-
-        if (!dataCache[Q_current]) {
-            dataCache[Q_current] = getPointsAndProperties(Q_current);
-        }
-        
-        const data = dataCache[Q_current];
-        const finalRatio = data.ratio_history[data.ratio_history.length - 1].ratio;
-
-        // Update data panel (HTML)
-        document.getElementById('propFarey').textContent = data.FareyCount.toLocaleString();
-        document.getElementById('propReducedCoprime').textContent = data.B_Q.toLocaleString();
-        document.getElementById('propTotalCoprime').textContent = data.A_Q.toLocaleString();
-        document.getElementById('propRatio').textContent = finalRatio.toFixed(6);
-
-        redraw();
-    }
-    
-    function draw() {
-        if (!dataCache[Q_current]) return; 
-        const data = dataCache[Q_current];
-        const visMode = document.getElementById('visMode').value;
-        
-        // 1. WEBGL Setup
-        clear();
-        push();
-        translate(0, 0, -100); 
-        fill(bgColor);
-        noStroke();
-        plane(CANVAS_W * 2, CANVAS_H * 2); 
-        pop();
-        
-        strokeWeight(pointSize);
-        
-        // 2. Draw Main Visualization
-        push();
-        translate(0, MAIN_PLOT_Y_OFFSET, 0); 
-        
-        if (visMode === 'circle') {
-            drawUnitCircleWebGL(data.fractions);
-        } else {
-            drawCoprimeLatticeWebGL(data.latticePoints);
-        }
-        pop();
-        
-        // 3. Draw 2D UI Overlay (Title, Legend, Live Metrics, Charts)
-        drawUIOverlay(dashboardGraphics, data, visMode);
-        image(dashboardGraphics, -CANVAS_W/2, -CANVAS_H/2);
-    }
-    
-    // --- COLORING LOGIC (Unchanged) ---
-    function getPointColor(p, scheme, isLattice) {
-        if (scheme === 'none' || (isLattice && scheme === 'gcd_coprime')) { return axisColor; }
-        const sat_val = parseInt(document.getElementById('saturation').value);
-        const bright_val = parseInt(document.getElementById('brightness').value);
-
-        if (scheme === 'mobius') {
-            if (p.mu === 1) return color(220, 80, 95); 
-            if (p.mu === -1) return color(0, 80, 95);  
-            return color(0, 0, 50); 
-        }
-        if (scheme === 'omega') {
-            const maxOmega = Math.max(3, ...dataCache[Q_current].fractions.map(f => f.omega));
-            let hue = map(p.omega, 0, maxOmega, 180, 300); 
-            return color(hue, sat_val, bright_val);
-        }
-        let propValues = isLattice ? dataCache[Q_current].latticePoints.map(p => p.prop_value) : dataCache[Q_current].fractions.map(p => p.q);
-        let minVal = Math.min(...propValues.filter(v => v > 0)); 
-        let maxVal = Math.max(...propValues);
-        if (maxVal === 0 || maxVal <= minVal) maxVal = minVal + 1;
-        const val = isLattice ? p.prop_value : (scheme === 'divisor_sum' ? p.sigma : p.q);
-        let hue = map(val, minVal, maxVal, 0, 300);
-        return color(hue, sat_val, bright_val);
-    }
-    
-    // --- VISUALIZATION DRAWING (Unchanged) ---
-    function drawUnitCircleWebGL(fractions) {
-        push();
-        const radius = MAIN_PLOT_RADIUS; 
-        
-        push();
-        stroke(axisColor); noFill(); strokeWeight(1);
-        rotateX(PI/2); 
-        torus(radius, 1, 100, 100); 
-        pop();
-
-        const scheme = document.getElementById('colorScheme').value;
-        
-        beginShape(POINTS);
-        for (let p of fractions) {
-            const angle = -2 * PI * p.value; 
-            const x = radius * cos(angle);
-            const z = radius * sin(angle); 
-            
-            stroke(getPointColor(p, scheme, false));
-            vertex(x, 0, z); 
-        }
-        endShape();
-        pop();
-    }
-
-    function drawCoprimeLatticeWebGL(latticePoints) {
-        push();
-        const plotSize = MAIN_PLOT_SIZE * 0.75; 
-        
-        translate(-plotSize/2, plotSize/2, 0); 
-        
-        stroke(axisColor); strokeWeight(1);
-        line(0, 0, plotSize, 0); 
-        line(0, 0, 0, -plotSize); 
-
-        const scheme = document.getElementById('colorScheme').value;
-        const scaleFactor = plotSize / Q_current;
-        
-        beginShape(POINTS);
-        for (let p of latticePoints) {
-            const x = p.a * scaleFactor;
-            const y = -p.b * scaleFactor; 
-            
-            stroke(getPointColor(p, scheme, true));
-            vertex(x, y, 0); 
-        }
-        endShape();
-        pop();
-    }
-    
-    // --- DRAW 2D UI OVERLAY ---
-    function drawUIOverlay(pg, data, visMode) {
-        pg.clear();
-        pg.background(0, 0, 0, 0); 
-        
-        // 1. Title and Legend
-        drawLegendAndTitleP2D(pg, visMode);
-
-        // 2. Computational Results Display for Export
-        drawLiveDataDisplayP2D(pg, data, visMode);
-
-        // 3. Draw dashboard charts 
-        pg.push(); pg.translate(10, Y_DASHBOARD_AREA_P2D); drawPhiBarChartP2D(pg, data.Q_phi_values); pg.pop();
-        pg.push(); pg.translate(CANVAS_W / 2 - PLOT_W / 2, Y_DASHBOARD_AREA_P2D); drawRatioConvergenceP2D(pg, data.ratio_history); pg.pop();
-        pg.push(); pg.translate(CANVAS_W - PLOT_W - 10, Y_DASHBOARD_AREA_P2D); drawMobiusSequenceP2D(pg, data.mobius_history); pg.pop();
-    }
-    
-    function drawLegendAndTitleP2D(pg, visMode) {
-        const scheme = document.getElementById('colorScheme').value;
-        const Q = Q_current;
-        
-        // --- 1. Title ---
-        pg.fill(axisColor);
-        pg.textSize(28);
-        pg.textAlign(CENTER, TOP);
-        
-        let titleText;
-        if (visMode === 'circle') {
-            titleText = 'Farey Sequence Angles on the Unit Circle (q \u2264 Q)'; // Unicode for <=
-        } else {
-            titleText = 'Coprime Pairs Density (Lattice Plot gcd(a, b)=g)';
-        }
-        pg.text(titleText, CANVAS_W / 2, 20);
-
-        // --- 2. Legend Box ---
-        const legendX = CANVAS_W * 0.05;
-        const legendY = 60;
-        const legendW = CANVAS_W * 0.9;
-        const legendH = 100;
-
-        pg.fill(bgColor);
-        pg.stroke(axisColor);
-        pg.rect(legendX, legendY, legendW, legendH, 5);
-
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(LEFT, TOP);
-
-        // Left Column (Parameters)
-        pg.text(`Visualization Parameters:`, legendX + 10, legendY + 10);
-        pg.textSize(16);
-        pg.text(`Max Limit Q: ${Q}`, legendX + 10, legendY + 35);
-        
-        let pointCount = visMode === 'circle' ? dataCache[Q].FareyCount : dataCache[Q].latticePoints.length;
-        pg.textSize(14);
-        pg.text(`Total Points Plotted: ${pointCount.toLocaleString()}`, legendX + 10, legendY + 65);
-
-
-        // Right Column (Color Scheme Details)
-        pg.textSize(14);
-        pg.text(`Color Map Details:`, CANVAS_W / 2 + 10, legendY + 10);
-        pg.textSize(16);
-        pg.text(`Scheme: ${document.getElementById('colorScheme').options[document.getElementById('colorScheme').selectedIndex].text}`, CANVAS_W / 2 + 10, legendY + 35);
-        
-        let colorRangeText = `Range: Varies by selected function (q: 1 to ${Q})`;
-        if (scheme === 'gcd_coprime') {
-            colorRangeText = 'Range: Coprime (V=1) vs. Not Coprime (V>1)';
-        } else if (scheme === 'mobius') {
-            colorRangeText = 'Range: Mu(q) = 1, -1, or 0';
-        }
-        pg.textSize(14);
-        pg.text(colorRangeText, CANVAS_W / 2 + 10, legendY + 65);
-    }
-
-    // Corrected with Unicode for Export
-    function drawLiveDataDisplayP2D(pg, data, visMode) {
-        const x = CANVAS_W * 0.05;
-        const y = Y_COMPUTATIONAL_AREA_P2D; 
-        const w = CANVAS_W * 0.9;
-        const h = 75;
-        const colW = w / 4;
-        
-        pg.fill(bgColor);
-        pg.stroke(axisColor);
-        pg.rect(x, y, w, h, 5);
-        
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-
-        // --- Box 1: Farey Sequence Cardinality |F_Q| ---
-        pg.textStyle(BOLD);
-        pg.text(`Farey Sequence |F\u208B${Q_current}\u208C|:`, x + colW/2, y + 10); // \u208B and \u208C are subscript brackets
-        pg.textStyle(NORMAL);
-        pg.fill(color('#E67E22'));
-        pg.text(data.FareyCount.toLocaleString(), x + colW/2, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 2: Count of Reduced Fractions B_Q ---
-        pg.textStyle(BOLD);
-        pg.text(`Reduced Fractions B\u208B${Q_current}\u208C:`, x + colW*1.5, y + 10);
-        pg.textStyle(NORMAL);
-        pg.fill(color('#0077B6'));
-        pg.text(data.B_Q.toLocaleString(), x + colW*1.5, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 3: Total Coprime Pairs A_Q ---
-        pg.textStyle(BOLD);
-        pg.text(`Coprime Pairs A\u208B${Q_current}\u208C:`, x + colW*2.5, y + 10);
-        pg.textStyle(NORMAL);
-        pg.fill(color('#9B59B6'));
-        pg.text(data.A_Q.toLocaleString(), x + colW*2.5, y + 35);
-        pg.fill(axisColor);
-
-        // --- Box 4: Asymptotic Ratio |F_Q| / Q² ---
-        pg.textStyle(BOLD);
-        pg.text(`Ratio |F\u208B${Q_current}\u208C| / Q\u00B2:`, x + colW*3.5, y + 10); // \u00B2 is superscript 2
-        pg.textStyle(NORMAL);
-        pg.fill(color('#2ECC71'));
-        pg.text(data.ratio_history[data.ratio_history.length - 1].ratio.toFixed(6), x + colW*3.5, y + 35);
-        pg.fill(axisColor);
-        pg.textSize(10);
-        // Use \u03C0 for pi
-        pg.text(`Target: 3 / \u03C0\u00B2 \u2248 ${ZETA2_INV_HALF.toFixed(6)}`, x + colW*3.5, y + 55); 
-
-        // Draw vertical separators
-        pg.stroke(axisColor);
-        pg.line(x + colW, y + 5, x + colW, y + h - 5);
-        pg.line(x + colW*2, y + 5, x + colW*2, y + h - 5);
-        pg.line(x + colW*3, y + 5, x + colW*3, y + h - 5);
-    }
-    
-    // --- CHART DRAWING FUNCTIONS (Positions relative to Y_DASHBOARD_AREA_P2D) ---
-    
-    function drawPhiBarChartP2D(pg, phiData) {
-        const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
-        pg.noFill(); pg.stroke(axisColor); pg.rect(0, 0, chartW, chartH);
-        
-        const maxPhi = Math.max(...phiData.map(d => d.phi), 1);
-        const plotAreaH = chartH - margin * 2;
-        const barW = chartW / Q_current;
-        
-        pg.stroke(axisColor); pg.line(0, chartH - margin, chartW, chartH - margin); 
-        pg.push(); pg.translate(0, chartH - margin);
-        
-        for (let i = 0; i < phiData.length; i++) {
-            const data = phiData[i];
-            const barHeight = map(data.phi, 0, maxPhi, 0, plotAreaH);
-            let hue = map(data.phi / data.q, 0, 1, 30, 100); 
-            pg.fill(hue, 80, 80); pg.noStroke();
-            pg.rect(i * barW, 0, barW * 0.9, -barHeight);
-        }
-        pg.pop();
-        
-        // Title for the chart: Replaced \phi with \u03C6
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-        pg.text("Euler's Totient \u03C6(q) Distribution", chartW / 2, 5); 
-    }
-    
-    function drawRatioConvergenceP2D(pg, ratioHistory) {
-        const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
-        pg.noFill(); pg.stroke(axisColor); pg.rect(0, 0, chartW, chartH);
-        
-        const minY = 0.28; const maxY = Math.max(...ratioHistory.map(d => d.ratio), 0.5);
-        const asymptoticY = map(ZETA2_INV_HALF, minY, maxY, chartH - margin, margin); 
-        
-        // Asymptotic Line
-        pg.stroke(color('#E67E22')); pg.strokeWeight(2);
-        pg.line(0, asymptoticY, chartW, asymptoticY);
-        pg.fill(axisColor); pg.textSize(10); pg.textAlign(RIGHT, CENTER);
-        // Replaced \pi^2 with \u03C0\u00B2
-        pg.text(`Target ${ZETA2_INV_HALF.toFixed(4)}`, chartW - 5, asymptoticY);
-
-        // Data Line
-        pg.noFill(); pg.stroke(color('#0077B6')); pg.strokeWeight(2); 
-        
-        pg.beginShape();
-        for (let i = 0; i < ratioHistory.length; i++) {
-            const data = ratioHistory[i];
-            const x = map(data.q, 1, Q_current, 0, chartW);
-            const y = map(data.ratio, minY, maxY, chartH - margin, margin);
-            pg.vertex(x, y);
-        }
-        pg.endShape();
-        
-        // Title for the chart: Replaced \pi^2 and Q^2 with \u03C0\u00B2 and Q\u00B2
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-        pg.text("Ratio Convergence: |F\u208BQ\u208C| / Q\u00B2 \u2192 3 / \u03C0\u00B2", chartW / 2, 5); // \u2192 is right arrow
-    }
-    
-    function drawMobiusSequenceP2D(pg, mobiusData) {
-        const chartW = PLOT_W; const chartH = PLOT_H; const margin = 30;
-        const plotAreaH = chartH - margin * 2;
-        const midpointY = chartH - margin - plotAreaH / 2;
-
-        pg.noFill(); pg.stroke(axisColor); pg.rect(0, 0, chartW, chartH);
-        pg.stroke(axisColor); pg.line(0, midpointY, chartW, midpointY);
-        
-        const pointDiameter = 4;
-        
-        for (let i = 0; i < mobiusData.length; i++) {
-            const data = mobiusData[i];
-            const x = map(data.q, 1, Q_current, 0, chartW);
-            let y;
-            
-            // Plot mu(q) points
-            if (data.mu === 1) { y = midpointY - plotAreaH / 2; pg.fill(220, 80, 95); } 
-            else if (data.mu === -1) { y = midpointY + plotAreaH / 2; pg.fill(0, 80, 95); } 
-            else { y = midpointY; pg.fill(0, 0, 50); }
-            
-            pg.noStroke();
-            pg.ellipse(x, y, pointDiameter, pointDiameter);
-            
-            // Plot M(Q) summation
-            const M_y = map(data.M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
-            pg.stroke(60, 80, 80); 
-            if (i > 0) {
-                const prevX = map(mobiusData[i-1].q, 1, Q_current, 0, chartW);
-                const prevM_y = map(mobiusData[i-1].M_q, -Q_current / 2, Q_current / 2, midpointY + plotAreaH / 2, midpointY - plotAreaH / 2);
-                pg.line(prevX, prevM_y, x, M_y);
-            }
-        }
-        
-        // Title for the chart: Replaced \Sigma and \mu(q) with \u03A3 and \u03BC(q)
-        pg.fill(axisColor);
-        pg.textSize(14);
-        pg.textAlign(CENTER, TOP);
-        pg.text("Mertens Function M(Q) = \u03A3\u03BC(q)", chartW / 2, 5); 
-    }
-    
-    // --- UI Control and Export Functions ---
-    function toggleDarkMode() {
-        const isDarkMode = document.body.classList.toggle('dark-mode');
-        document.getElementById('darkModeToggle').textContent = isDarkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
-        updateVisualization();
-    }
-    
-    function exportPNG() { 
-        const visMode = document.getElementById('visMode').value;
-        const filename = visMode + '_Q' + Q_current + '_Export_WithResults.png';
-        saveCanvas(filename, 'png'); 
-    }
-    
-    // **MODIFIED: Now accepts a dataType argument to export specific data sets.**
-    function exportCSV(dataType) { 
-        const data = dataCache[Q_current];
-        let csvContent = "";
-        let filename = "Data_Q" + Q_current;
-        const visMode = document.getElementById('visMode').value;
-
-        if (!data) {
-            alert("Please calculate data first by setting Q.");
-            return;
+            // Update statistics
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('coprimePoints').textContent = coprimeCount;
+            document.getElementById('coprimeRatio').textContent = 
+                totalPoints > 0 ? (coprimeCount / totalPoints).toFixed(6) : '0';
         }
 
-        if (dataType === 'main_points') {
-            if (visMode === 'circle') {
-                csvContent = "q,a,Fraction_Value,Angle_Radians,Phi_q,Mu_q,Sigma_q\n";
-                for (let p of data.fractions) {
-                    csvContent += `${p.q},${p.a},${p.value.toFixed(8)},${(p.value * 2 * PI).toFixed(6)},${p.phi},${p.mu},${p.sigma}\n`;
+        // Render Coprime Pairs Grid
+        function renderCoprimePairs() {
+            const canvas = document.getElementById('coprimePairsCanvas');
+            const ctx = canvas.getContext('2d');
+            const N = parseInt(document.getElementById('gridSize').value);
+
+            const cellSize = Math.min(canvas.width, canvas.height) / (N + 2);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let coprimeCount = 0;
+
+            for (let a = 1; a <= N; a++) {
+                for (let b = 1; b <= N; b++) {
+                    const x = a * cellSize;
+                    const y = canvas.height - b * cellSize;
+                    
+                    if (gcd(a, b) === 1) {
+                        ctx.fillStyle = '#e74c3c';
+                        coprimeCount++;
+                    } else {
+                        ctx.fillStyle = '#ecf0f1';
+                    }
+                    
+                    ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
                 }
-                filename = "Farey_Angles_Q" + Q_current + ".csv";
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cellSize, 0);
+            ctx.lineTo(cellSize, canvas.height - cellSize);
+            ctx.lineTo(canvas.width, canvas.height - cellSize);
+            ctx.stroke();
+
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            ctx.fillText('a', canvas.width - 20, canvas.height - cellSize + 20);
+            ctx.fillText('b', cellSize - 20, 20);
+
+            // Update statistics
+            const totalPairs = N * N;
+            const ratio = coprimeCount / totalPairs;
+            const error = Math.abs(ratio - SIX_OVER_PI_SQUARED);
+
+            document.getElementById('pairsN').textContent = N;
+            document.getElementById('totalPairs').textContent = totalPairs;
+            document.getElementById('coprimePairsCount').textContent = coprimeCount;
+            document.getElementById('pairsRatio').textContent = ratio.toFixed(6);
+            document.getElementById('pairsError').textContent = error.toFixed(6);
+        }
+
+        // Render Phi Ratios
+        function renderPhiRatios() {
+            const canvas = document.getElementById('phiRatiosCanvas');
+            const ctx = canvas.getContext('2d');
+            const maxM = parseInt(document.getElementById('phiMaxModulus').value);
+            const primesOnly = document.getElementById('primesOnly').checked;
+
+            const padding = 60;
+            const plotWidth = canvas.width - 2 * padding;
+            const plotHeight = canvas.height - 2 * padding;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.moveTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+
+            // Draw theoretical limit line
+            ctx.strokeStyle = '#27ae60';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            const limitY = canvas.height - padding - (SIX_OVER_PI_SQUARED * plotHeight);
+            ctx.beginPath();
+            ctx.moveTo(padding, limitY);
+            ctx.lineTo(canvas.width - padding, limitY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Label for limit
+            ctx.fillStyle = '#27ae60';
+            ctx.font = '12px Arial';
+            ctx.fillText('6/π² ≈ 0.6079', canvas.width - padding + 10, limitY + 5);
+
+            // Plot points
+            let sum = 0;
+            let count = 0;
+            let primeSum = 0;
+            let primeCount = 0;
+
+            for (let m = 1; m <= maxM; m++) {
+                const isPrimeNum = isPrime(m);
+                if (primesOnly && !isPrimeNum) continue;
+
+                const ratio = euler_phi(m) / m;
+                const x = padding + (m / maxM) * plotWidth;
+                const y = canvas.height - padding - ratio * plotHeight;
+
+                ctx.fillStyle = isPrimeNum ? '#e74c3c' : '#3498db';
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                ctx.fill();
+
+                sum += ratio;
+                count++;
+
+                if (isPrimeNum) {
+                    primeSum += ratio;
+                    primeCount++;
+                }
+            }
+
+            // Axes labels
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            ctx.fillText('Modulus m', canvas.width / 2, canvas.height - 20);
+            ctx.save();
+            ctx.translate(20, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('φ(m)/m', 0, 0);
+            ctx.restore();
+
+            // Update statistics
+            const avgRatio = sum / count;
+            const error = Math.abs(avgRatio - SIX_OVER_PI_SQUARED);
+
+            document.getElementById('phiMaxMod').textContent = maxM;
+            document.getElementById('avgPhiRatio').textContent = avgRatio.toFixed(6);
+            document.getElementById('phiError').textContent = error.toFixed(6);
+            
+            if (primeCount > 0) {
+                document.getElementById('primeAvg').textContent = (primeSum / primeCount).toFixed(6);
             } else {
-                csvContent = "a,b,GCD_Value,Is_Coprime,Mu_gcd,Sigma_gcd\n";
-                for (let p of data.latticePoints) {
-                    csvContent += `${p.a},${p.b},${p.gcd_val},${p.is_coprime ? 'TRUE' : 'FALSE'},${p.mu},${p.sigma}\n`;
-                }
-                filename = "Coprime_Lattice_Q" + Q_current + ".csv";
+                document.getElementById('primeAvg').textContent = 'N/A';
             }
-        } else if (dataType === 'phi') {
-            csvContent = "q,Euler_Phi_q\n";
-            for (let d of data.Q_phi_values) {
-                csvContent += `${d.q},${d.phi}\n`;
-            }
-            filename = "Totient_Function_Q" + Q_current + ".csv";
-        } else if (dataType === 'ratio') {
-            csvContent = "Q,Farey_Count_FQ,Ratio_FQ_div_Q2\n";
-            for (let d of data.ratio_history) {
-                const FQ = (d.q > 0 && d.q <= data.ratio_history.length) ? data.ratio_history[d.q - 1].q * data.ratio_history[d.q - 1].ratio * d.q : 'N/A';
-                csvContent += `${d.q},${(d.q * d.q * d.ratio).toFixed(0)},${d.ratio.toFixed(8)}\n`;
-            }
-            filename = "Ratio_Convergence_Q" + Q_current + ".csv";
-        } else if (dataType === 'mobius') {
-            csvContent = "q,Mobius_Mu_q,Mertens_MQ\n";
-            for (let d of data.mobius_history) {
-                csvContent += `${d.q},${d.mu},${d.M_q}\n`;
-            }
-            filename = "Mertens_Function_Q" + Q_current + ".csv";
-        } else {
-            alert("Invalid data type specified for export.");
-            return;
         }
 
-        let encodedUri = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
-        let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", filename);
-        document.body.appendChild(link); 
-        link.click();
-        document.body.removeChild(link);
-    }
-</script>
+        // Render Convergence Chart
+        function renderConvergence() {
+            const canvas = document.getElementById('convergenceCanvas');
+            const ctx = canvas.getContext('2d');
+            const maxM = 500;
+
+            const padding = 60;
+            const plotWidth = canvas.width - 2 * padding;
+            const plotHeight = canvas.height - 2 * padding;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.moveTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+
+            // Draw theoretical limit line
+            ctx.strokeStyle = '#27ae60';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            const limitY = canvas.height - padding - (SIX_OVER_PI_SQUARED * plotHeight);
+            ctx.beginPath();
+            ctx.moveTo(padding, limitY);
+            ctx.lineTo(canvas.width - padding, limitY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Calculate running averages
+            const runningAvgs = [];
+            let sum = 0;
+            for (let m = 1; m <= maxM; m++) {
+                sum += euler_phi(m) / m;
+                runningAvgs.push(sum / m);
+            }
+
+            // Plot running average
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < runningAvgs.length; i++) {
+                const x = padding + ((i + 1) / maxM) * plotWidth;
+                const y = canvas.height - padding - runningAvgs[i] * plotHeight;
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            // Axes labels
+            ctx.fillStyle = '#333';
+            ctx.font = '14px Arial';
+            ctx.fillText('Maximum Modulus N', canvas.width / 2, canvas.height - 20);
+            ctx.save();
+            ctx.translate(20, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('(1/N) Σ φ(m)/m', 0, 0);
+            ctx.restore();
+
+            // Legend
+            ctx.fillStyle = '#27ae60';
+            ctx.fillText('Theoretical: 6/π²', canvas.width - 200, padding + 20);
+            ctx.fillStyle = '#3498db';
+            ctx.fillText('Running Average', canvas.width - 200, padding + 40);
+        }
+
+        // Export functions
+        function exportCanvas(canvasId, resolution) {
+            const canvas = document.getElementById(canvasId);
+            let exportCanvas, exportCtx;
+
+            if (resolution === '4k') {
+                exportCanvas = document.createElement('canvas');
+                exportCanvas.width = 3840;
+                exportCanvas.height = 3840;
+                exportCtx = exportCanvas.getContext('2d');
+                
+                const scaleX = 3840 / canvas.width;
+                const scaleY = 3840 / canvas.height;
+                exportCtx.scale(scaleX, scaleY);
+                exportCtx.drawImage(canvas, 0, 0);
+            } else {
+                exportCanvas = canvas;
+            }
+
+            exportCanvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${canvasId}_${resolution}_${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function exportCircleData() {
+            const maxM = parseInt(document.getElementById('maxModulus').value);
+            const coprimeOnly = document.getElementById('coprimeOnly').checked;
+
+            let csv = 'Modulus,Residue,Angle_Radians,X_Coordinate,Y_Coordinate,Is_Coprime\n';
+
+            for (let m = 1; m <= maxM; m++) {
+                for (let r = 0; r < m; r++) {
+                    const iscoprime = gcd(r, m) === 1;
+                    if (coprimeOnly && !iscoprime) continue;
+
+                    const angle = 2 * Math.PI * r / m;
+                    const x = Math.cos(angle);
+                    const y = Math.sin(angle);
+
+                    csv += `${m},${r},${angle.toFixed(10)},${x.toFixed(10)},${y.toFixed(10)},${iscoprime ? 1 : 0}\n`;
+                }
+            }
+
+            downloadCSV(csv, 'unit_circle_data.csv');
+        }
+
+        function exportCoprimePairsData() {
+            const N = parseInt(document.getElementById('gridSize').value);
+
+            let csv = 'a,b,gcd,is_coprime\n';
+
+            for (let a = 1; a <= N; a++) {
+                for (let b = 1; b <= N; b++) {
+                    const g = gcd(a, b);
+                    csv += `${a},${b},${g},${g === 1 ? 1 : 0}\n`;
+                }
+            }
+
+            downloadCSV(csv, 'coprime_pairs_data.csv');
+        }
+
+        function exportPhiData() {
+            const maxM = parseInt(document.getElementById('phiMaxModulus').value);
+
+            let csv = 'Modulus,Phi_m,Ratio_Phi_m_over_m,Is_Prime\n';
+
+            for (let m = 1; m <= maxM; m++) {
+                const phi = euler_phi(m);
+                const ratio = phi / m;
+                const prime = isPrime(m);
+                csv += `${m},${phi},${ratio.toFixed(10)},${prime ? 1 : 0}\n`;
+            }
+
+            downloadCSV(csv, 'phi_ratios_data.csv');
+        }
+
+        function exportConvergenceData() {
+            const maxM = 500;
+
+            let csv = 'N,Running_Average_Phi_over_m\n';
+            let sum = 0;
+
+            for (let m = 1; m <= maxM; m++) {
+                sum += euler_phi(m) / m;
+                const avg = sum / m;
+                csv += `${m},${avg.toFixed(10)}\n`;
+            }
+
+            downloadCSV(csv, 'convergence_data.csv');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Main render function
+        function renderAll() {
+            renderUnitCircle();
+            renderCoprimePairs();
+            renderPhiRatios();
+            renderConvergence();
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderAll();
+        };
+    </script>
 </body>
 </html>
