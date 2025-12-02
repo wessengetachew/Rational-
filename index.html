@@ -414,6 +414,11 @@
                     <span>Unit Circle</span>
                 </label>
                 <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="nested" checked>
+                    <span class="color-indicator" style="background: #9b59b6;"></span>
+                    <span>Nested Rings</span>
+                </label>
+                <label class="checkbox-item">
                     <input type="checkbox" class="canvas-export-checkbox" value="pairs" checked>
                     <span class="color-indicator" style="background: #3498db;"></span>
                     <span>Coprime Pairs Grid</span>
@@ -436,7 +441,7 @@
                     <button onclick="deselectAllCanvasExports()">Deselect All</button>
                 </div>
                 <div id="exportCount" style="color: #27ae60; font-weight: 700; font-size: 1.1em; margin-bottom: 15px;">
-                    4 canvases selected
+                    5 canvases selected
                 </div>
                 <label style="margin-right: 20px;">
                     <input type="checkbox" id="includeExportLegend" checked> Include Legend
@@ -482,6 +487,16 @@
                 <input type="range" id="pointSize" min="1" max="12" value="4" oninput="updatePointSizeDisplay(this.value); renderAll()">
                 <span class="value-display" id="pointSizeValue">4</span>
             </div>
+            <div class="control-group">
+                <label>Angular Mapping:</label>
+                <select id="angularMapping" onchange="renderAll()" style="padding: 8px; font-size: 1em;">
+                    <option value="standard">Standard Counterclockwise: 2πr/m</option>
+                    <option value="reverse">Reverse (Clockwise): -2πr/m</option>
+                    <option value="complement">Complement: 2π(m-r)/m</option>
+                    <option value="rotated">Rotated by π/2</option>
+                    <option value="farey">Farey-Order Mapping</option>
+                </select>
+            </div>
         </div>
 
         <div class="zoom-controls">
@@ -493,11 +508,55 @@
             </div>
         </div>
 
-        <div class="canvas-container">
-            <canvas id="unitCircleCanvas" width="800" height="800"></canvas>
-            <div class="export-buttons">
-                <button onclick="exportCanvas('unitCircleCanvas', '4k')">Export as 4K PNG</button>
-                <button onclick="exportCircleData()">Export Data as CSV</button>
+        <div class="multi-canvas-grid">
+            <div class="canvas-container">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">Single Modulus View</h3>
+                <canvas id="unitCircleCanvas" width="800" height="800"></canvas>
+                <div class="export-buttons">
+                    <button onclick="exportCanvas('unitCircleCanvas', '4k')">Export as 4K PNG</button>
+                    <button onclick="exportCircleData()">Export Data as CSV</button>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">Nested Modular Rings (1 to n)</h3>
+                <canvas id="nestedRingsCanvas" width="800" height="800"></canvas>
+                <div class="export-buttons">
+                    <button onclick="exportCanvas('nestedRingsCanvas', '4k')">Export as 4K PNG</button>
+                    <button onclick="exportNestedData()">Export Data as CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-header">Nested Rings Controls</div>
+            <div class="control-group">
+                <label>Number of Rings (n):</label>
+                <input type="range" id="numRings" min="1" max="30" value="12" oninput="updateNumRings(this.value); renderNestedRings()">
+                <span class="value-display" id="numRingsValue">12</span>
+            </div>
+            <div class="control-group">
+                <label>Ring Spacing:</label>
+                <input type="range" id="ringSpacing" min="0.5" max="2" value="1" step="0.1" oninput="updateRingSpacing(this.value); renderNestedRings()">
+                <span class="value-display" id="ringSpacingValue">1.0</span>
+            </div>
+            <div class="control-group">
+                <label>Color by GCD:</label>
+                <input type="checkbox" id="colorByGCD" checked onchange="renderNestedRings()">
+            </div>
+            <div class="control-group">
+                <label>Nested Point Size:</label>
+                <input type="range" id="nestedPointSize" min="1" max="8" value="2" oninput="updateNestedPointSize(this.value); renderNestedRings()">
+                <span class="value-display" id="nestedPointSizeValue">2</span>
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>Nested Rings Zoom:</label>
+                <input type="range" id="nestedZoom" min="50" max="300" value="100" step="5" oninput="updateNestedZoom(this.value); renderNestedRings()">
+                <span class="value-display" id="nestedZoomValue">100%</span>
             </div>
         </div>
 
@@ -720,7 +779,15 @@
             circle: 1.0,
             pairs: 1.0,
             phi: 1.0,
-            convergence: 1.0
+            convergence: 1.0,
+            nested: 1.0
+        };
+
+        // Nested rings state
+        const nestedState = {
+            numRings: 12,
+            ringSpacing: 1.0,
+            pointSize: 2
         };
 
         // Mathematical utilities
@@ -779,6 +846,26 @@
             document.getElementById('phiMaxValue').textContent = val;
         }
 
+        function updateNumRings(val) {
+            nestedState.numRings = parseInt(val);
+            document.getElementById('numRingsValue').textContent = val;
+        }
+
+        function updateRingSpacing(val) {
+            nestedState.ringSpacing = parseFloat(val);
+            document.getElementById('ringSpacingValue').textContent = parseFloat(val).toFixed(1);
+        }
+
+        function updateNestedPointSize(val) {
+            nestedState.pointSize = parseInt(val);
+            document.getElementById('nestedPointSizeValue').textContent = val;
+        }
+
+        function updateNestedZoom(val) {
+            zoomState.nested = parseFloat(val) / 100;
+            document.getElementById('nestedZoomValue').textContent = val + '%';
+        }
+
         // Zoom update functions
         function updateCircleZoom(val) {
             zoomState.circle = parseFloat(val) / 100;
@@ -808,13 +895,201 @@
             document.getElementById('pairsZoom').value = 100;
             document.getElementById('phiZoom').value = 100;
             document.getElementById('convergenceZoom').value = 100;
+            document.getElementById('nestedZoom').value = 100;
             
             updateCircleZoom(100);
             updatePairsZoom(100);
             updatePhiZoom(100);
             updateConvergenceZoom(100);
+            updateNestedZoom(100);
             
             renderAll();
+        }
+
+        // Angular mapping functions
+        function getAngle(r, m, mapping, r0 = 0) {
+            switch(mapping) {
+                case 'standard':
+                    return 2 * Math.PI * r / m;
+                case 'reverse':
+                    return -2 * Math.PI * r / m;
+                case 'complement':
+                    return 2 * Math.PI * (m - r) / m;
+                case 'rotated':
+                    return 2 * Math.PI * r / m - Math.PI / 2;
+                case 'farey':
+                    // Simplified Farey ordering by coprimality
+                    const fareyIndex = getFareyIndex(r, m);
+                    return 2 * Math.PI * fareyIndex / m;
+                default:
+                    return 2 * Math.PI * r / m;
+            }
+        }
+
+        function getFareyIndex(r, m) {
+            // Simple ordering: coprimes first, then non-coprimes
+            let index = 0;
+            for (let i = 0; i < r; i++) {
+                if (gcd(i, m) === 1) index++;
+            }
+            return index;
+        }
+
+        // Render nested rings
+        function renderNestedRings() {
+            const canvas = document.getElementById('nestedRingsCanvas');
+            const ctx = canvas.getContext('2d');
+            const n = nestedState.numRings;
+            const spacing = nestedState.ringSpacing;
+            const pointSize = nestedState.pointSize;
+            const colorByGCD = document.getElementById('colorByGCD').checked;
+            const mapping = document.getElementById('angularMapping').value;
+            const zoom = zoomState.nested;
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const maxRadius = (Math.min(cx, cy) - 50) * zoom;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cx - maxRadius - 20, cy);
+            ctx.lineTo(cx + maxRadius + 20, cy);
+            ctx.moveTo(cx, cy - maxRadius - 20);
+            ctx.lineTo(cx, cy + maxRadius + 20);
+            ctx.stroke();
+
+            // Calculate ring radii
+            const baseRadius = maxRadius * 0.15;
+            
+            // GCD color palette
+            const gcdColors = {
+                1: '#e74c3c',  // Coprime - red
+                2: '#3498db',  // GCD 2 - blue
+                3: '#2ecc71',  // GCD 3 - green
+                4: '#f39c12',  // GCD 4 - orange
+                5: '#9b59b6',  // GCD 5 - purple
+                default: '#95a5a6'  // Other - gray
+            };
+
+            // Draw each ring
+            for (let m = 1; m <= n; m++) {
+                const t = (m - 1) / (n - 1 || 1);
+                const radius = baseRadius + t * (maxRadius - baseRadius) * spacing;
+
+                // Draw ring circle
+                ctx.strokeStyle = 'rgba(200, 200, 200, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // Draw ring label
+                ctx.fillStyle = '#666';
+                ctx.font = '10px Arial';
+                ctx.fillText(`m=${m}`, cx + radius + 5, cy);
+
+                // Draw residue points
+                for (let r = 0; r < m; r++) {
+                    const g = gcd(r, m);
+                    
+                    // Get angle based on mapping
+                    const angle = getAngle(r, m, mapping);
+                    const x = cx + radius * Math.cos(angle);
+                    const y = cy - radius * Math.sin(angle);
+
+                    // Determine color
+                    let color;
+                    if (colorByGCD) {
+                        color = gcdColors[g] || gcdColors.default;
+                    } else {
+                        color = g === 1 ? '#e74c3c' : '#95a5a6';
+                    }
+
+                    // Draw point
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(x, y, pointSize, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // Draw connecting line to center for coprime points on outer ring
+                    if (m === n && g === 1 && n <= 20) {
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 0.5;
+                        ctx.globalAlpha = 0.3;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, cy);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1.0;
+                    }
+                }
+            }
+
+            // Draw legend
+            const legendX = 20;
+            const legendY = canvas.height - 120;
+            
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillRect(legendX, legendY, 200, 100);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(legendX, legendY, 200, 100);
+
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText('GCD Color Legend', legendX + 10, legendY + 20);
+
+            let y = legendY + 40;
+            const legendItems = [
+                { gcd: 1, label: 'GCD = 1 (Coprime)', color: gcdColors[1] },
+                { gcd: 2, label: 'GCD = 2', color: gcdColors[2] },
+                { gcd: 3, label: 'GCD = 3', color: gcdColors[3] },
+                { gcd: 4, label: 'GCD ≥ 4', color: gcdColors.default }
+            ];
+
+            legendItems.forEach(item => {
+                ctx.fillStyle = item.color;
+                ctx.beginPath();
+                ctx.arc(legendX + 15, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+
+                ctx.fillStyle = '#333';
+                ctx.font = '11px Arial';
+                ctx.fillText(item.label, legendX + 30, y + 4);
+                y += 15;
+            });
+
+            // Angular mapping info
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 11px Arial';
+            const mappingText = document.getElementById('angularMapping').options[
+                document.getElementById('angularMapping').selectedIndex
+            ].text;
+            ctx.fillText('Mapping: ' + mappingText.split(':')[0], 20, 30);
+        }
+
+        function exportNestedData() {
+            const n = nestedState.numRings;
+            const mapping = document.getElementById('angularMapping').value;
+
+            let csv = 'Ring_Modulus,Residue,Angle_Radians,X_Unit,Y_Unit,GCD,Is_Coprime,Mapping\n';
+
+            for (let m = 1; m <= n; m++) {
+                for (let r = 0; r < m; r++) {
+                    const angle = getAngle(r, m, mapping);
+                    const x = Math.cos(angle);
+                    const y = Math.sin(angle);
+                    const g = gcd(r, m);
+
+                    csv += `${m},${r},${angle.toFixed(10)},${x.toFixed(10)},${y.toFixed(10)},${g},${g === 1 ? 1 : 0},${mapping}\n`;
+                }
+            }
+
+            downloadCSV(csv, `nested_rings_${mapping}_data.csv`);
         }
 
         // Multi-canvas export selection
@@ -847,6 +1122,7 @@
             const maxM = parseInt(document.getElementById('maxModulus').value);
             const coprimeOnly = document.getElementById('coprimeOnly').checked;
             const pointSize = parseInt(document.getElementById('pointSize').value);
+            const mapping = document.getElementById('angularMapping').value;
             const zoom = zoomState.circle;
 
             const cx = canvas.width / 2;
@@ -885,7 +1161,7 @@
                     totalPoints++;
                     if (iscoprime) coprimeCount++;
 
-                    const angle = 2 * Math.PI * r / m;
+                    const angle = getAngle(r, m, mapping);
                     const x = cx + radius * Math.cos(angle);
                     const y = cy - radius * Math.sin(angle);
 
@@ -899,6 +1175,14 @@
                     ctx.fill();
                 }
             }
+
+            // Angular mapping info
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Arial';
+            const mappingText = document.getElementById('angularMapping').options[
+                document.getElementById('angularMapping').selectedIndex
+            ].text;
+            ctx.fillText('Mapping: ' + mappingText.split(':')[0], 20, 30);
 
             // Update statistics
             document.getElementById('totalPoints').textContent = totalPoints;
@@ -1194,6 +1478,7 @@
 
                 const canvasInfo = {
                     'circle': { canvas: document.getElementById('unitCircleCanvas'), title: 'Unit Circle', color: '#e74c3c', subtitle: 'Roots of Unity' },
+                    'nested': { canvas: document.getElementById('nestedRingsCanvas'), title: 'Nested Rings', color: '#9b59b6', subtitle: 'Moduli 1 to n' },
                     'pairs': { canvas: document.getElementById('coprimePairsCanvas'), title: 'Coprime Pairs', color: '#3498db', subtitle: 'GCD Grid' },
                     'phi': { canvas: document.getElementById('phiRatiosCanvas'), title: 'φ(m)/m Ratios', color: '#27ae60', subtitle: 'Totient Function' },
                     'convergence': { canvas: document.getElementById('convergenceCanvas'), title: 'Convergence', color: '#f39c12', subtitle: 'Running Average' }
@@ -1202,7 +1487,9 @@
                 const count = selected.length;
                 let cols, rows;
                 if (count <= 2) { cols = count; rows = 1; }
-                else { cols = 2; rows = 2; }
+                else if (count <= 4) { cols = 2; rows = 2; }
+                else if (count <= 6) { cols = 3; rows = 2; }
+                else { cols = 3; rows = Math.ceil(count / 3); }
 
                 const baseSize = Math.min(width, height);
                 const canvasSize = baseSize / Math.max(rows, cols);
@@ -1319,9 +1606,15 @@
                         const maxM = document.getElementById('maxModulus').value;
                         const gridSize = document.getElementById('gridSize').value;
                         const phiMax = document.getElementById('phiMaxModulus').value;
+                        const numRings = document.getElementById('numRings').value;
+                        const mapping = document.getElementById('angularMapping').options[
+                            document.getElementById('angularMapping').selectedIndex
+                        ].text.split(':')[0];
 
                         const params = [
                             `Max Modulus: ${maxM}`,
+                            `Nested Rings: ${numRings}`,
+                            `Mapping: ${mapping}`,
                             `Grid Size: ${gridSize}`,
                             `φ Range: 1-${phiMax}`,
                             `Target: 6/π² ≈ 0.608`
@@ -1436,6 +1729,7 @@
         // Main render function
         function renderAll() {
             renderUnitCircle();
+            renderNestedRings();
             renderCoprimePairs();
             renderPhiRatios();
             renderConvergence();
