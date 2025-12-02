@@ -12019,6 +12019,12 @@ Generated: ${new Date().toLocaleString()}
                 const radius = (n / maxN) * maxRadius;
                 const phiN = phi(n);
                 
+                // Per-ring rotation support
+                let perRingOffset = 0;
+                if (state.perRingRotations && state.perRingRotations[n] !== undefined) {
+                    perRingOffset = state.perRingRotations[n] * Math.PI / 180;
+                }
+                
                 // Draw ring circle
                 ctx.strokeStyle = `rgba(39, 174, 96, ${0.2 + (phiN / n) * 0.5})`;
                 ctx.lineWidth = 2;
@@ -12029,7 +12035,7 @@ Generated: ${new Date().toLocaleString()}
                 // Draw coprime points on this ring
                 for (let k = 1; k < n; k++) {
                     if (gcd(k, n) === 1) {
-                        const angle = 2 * Math.PI * k / n + phase;
+                        const angle = 2 * Math.PI * k / n + phase + perRingOffset;
                         const x = cx + radius * Math.cos(angle);
                         const y = cy + radius * Math.sin(angle);
                         
