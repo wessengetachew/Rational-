@@ -130,6 +130,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         label {
@@ -386,6 +387,24 @@
             font-size: 1.2em;
             z-index: 1000;
         }
+
+        .input-override {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-override input[type="number"] {
+            width: 120px;
+            font-weight: 600;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -404,7 +423,7 @@
 
         <!-- Multi-Canvas Export Section -->
         <div class="export-section">
-            <h3>🎯 Multi-Canvas Export System</h3>
+            <h3>Multi-Canvas Export System</h3>
             <p style="margin-bottom: 20px;">Select any combination of visualizations to export together. The system will automatically arrange them in an optimal grid layout with a comprehensive legend.</p>
             
             <div class="checkbox-group">
@@ -461,7 +480,7 @@
             </div>
             <div style="text-align: center; margin-top: 20px;">
                 <button class="export-all" onclick="exportMultipleCanvases()">
-                    📊 Export Selected Canvases
+                    Export Selected Canvases
                 </button>
             </div>
         </div>
@@ -475,8 +494,13 @@
             <div class="controls-header">Unit Circle Controls</div>
             <div class="control-group">
                 <label>Maximum Modulus:</label>
-                <input type="range" id="maxModulus" min="1" max="100" value="20" oninput="updateModulusDisplay(this.value); renderAll()">
-                <span class="value-display" id="maxModulusValue">20</span>
+                <div class="slider-group">
+                    <input type="range" id="maxModulus" min="1" max="100" value="20" oninput="updateModulusDisplay(); renderAll()">
+                    <span class="value-display" id="maxModulusValue">20</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="maxModulusInput" min="1" value="20" onchange="overrideModulus()">
+                </div>
             </div>
             <div class="control-group">
                 <label>Show Coprime Only:</label>
@@ -484,8 +508,13 @@
             </div>
             <div class="control-group">
                 <label>Point Size:</label>
-                <input type="range" id="pointSize" min="1" max="12" value="4" oninput="updatePointSizeDisplay(this.value); renderAll()">
-                <span class="value-display" id="pointSizeValue">4</span>
+                <div class="slider-group">
+                    <input type="range" id="pointSize" min="1" max="12" value="4" oninput="updatePointSizeDisplay(); renderAll()">
+                    <span class="value-display" id="pointSizeValue">4</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="pointSizeInput" min="1" max="50" value="4" onchange="overridePointSize()">
+                </div>
             </div>
             <div class="control-group">
                 <label>Angular Mapping:</label>
@@ -503,8 +532,13 @@
             <h4>Canvas Zoom Controls</h4>
             <div class="control-group">
                 <label>Unit Circle Zoom:</label>
-                <input type="range" id="circleZoom" min="50" max="300" value="100" step="5" oninput="updateCircleZoom(this.value); renderUnitCircle()">
-                <span class="value-display" id="circleZoomValue">100%</span>
+                <div class="slider-group">
+                    <input type="range" id="circleZoom" min="50" max="300" value="100" step="5" oninput="updateCircleZoom(); renderUnitCircle()">
+                    <span class="value-display" id="circleZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="circleZoomInput" min="10" max="500" value="100" step="5" onchange="overrideCircleZoom()">
+                </div>
             </div>
         </div>
 
@@ -532,13 +566,23 @@
             <div class="controls-header">Nested Rings Controls</div>
             <div class="control-group">
                 <label>Number of Rings (n):</label>
-                <input type="range" id="numRings" min="1" max="30" value="12" oninput="updateNumRings(this.value); renderNestedRings()">
-                <span class="value-display" id="numRingsValue">12</span>
+                <div class="slider-group">
+                    <input type="range" id="numRings" min="1" max="30" value="12" oninput="updateNumRings(); renderNestedRings()">
+                    <span class="value-display" id="numRingsValue">12</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="numRingsInput" min="1" value="12" onchange="overrideNumRings()">
+                </div>
             </div>
             <div class="control-group">
                 <label>Ring Spacing:</label>
-                <input type="range" id="ringSpacing" min="0.5" max="2" value="1" step="0.1" oninput="updateRingSpacing(this.value); renderNestedRings()">
-                <span class="value-display" id="ringSpacingValue">1.0</span>
+                <div class="slider-group">
+                    <input type="range" id="ringSpacing" min="0.5" max="2" value="1" step="0.1" oninput="updateRingSpacing(); renderNestedRings()">
+                    <span class="value-display" id="ringSpacingValue">1.0</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="ringSpacingInput" min="0.1" max="10" value="1" step="0.1" onchange="overrideRingSpacing()">
+                </div>
             </div>
             <div class="control-group">
                 <label>Color by GCD:</label>
@@ -550,8 +594,13 @@
             </div>
             <div class="control-group">
                 <label>Nested Point Size:</label>
-                <input type="range" id="nestedPointSize" min="1" max="8" value="2" oninput="updateNestedPointSize(this.value); renderNestedRings()">
-                <span class="value-display" id="nestedPointSizeValue">2</span>
+                <div class="slider-group">
+                    <input type="range" id="nestedPointSize" min="1" max="8" value="2" oninput="updateNestedPointSize(); renderNestedRings()">
+                    <span class="value-display" id="nestedPointSizeValue">2</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="nestedPointSizeInput" min="1" max="50" value="2" onchange="overrideNestedPointSize()">
+                </div>
             </div>
         </div>
 
@@ -559,8 +608,13 @@
             <h4>Canvas Zoom Controls</h4>
             <div class="control-group">
                 <label>Nested Rings Zoom:</label>
-                <input type="range" id="nestedZoom" min="50" max="300" value="100" step="5" oninput="updateNestedZoom(this.value); renderNestedRings()">
-                <span class="value-display" id="nestedZoomValue">100%</span>
+                <div class="slider-group">
+                    <input type="range" id="nestedZoom" min="50" max="300" value="100" step="5" oninput="updateNestedZoom(); renderNestedRings()">
+                    <span class="value-display" id="nestedZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="nestedZoomInput" min="10" max="500" value="100" step="5" onchange="overrideNestedZoom()">
+                </div>
             </div>
         </div>
 
@@ -598,8 +652,13 @@
             <div class="controls-header">Coprime Pairs Controls</div>
             <div class="control-group">
                 <label>Grid Size N:</label>
-                <input type="range" id="gridSize" min="10" max="200" value="60" step="10" oninput="updateGridSizeDisplay(this.value); renderCoprimePairs()">
-                <span class="value-display" id="gridSizeValue">60</span>
+                <div class="slider-group">
+                    <input type="range" id="gridSize" min="10" max="200" value="60" step="10" oninput="updateGridSizeDisplay(); renderCoprimePairs()">
+                    <span class="value-display" id="gridSizeValue">60</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="gridSizeInput" min="10" value="60" step="10" onchange="overrideGridSize()">
+                </div>
             </div>
         </div>
 
@@ -607,8 +666,13 @@
             <h4>Canvas Zoom Controls</h4>
             <div class="control-group">
                 <label>Coprime Pairs Zoom:</label>
-                <input type="range" id="pairsZoom" min="50" max="300" value="100" step="5" oninput="updatePairsZoom(this.value); renderCoprimePairs()">
-                <span class="value-display" id="pairsZoomValue">100%</span>
+                <div class="slider-group">
+                    <input type="range" id="pairsZoom" min="50" max="300" value="100" step="5" oninput="updatePairsZoom(); renderCoprimePairs()">
+                    <span class="value-display" id="pairsZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="pairsZoomInput" min="10" max="500" value="100" step="5" onchange="overridePairsZoom()">
+                </div>
             </div>
         </div>
 
@@ -666,8 +730,13 @@
             <div class="controls-header">φ(m)/m Ratio Controls</div>
             <div class="control-group">
                 <label>Maximum Modulus:</label>
-                <input type="range" id="phiMaxModulus" min="10" max="500" value="100" step="10" oninput="updatePhiMaxDisplay(this.value); renderPhiRatios()">
-                <span class="value-display" id="phiMaxValue">100</span>
+                <div class="slider-group">
+                    <input type="range" id="phiMaxModulus" min="10" max="500" value="100" step="10" oninput="updatePhiMaxDisplay(); renderPhiRatios()">
+                    <span class="value-display" id="phiMaxValue">100</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="phiMaxModulusInput" min="10" value="100" step="10" onchange="overridePhiMaxModulus()">
+                </div>
             </div>
             <div class="control-group">
                 <label>Show Primes Only:</label>
@@ -679,8 +748,13 @@
             <h4>Canvas Zoom Controls</h4>
             <div class="control-group">
                 <label>φ Ratios Zoom:</label>
-                <input type="range" id="phiZoom" min="50" max="300" value="100" step="5" oninput="updatePhiZoom(this.value); renderPhiRatios()">
-                <span class="value-display" id="phiZoomValue">100%</span>
+                <div class="slider-group">
+                    <input type="range" id="phiZoom" min="50" max="300" value="100" step="5" oninput="updatePhiZoom(); renderPhiRatios()">
+                    <span class="value-display" id="phiZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="phiZoomInput" min="10" max="500" value="100" step="5" onchange="overridePhiZoom()">
+                </div>
             </div>
         </div>
 
@@ -729,8 +803,13 @@
             <h4>Canvas Zoom Controls</h4>
             <div class="control-group">
                 <label>Convergence Chart Zoom:</label>
-                <input type="range" id="convergenceZoom" min="50" max="300" value="100" step="5" oninput="updateConvergenceZoom(this.value); renderConvergence()">
-                <span class="value-display" id="convergenceZoomValue">100%</span>
+                <div class="slider-group">
+                    <input type="range" id="convergenceZoom" min="50" max="300" value="100" step="5" oninput="updateConvergenceZoom(); renderConvergence()">
+                    <span class="value-display" id="convergenceZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="convergenceZoomInput" min="10" max="500" value="100" step="5" onchange="overrideConvergenceZoom()">
+                </div>
             </div>
         </div>
 
@@ -834,64 +913,208 @@
         const SIX_OVER_PI_SQUARED = 6 / (Math.PI * Math.PI);
 
         // Display update functions
-        function updateModulusDisplay(val) {
+        function updateModulusDisplay() {
+            const val = document.getElementById('maxModulus').value;
             document.getElementById('maxModulusValue').textContent = val;
+            document.getElementById('maxModulusInput').value = val;
         }
 
-        function updatePointSizeDisplay(val) {
+        function updatePointSizeDisplay() {
+            const val = document.getElementById('pointSize').value;
             document.getElementById('pointSizeValue').textContent = val;
+            document.getElementById('pointSizeInput').value = val;
         }
 
-        function updateGridSizeDisplay(val) {
+        function updateGridSizeDisplay() {
+            const val = document.getElementById('gridSize').value;
             document.getElementById('gridSizeValue').textContent = val;
+            document.getElementById('gridSizeInput').value = val;
         }
 
-        function updatePhiMaxDisplay(val) {
+        function updatePhiMaxDisplay() {
+            const val = document.getElementById('phiMaxModulus').value;
             document.getElementById('phiMaxValue').textContent = val;
+            document.getElementById('phiMaxModulusInput').value = val;
         }
 
-        function updateNumRings(val) {
+        function updateNumRings() {
+            const val = document.getElementById('numRings').value;
             nestedState.numRings = parseInt(val);
             document.getElementById('numRingsValue').textContent = val;
+            document.getElementById('numRingsInput').value = val;
         }
 
-        function updateRingSpacing(val) {
+        function updateRingSpacing() {
+            const val = document.getElementById('ringSpacing').value;
             nestedState.ringSpacing = parseFloat(val);
             document.getElementById('ringSpacingValue').textContent = parseFloat(val).toFixed(1);
+            document.getElementById('ringSpacingInput').value = val;
         }
 
-        function updateNestedPointSize(val) {
+        function updateNestedPointSize() {
+            const val = document.getElementById('nestedPointSize').value;
             nestedState.pointSize = parseInt(val);
             document.getElementById('nestedPointSizeValue').textContent = val;
+            document.getElementById('nestedPointSizeInput').value = val;
         }
 
-        function updateNestedZoom(val) {
+        function updateNestedZoom() {
+            const val = document.getElementById('nestedZoom').value;
             zoomState.nested = parseFloat(val) / 100;
             document.getElementById('nestedZoomValue').textContent = val + '%';
+            document.getElementById('nestedZoomInput').value = val;
+        }
+
+        // Override functions for input boxes
+        function overrideModulus() {
+            const val = parseInt(document.getElementById('maxModulusInput').value);
+            if (val >= 1) {
+                document.getElementById('maxModulus').value = Math.min(val, 100);
+                document.getElementById('maxModulusValue').textContent = val;
+                renderAll();
+            }
+        }
+
+        function overridePointSize() {
+            const val = parseInt(document.getElementById('pointSizeInput').value);
+            if (val >= 1) {
+                document.getElementById('pointSize').value = Math.min(val, 12);
+                document.getElementById('pointSizeValue').textContent = val;
+                renderAll();
+            }
+        }
+
+        function overrideGridSize() {
+            const val = parseInt(document.getElementById('gridSizeInput').value);
+            if (val >= 10) {
+                document.getElementById('gridSize').value = Math.min(val, 200);
+                document.getElementById('gridSizeValue').textContent = val;
+                renderCoprimePairs();
+            }
+        }
+
+        function overridePhiMaxModulus() {
+            const val = parseInt(document.getElementById('phiMaxModulusInput').value);
+            if (val >= 10) {
+                document.getElementById('phiMaxModulus').value = Math.min(val, 500);
+                document.getElementById('phiMaxValue').textContent = val;
+                renderPhiRatios();
+            }
+        }
+
+        function overrideNumRings() {
+            const val = parseInt(document.getElementById('numRingsInput').value);
+            if (val >= 1) {
+                nestedState.numRings = val;
+                document.getElementById('numRings').value = Math.min(val, 30);
+                document.getElementById('numRingsValue').textContent = val;
+                renderNestedRings();
+            }
+        }
+
+        function overrideRingSpacing() {
+            const val = parseFloat(document.getElementById('ringSpacingInput').value);
+            if (val >= 0.1) {
+                nestedState.ringSpacing = val;
+                document.getElementById('ringSpacing').value = Math.min(val, 2);
+                document.getElementById('ringSpacingValue').textContent = val.toFixed(1);
+                renderNestedRings();
+            }
+        }
+
+        function overrideNestedPointSize() {
+            const val = parseInt(document.getElementById('nestedPointSizeInput').value);
+            if (val >= 1) {
+                nestedState.pointSize = val;
+                document.getElementById('nestedPointSize').value = Math.min(val, 8);
+                document.getElementById('nestedPointSizeValue').textContent = val;
+                renderNestedRings();
+            }
+        }
+
+        function overrideCircleZoom() {
+            const val = parseFloat(document.getElementById('circleZoomInput').value);
+            if (val >= 10) {
+                zoomState.circle = val / 100;
+                document.getElementById('circleZoom').value = Math.min(val, 300);
+                document.getElementById('circleZoomValue').textContent = val + '%';
+                document.getElementById('circleZoomStat').textContent = val + '%';
+                renderUnitCircle();
+            }
+        }
+
+        function overridePairsZoom() {
+            const val = parseFloat(document.getElementById('pairsZoomInput').value);
+            if (val >= 10) {
+                zoomState.pairs = val / 100;
+                document.getElementById('pairsZoom').value = Math.min(val, 300);
+                document.getElementById('pairsZoomValue').textContent = val + '%';
+                document.getElementById('pairsZoomStat').textContent = val + '%';
+                renderCoprimePairs();
+            }
+        }
+
+        function overridePhiZoom() {
+            const val = parseFloat(document.getElementById('phiZoomInput').value);
+            if (val >= 10) {
+                zoomState.phi = val / 100;
+                document.getElementById('phiZoom').value = Math.min(val, 300);
+                document.getElementById('phiZoomValue').textContent = val + '%';
+                document.getElementById('phiZoomStat').textContent = val + '%';
+                renderPhiRatios();
+            }
+        }
+
+        function overrideConvergenceZoom() {
+            const val = parseFloat(document.getElementById('convergenceZoomInput').value);
+            if (val >= 10) {
+                zoomState.convergence = val / 100;
+                document.getElementById('convergenceZoom').value = Math.min(val, 300);
+                document.getElementById('convergenceZoomValue').textContent = val + '%';
+                renderConvergence();
+            }
+        }
+
+        function overrideNestedZoom() {
+            const val = parseFloat(document.getElementById('nestedZoomInput').value);
+            if (val >= 10) {
+                zoomState.nested = val / 100;
+                document.getElementById('nestedZoom').value = Math.min(val, 300);
+                document.getElementById('nestedZoomValue').textContent = val + '%';
+                renderNestedRings();
+            }
         }
 
         // Zoom update functions
-        function updateCircleZoom(val) {
+        function updateCircleZoom() {
+            const val = document.getElementById('circleZoom').value;
             zoomState.circle = parseFloat(val) / 100;
             document.getElementById('circleZoomValue').textContent = val + '%';
             document.getElementById('circleZoomStat').textContent = val + '%';
+            document.getElementById('circleZoomInput').value = val;
         }
 
-        function updatePairsZoom(val) {
+        function updatePairsZoom() {
+            const val = document.getElementById('pairsZoom').value;
             zoomState.pairs = parseFloat(val) / 100;
             document.getElementById('pairsZoomValue').textContent = val + '%';
             document.getElementById('pairsZoomStat').textContent = val + '%';
+            document.getElementById('pairsZoomInput').value = val;
         }
 
-        function updatePhiZoom(val) {
+        function updatePhiZoom() {
+            const val = document.getElementById('phiZoom').value;
             zoomState.phi = parseFloat(val) / 100;
             document.getElementById('phiZoomValue').textContent = val + '%';
             document.getElementById('phiZoomStat').textContent = val + '%';
+            document.getElementById('phiZoomInput').value = val;
         }
 
-        function updateConvergenceZoom(val) {
+        function updateConvergenceZoom() {
+            const val = document.getElementById('convergenceZoom').value;
             zoomState.convergence = parseFloat(val) / 100;
             document.getElementById('convergenceZoomValue').textContent = val + '%';
+            document.getElementById('convergenceZoomInput').value = val;
         }
 
         function resetAllZoom() {
@@ -901,11 +1124,11 @@
             document.getElementById('convergenceZoom').value = 100;
             document.getElementById('nestedZoom').value = 100;
             
-            updateCircleZoom(100);
-            updatePairsZoom(100);
-            updatePhiZoom(100);
-            updateConvergenceZoom(100);
-            updateNestedZoom(100);
+            updateCircleZoom();
+            updatePairsZoom();
+            updatePhiZoom();
+            updateConvergenceZoom();
+            updateNestedZoom();
             
             renderAll();
         }
@@ -922,7 +1145,6 @@
                 case 'rotated':
                     return 2 * Math.PI * r / m - Math.PI / 2;
                 case 'farey':
-                    // Simplified Farey ordering by coprimality
                     const fareyIndex = getFareyIndex(r, m);
                     return 2 * Math.PI * fareyIndex / m;
                 default:
@@ -931,7 +1153,6 @@
         }
 
         function getFareyIndex(r, m) {
-            // Simple ordering: coprimes first, then non-coprimes
             let index = 0;
             for (let i = 0; i < r; i++) {
                 if (gcd(i, m) === 1) index++;
@@ -967,46 +1188,38 @@
             ctx.lineTo(cx, cy + maxRadius + 20);
             ctx.stroke();
 
-            // Calculate ring radii
             const baseRadius = maxRadius * 0.15;
             
-            // GCD color palette
             const gcdColors = {
-                1: '#e74c3c',  // Coprime - red
-                2: '#3498db',  // GCD 2 - blue
-                3: '#2ecc71',  // GCD 3 - green
-                4: '#f39c12',  // GCD 4 - orange
-                5: '#9b59b6',  // GCD 5 - purple
-                default: '#95a5a6'  // Other - gray
+                1: '#e74c3c',
+                2: '#3498db',
+                3: '#2ecc71',
+                4: '#f39c12',
+                5: '#9b59b6',
+                default: '#95a5a6'
             };
 
-            // Draw each ring
             for (let m = 1; m <= n; m++) {
                 const t = (m - 1) / (n - 1 || 1);
                 const radius = baseRadius + t * (maxRadius - baseRadius) * spacing;
 
-                // Draw ring circle
                 ctx.strokeStyle = 'rgba(200, 200, 200, 0.3)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
                 ctx.stroke();
 
-                // Draw ring label
                 ctx.fillStyle = '#666';
                 ctx.font = '10px Arial';
                 ctx.fillText(`m=${m}`, cx + radius + 5, cy);
 
-                // Draw residue points
                 for (let r = 0; r < m; r++) {
                     const g = gcd(r, m);
                     
-                    // Get angle based on mapping
                     const angle = getAngle(r, m, mapping);
                     const x = cx + radius * Math.cos(angle);
                     const y = cy - radius * Math.sin(angle);
 
-                    // Determine color
                     let color;
                     if (colorByGCD) {
                         color = gcdColors[g] || gcdColors.default;
@@ -1014,13 +1227,11 @@
                         color = g === 1 ? '#e74c3c' : '#95a5a6';
                     }
 
-                    // Draw point
                     ctx.fillStyle = color;
                     ctx.beginPath();
                     ctx.arc(x, y, pointSize, 0, 2 * Math.PI);
                     ctx.fill();
 
-                    // Draw connecting line to center for coprime points on outer ring
                     if (showConnections && m === n && g === 1 && n <= 30) {
                         ctx.strokeStyle = color;
                         ctx.lineWidth = 0.5;
@@ -1034,7 +1245,6 @@
                 }
             }
 
-            // Draw legend
             const legendX = 20;
             const legendY = canvas.height - 120;
             
@@ -1053,7 +1263,7 @@
                 { gcd: 1, label: 'GCD = 1 (Coprime)', color: gcdColors[1] },
                 { gcd: 2, label: 'GCD = 2', color: gcdColors[2] },
                 { gcd: 3, label: 'GCD = 3', color: gcdColors[3] },
-                { gcd: 4, label: 'GCD ≥ 4', color: gcdColors.default }
+                { gcd: 4, label: 'GCD >= 4', color: gcdColors.default }
             ];
 
             legendItems.forEach(item => {
@@ -1068,7 +1278,6 @@
                 y += 15;
             });
 
-            // Angular mapping info
             ctx.fillStyle = '#2c3e50';
             ctx.font = 'bold 11px Arial';
             const mappingText = document.getElementById('angularMapping').options[
@@ -1113,20 +1322,13 @@
             updateExportCount();
         }
 
-        // Add event listeners to checkboxes
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.canvas-export-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateExportCount);
-            });
-        });
-
         // Render Unit Circle
         function renderUnitCircle() {
             const canvas = document.getElementById('unitCircleCanvas');
             const ctx = canvas.getContext('2d');
-            const maxM = parseInt(document.getElementById('maxModulus').value);
+            const maxM = parseInt(document.getElementById('maxModulusInput').value);
             const coprimeOnly = document.getElementById('coprimeOnly').checked;
-            const pointSize = parseInt(document.getElementById('pointSize').value);
+            const pointSize = parseInt(document.getElementById('pointSizeInput').value);
             const mapping = document.getElementById('angularMapping').value;
             const zoom = zoomState.circle;
 
@@ -1136,14 +1338,12 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw circle
             ctx.strokeStyle = '#ccc';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
             ctx.stroke();
 
-            // Draw axes
             ctx.strokeStyle = '#ddd';
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -1157,7 +1357,6 @@
             let coprimeCount = 0;
             const points = new Set();
 
-            // Plot points
             for (let m = 1; m <= maxM; m++) {
                 for (let r = 0; r < m; r++) {
                     const iscoprime = gcd(r, m) === 1;
@@ -1181,7 +1380,6 @@
                 }
             }
 
-            // Angular mapping info
             ctx.fillStyle = '#2c3e50';
             ctx.font = 'bold 14px Arial';
             const mappingText = document.getElementById('angularMapping').options[
@@ -1189,7 +1387,6 @@
             ].text;
             ctx.fillText('Mapping: ' + mappingText.split(':')[0], 20, 30);
 
-            // Update statistics
             document.getElementById('totalPoints').textContent = totalPoints;
             document.getElementById('coprimePoints').textContent = coprimeCount;
             document.getElementById('coprimeRatio').textContent = 
@@ -1200,7 +1397,7 @@
         function renderCoprimePairs() {
             const canvas = document.getElementById('coprimePairsCanvas');
             const ctx = canvas.getContext('2d');
-            const N = parseInt(document.getElementById('gridSize').value);
+            const N = parseInt(document.getElementById('gridSizeInput').value);
             const zoom = zoomState.pairs;
 
             const cellSize = (Math.min(canvas.width, canvas.height) / (N + 2)) * zoom;
@@ -1227,7 +1424,6 @@
                 }
             }
 
-            // Draw axes
             const axisX = offsetX + cellSize;
             const axisY = canvas.height - offsetY - cellSize;
             
@@ -1239,13 +1435,11 @@
             ctx.lineTo(canvas.width - offsetX, axisY);
             ctx.stroke();
 
-            // Labels
             ctx.fillStyle = '#333';
             ctx.font = '16px Arial';
             ctx.fillText('a', canvas.width - offsetX - 30, axisY + 25);
             ctx.fillText('b', axisX - 30, offsetY + 20);
 
-            // Update statistics
             const totalPairs = N * N;
             const ratio = coprimeCount / totalPairs;
             const error = Math.abs(ratio - SIX_OVER_PI_SQUARED);
@@ -1261,7 +1455,7 @@
         function renderPhiRatios() {
             const canvas = document.getElementById('phiRatiosCanvas');
             const ctx = canvas.getContext('2d');
-            const maxM = parseInt(document.getElementById('phiMaxModulus').value);
+            const maxM = parseInt(document.getElementById('phiMaxModulusInput').value);
             const primesOnly = document.getElementById('primesOnly').checked;
             const zoom = zoomState.phi;
 
@@ -1273,7 +1467,6 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw axes
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1282,7 +1475,6 @@
             ctx.lineTo(canvas.width - offsetX, canvas.height - offsetY);
             ctx.stroke();
 
-            // Draw theoretical limit line
             ctx.strokeStyle = '#27ae60';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
@@ -1293,12 +1485,10 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Label for limit
             ctx.fillStyle = '#27ae60';
             ctx.font = 'bold 14px Arial';
             ctx.fillText('6/π² ≈ 0.6079', canvas.width - offsetX + 10, limitY + 5);
 
-            // Plot points
             let sum = 0;
             let count = 0;
             let primeSum = 0;
@@ -1326,7 +1516,6 @@
                 }
             }
 
-            // Axes labels
             ctx.fillStyle = '#333';
             ctx.font = 'bold 16px Arial';
             ctx.fillText('Modulus m', canvas.width / 2, canvas.height - 20);
@@ -1336,7 +1525,6 @@
             ctx.fillText('φ(m)/m', 0, 0);
             ctx.restore();
 
-            // Update statistics
             const avgRatio = sum / count;
             const error = Math.abs(avgRatio - SIX_OVER_PI_SQUARED);
 
@@ -1366,7 +1554,6 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw axes
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1375,7 +1562,6 @@
             ctx.lineTo(canvas.width - offsetX, canvas.height - offsetY);
             ctx.stroke();
 
-            // Draw theoretical limit line
             ctx.strokeStyle = '#27ae60';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
@@ -1386,7 +1572,6 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Calculate running averages
             const runningAvgs = [];
             let sum = 0;
             for (let m = 1; m <= maxM; m++) {
@@ -1394,7 +1579,6 @@
                 runningAvgs.push(sum / m);
             }
 
-            // Plot running average
             ctx.strokeStyle = '#f39c12';
             ctx.lineWidth = 3;
             ctx.beginPath();
@@ -1409,7 +1593,6 @@
             }
             ctx.stroke();
 
-            // Axes labels
             ctx.fillStyle = '#333';
             ctx.font = 'bold 16px Arial';
             ctx.fillText('Maximum Modulus N', canvas.width / 2, canvas.height - 20);
@@ -1419,7 +1602,6 @@
             ctx.fillText('(1/N) Σ φ(m)/m', 0, 0);
             ctx.restore();
 
-            // Legend
             ctx.fillStyle = '#27ae60';
             ctx.font = 'bold 14px Arial';
             ctx.fillText('Theoretical: 6/π²', canvas.width - 200, offsetY + 30);
@@ -1507,11 +1689,9 @@
                 exportCanvas.height = gridHeight;
                 const ctx = exportCanvas.getContext('2d');
 
-                // Background
                 ctx.fillStyle = '#0a0e27';
                 ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
 
-                // Draw canvases
                 selected.forEach((key, idx) => {
                     const info = canvasInfo[key];
                     if (!info) return;
@@ -1525,30 +1705,25 @@
                         0, 0, info.canvas.width, info.canvas.height,
                         x, y, canvasSize, canvasSize);
 
-                    // Colored border
                     ctx.strokeStyle = info.color;
                     ctx.lineWidth = 6;
                     ctx.strokeRect(x, y, canvasSize, canvasSize);
 
-                    // Title
                     ctx.fillStyle = info.color;
                     ctx.font = `bold ${28}px "Fira Code"`;
                     ctx.textAlign = 'center';
                     ctx.fillText(info.title, x + canvasSize / 2, y + 40);
 
-                    // Subtitle
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                     ctx.font = `${18}px "Fira Code"`;
                     ctx.fillText(info.subtitle, x + canvasSize / 2, y + 70);
                 });
 
-                // Draw legend
                 if (includeLegend) {
                     const legendX = gridWidth + 20;
                     const legendWidth = legendSpace - 40;
                     const padding = 20;
 
-                    // Background
                     ctx.fillStyle = 'rgba(10, 14, 39, 0.95)';
                     ctx.fillRect(legendX, 20, legendWidth, gridHeight - 40);
                     ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
@@ -1560,14 +1735,12 @@
                     const titleFont = 28;
                     const squareSize = 24;
 
-                    // Title
                     ctx.fillStyle = '#ffd700';
                     ctx.font = `bold ${titleFont}px "Fira Code"`;
                     ctx.textAlign = 'left';
                     ctx.fillText('LEGEND', legendX + padding, currentY);
                     currentY += titleFont * 2.5;
 
-                    // Canvases
                     ctx.fillStyle = '#00ffff';
                     ctx.font = `bold ${baseFont * 1.2}px "Fira Code"`;
                     ctx.fillText('Visualizations', legendX + padding, currentY);
@@ -1577,19 +1750,16 @@
                         const info = canvasInfo[key];
                         if (!info) return;
 
-                        // Color square
                         ctx.fillStyle = info.color;
                         ctx.fillRect(legendX + padding, currentY - squareSize * 0.8, squareSize, squareSize);
                         ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
                         ctx.lineWidth = 2;
                         ctx.strokeRect(legendX + padding, currentY - squareSize * 0.8, squareSize, squareSize);
 
-                        // Title
                         ctx.fillStyle = info.color;
                         ctx.font = `bold ${baseFont}px "Fira Code"`;
                         ctx.fillText(info.title, legendX + padding + squareSize + 12, currentY);
 
-                        // Subtitle
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
                         ctx.font = `${baseFont * 0.75}px "Fira Code"`;
                         ctx.fillText(info.subtitle, legendX + padding + squareSize + 12, currentY + baseFont * 1.1);
@@ -1597,7 +1767,6 @@
                         currentY += baseFont * 3;
                     });
 
-                    // Parameters
                     if (includeParameters) {
                         currentY += baseFont;
                         ctx.fillStyle = '#00ffff';
@@ -1608,10 +1777,10 @@
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
                         ctx.font = `${baseFont * 0.9}px "Fira Code"`;
 
-                        const maxM = document.getElementById('maxModulus').value;
-                        const gridSize = document.getElementById('gridSize').value;
-                        const phiMax = document.getElementById('phiMaxModulus').value;
-                        const numRings = document.getElementById('numRings').value;
+                        const maxM = document.getElementById('maxModulusInput').value;
+                        const gridSize = document.getElementById('gridSizeInput').value;
+                        const phiMax = document.getElementById('phiMaxModulusInput').value;
+                        const numRings = document.getElementById('numRingsInput').value;
                         const mapping = document.getElementById('angularMapping').options[
                             document.getElementById('angularMapping').selectedIndex
                         ].text.split(':')[0];
@@ -1631,7 +1800,6 @@
                         });
                     }
 
-                    // Footer
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
                     ctx.font = `italic ${baseFont * 0.8}px "Fira Code"`;
                     ctx.textAlign = 'center';
@@ -1639,7 +1807,6 @@
                     ctx.fillText('Wessen Getachew (@7dview)', legendX + legendWidth / 2, gridHeight - 35);
                 }
 
-                // Download
                 exportCanvas.toBlob(blob => {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -1655,7 +1822,7 @@
         }
 
         function exportCircleData() {
-            const maxM = parseInt(document.getElementById('maxModulus').value);
+            const maxM = parseInt(document.getElementById('maxModulusInput').value);
             const coprimeOnly = document.getElementById('coprimeOnly').checked;
 
             let csv = 'Modulus,Residue,Angle_Radians,X_Coordinate,Y_Coordinate,Is_Coprime\n';
@@ -1677,7 +1844,7 @@
         }
 
         function exportCoprimePairsData() {
-            const N = parseInt(document.getElementById('gridSize').value);
+            const N = parseInt(document.getElementById('gridSizeInput').value);
 
             let csv = 'a,b,gcd,is_coprime\n';
 
@@ -1692,7 +1859,7 @@
         }
 
         function exportPhiData() {
-            const maxM = parseInt(document.getElementById('phiMaxModulus').value);
+            const maxM = parseInt(document.getElementById('phiMaxModulusInput').value);
 
             let csv = 'Modulus,Phi_m,Ratio_Phi_m_over_m,Is_Prime\n';
 
@@ -1744,6 +1911,11 @@
         window.onload = function() {
             renderAll();
             updateExportCount();
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.canvas-export-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateExportCount);
+            });
         };
     </script>
 </body>
