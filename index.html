@@ -158,6 +158,11 @@
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
 
         input[type="range"]::-moz-range-thumb {
@@ -168,6 +173,42 @@
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .animation-controls {
+            background: #e8f8f5;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #27ae60;
+        }
+
+        .animation-controls h4 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .animation-button {
+            background: #27ae60;
+            min-width: 120px;
+        }
+
+        .animation-button:hover {
+            background: #229954;
+        }
+
+        .animation-button.playing {
+            background: #e74c3c;
+        }
+
+        .animation-button.playing:hover {
+            background: #c0392b;
         }
         
         input[type="number"] {
@@ -330,7 +371,7 @@
         
         .section-content {
             margin: 20px 0;
-            text-align: justify;
+            text-align: left;
         }
         
         .interpretation {
@@ -418,7 +459,108 @@
         </header>
 
         <div class="abstract">
-            <strong>Abstract:</strong> This interactive document explores the classical connection between rational points on the unit circle arising from roots of unity, the density of coprime integer pairs, and the asymptotic behavior of Farey sequences. We demonstrate that while the set of all rational angles is dense on the unit circle, the subset corresponding to reduced fractions (coprime numerator and denominator) has natural density 3/π². The global average of φ(m)/m over all moduli converges to 6/π², reconciling the fact that prime moduli individually approach density 1 while having measure zero in the integers.
+            <strong>Abstract:</strong> This interactive document explores the classical connection between rational points on the unit circle arising from roots of unity, the density of coprime integer pairs, and the asymptotic behavior of Farey sequences. We demonstrate that while the set of all rational angles is dense on the unit circle, the subset corresponding to reduced fractions (coprime numerator and denominator) has natural density 6/π². The global average of φ(m)/m over all moduli converges to 6/π², reconciling the fact that prime moduli individually approach density 1 while having measure zero in the integers.
+            
+            <p style="margin-top: 15px;"><strong>Extended Framework:</strong> We further explore the deep connection between primitive lattice vectors, GCD-visibility, and the norm structure of Gaussian integers. Primitive lattice vectors (a,b) with gcd(a,b) = 1 determine visible rays from the origin and correspond naturally to reduced residues modulo suitable moduli, providing a geometric framework that unifies number-theoretic and analytic perspectives.</p>
+        </div>
+
+        <h2>Mathematical Background & Theory</h2>
+        
+        <div class="section-content">
+            <h3>Visibility and Lattice Geometry</h3>
+            <p>For any lattice point (a,b) ∈ ℤ², we define the <strong>visibility indicator</strong>:</p>
+            <div class="theorem">
+                <div class="theorem-title">Visibility Indicator:</div>
+                vis(a,b) = 1 if gcd(a,b) = 1, else 0
+            </div>
+            <p>A lattice point (a,b) is <strong>visible from the origin</strong> if and only if gcd(a,b) = 1. These primitive lattice vectors determine rays from the origin that hit no other lattice point before reaching (a,b). The set of primitive directions forms a fundamental geometric object in number theory.</p>
+
+            <p><strong>Key Insight:</strong> The angle θ = arctan(b/a) for a primitive vector (a,b) provides a one-to-one correspondence between primitive lattice directions and angles that can be expressed as rational multiples of π (modulo appropriate symmetries).</p>
+
+            <h3>Gaussian Integers and Norm Structure</h3>
+            <p>Every primitive lattice vector (a,b) corresponds to a <strong>Gaussian integer</strong> z = a + bi with the property that gcd(a,b) = 1. The norm of this Gaussian integer is:</p>
+            <div class="theorem">
+                <div class="theorem-title">Gaussian Integer Norm:</div>
+                N(z) = |a + bi|² = a² + b²
+            </div>
+            <p>This norm connects lattice geometry to the theory of sums of two squares. A positive integer n can be expressed as a sum of two coprime squares (with specific multiplicity) if and only if in the prime factorization of n, every prime p ≡ 3 (mod 4) appears to an even power.</p>
+
+            <p><strong>Fermat's Two-Square Theorem:</strong> A prime p can be expressed as p = a² + b² if and only if p = 2 or p ≡ 1 (mod 4). Moreover, this representation is unique up to signs and order when gcd(a,b) = 1.</p>
+
+            <h3>The Riemann Zeta Function Connection</h3>
+            <p>The constant 6/π² appears throughout number theory and is intimately connected to the Riemann zeta function ζ(s). Euler famously proved in 1734 that:</p>
+            <div class="theorem">
+                <div class="theorem-title">Euler's Basel Problem Solution:</div>
+                ζ(2) = 1 + 1/4 + 1/9 + 1/16 + ... = Σ<sub>n=1</sub><sup>∞</sup> 1/n² = π²/6
+            </div>
+            <p>Therefore, our density constant is simply <strong>6/π² = 1/ζ(2)</strong>. This connection reveals that the probability two random integers are coprime is the reciprocal of ζ(2).</p>
+
+            <h3>Historical Development</h3>
+            <p><strong>Leonhard Euler (1707-1783)</strong> first proved the Basel problem and established the product formula for the zeta function:</p>
+            <div class="theorem">
+                <div class="theorem-title">Euler Product Formula:</div>
+                ζ(s) = Π<sub>p prime</sub> (1 - p<sup>-s</sup>)<sup>-1</sup> for Re(s) > 1
+            </div>
+            <p>This product over primes directly implies the coprime density result. The probability that a prime p divides both random integers a and b is 1/p². Thus the probability that p divides neither (or only one) is 1 - 1/p². Taking the product over all primes:</p>
+            <p style="text-align: center; margin: 20px 0; font-size: 1.1em;">
+                P(gcd(a,b) = 1) = Π<sub>p</sub> (1 - 1/p²) = 1/ζ(2) = 6/π²
+            </p>
+
+            <h3>Modular Embedding and Circle Geometry</h3>
+            <p>Each reduced residue r with gcd(r,m) = 1 maps naturally to the unit circle via the <strong>modular embedding</strong>:</p>
+            <div class="theorem">
+                <div class="theorem-title">Modular Embedding:</div>
+                r ↦ e<sup>2πir/m</sup> = cos(2πr/m) + i·sin(2πr/m)
+            </div>
+            <p>This embedding preserves the multiplicative structure of (ℤ/mℤ)* and provides a geometric representation of the reduced residue system. The φ(m) points form a regular φ(m)-gon inscribed in the unit circle, though not necessarily with consecutive vertices.</p>
+
+            <h3>Proof Sketch: Average of φ(m)/m</h3>
+            <p>We want to show that (1/N) Σ<sub>m=1</sub><sup>N</sup> φ(m)/m → 6/π² as N → ∞.</p>
+            <p><strong>Key insight:</strong> For each pair (a, b) with 1 ≤ a < b ≤ N, the pair contributes to φ(m) exactly when m is a common divisor of a and b, and gcd(a/m, b/m) = 1.</p>
+            <p>By Möbius inversion and manipulating the double sum:</p>
+            <div style="background: #f8f9fa; padding: 15px; margin: 15px 0; border-left: 3px solid #3498db;">
+                Σ<sub>m=1</sub><sup>N</sup> φ(m)/m = Σ<sub>m=1</sub><sup>N</sup> (1/m) Σ<sub>d|m</sub> μ(d)·(m/d)<br>
+                = Σ<sub>d=1</sub><sup>N</sup> μ(d) Σ<sub>k=1</sub><sup>⌊N/d⌋</sup> 1<br>
+                ≈ N · Σ<sub>d=1</sub><sup>∞</sup> μ(d)/d² = N · 1/ζ(2) = N · 6/π²
+            </div>
+            <p>Therefore the average converges to 6/π².</p>
+
+            <h3>Connection to Farey Sequences</h3>
+            <p>The <strong>Farey sequence</strong> F<sub>n</sub> is the sequence of completely reduced fractions between 0 and 1 with denominators ≤ n, arranged in increasing order. For example:</p>
+            <div style="background: #fff9e6; padding: 15px; margin: 15px 0; border-left: 3px solid #f39c12;">
+                F<sub>5</sub> = {0/1, 1/5, 1/4, 1/3, 2/5, 1/2, 3/5, 2/3, 3/4, 4/5, 1/1}
+            </div>
+            <p>The length of F<sub>n</sub> is |F<sub>n</sub>| = 1 + Σ<sub>m=1</sub><sup>n</sup> φ(m), which grows as (3/π²)n² + O(n log n). This is equivalent to our density theorem since we're counting coprime pairs (numerator, denominator).</p>
+
+            <p><strong>Geometric Interpretation:</strong> Each element p/q ∈ F<sub>n</sub> with gcd(p,q) = 1 corresponds to a primitive lattice direction (p,q) visible from the origin. The Farey sequence thus provides a canonical ordering of these visible directions within a bounded region.</p>
+
+            <h3>Why Primes Don't Dominate</h3>
+            <p>Although φ(p)/p = (p-1)/p → 1 for prime p, primes have density zero among integers by the Prime Number Theorem:</p>
+            <div class="theorem">
+                <div class="theorem-title">Prime Number Theorem (Hadamard & de la Vallée Poussin, 1896):</div>
+                π(x) ~ x/ln(x), where π(x) counts primes ≤ x
+            </div>
+            <p>As x → ∞, the ratio π(x)/x → 0, so primes become increasingly sparse. Meanwhile, highly composite numbers (with many small prime factors) have small φ(m)/m ratios and dominate the average. For instance:</p>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li>φ(2)/2 = 1/2</li>
+                <li>φ(6)/6 = 2/6 = 1/3 (divisible by 2 and 3)</li>
+                <li>φ(30)/30 = 8/30 = 4/15 ≈ 0.267 (divisible by 2, 3, and 5)</li>
+                <li>φ(210)/210 = 48/210 = 8/35 ≈ 0.229 (divisible by 2, 3, 5, and 7)</li>
+            </ul>
+            <p>The global average balances these competing effects, converging to 6/π² ≈ 0.6079.</p>
+
+            <h3>Lattice Point Counting and Primitive Vectors</h3>
+            <p>The number of primitive lattice vectors (a,b) with a² + b² ≤ R² grows asymptotically as:</p>
+            <div class="theorem">
+                <div class="theorem-title">Primitive Vector Asymptotics:</div>
+                #{(a,b) : gcd(a,b)=1, a²+b²≤R²} ~ (6/π²)·πR² = (6/π)R² as R → ∞
+            </div>
+            <p>This provides a geometric interpretation of the coprime density: in a large circle of radius R, approximately 6/π of the area contains primitive lattice points.</p>
+
+            <h3>Related Results</h3>
+            <p><strong>Dirichlet's theorem on primes in arithmetic progressions</strong> (1837) and the study of <strong>L-functions</strong> extend these density results to restricted sets of integers, providing a rich framework for understanding coprimality in various contexts.</p>
+            
+            <p><strong>Lattice-Based Cryptography:</strong> The hardness of finding short primitive vectors in high-dimensional lattices forms the basis of post-quantum cryptographic systems, connecting these classical results to modern applications.</p>
         </div>
 
         <!-- Multi-Canvas Export Section -->
@@ -427,6 +569,11 @@
             <p style="margin-bottom: 20px;">Select any combination of visualizations to export together. The system will automatically arrange them in an optimal grid layout with a comprehensive legend.</p>
             
             <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" class="canvas-export-checkbox" value="lattice" checked>
+                    <span class="color-indicator" style="background: #16a085;"></span>
+                    <span>Primitive Lattice Vectors</span>
+                </label>
                 <label class="checkbox-item">
                     <input type="checkbox" class="canvas-export-checkbox" value="circle" checked>
                     <span class="color-indicator" style="background: #e74c3c;"></span>
@@ -460,7 +607,7 @@
                     <button onclick="deselectAllCanvasExports()">Deselect All</button>
                 </div>
                 <div id="exportCount" style="color: #27ae60; font-weight: 700; font-size: 1.1em; margin-bottom: 15px;">
-                    5 canvases selected
+                    6 canvases selected
                 </div>
                 <label style="margin-right: 20px;">
                     <input type="checkbox" id="includeExportLegend" checked> Include Legend
@@ -499,7 +646,7 @@
                     <span class="value-display" id="maxModulusValue">20</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="maxModulusInput" min="1" value="20" onchange="overrideModulus()">
+                    <input type="number" id="maxModulusInput" min="1" value="20" oninput="overrideModulus()">
                 </div>
             </div>
             <div class="control-group">
@@ -513,11 +660,11 @@
                     <span class="value-display" id="pointSizeValue">4</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="pointSizeInput" min="1" max="50" value="4" onchange="overridePointSize()">
+                    <input type="number" id="pointSizeInput" min="1" max="50" value="4" oninput="overridePointSize()">
                 </div>
             </div>
             <div class="control-group">
-                <label>Angular Mapping:</label>
+                <label>Angular Mapping (applies to both circle views):</label>
                 <select id="angularMapping" onchange="renderAll()" style="padding: 8px; font-size: 1em;">
                     <option value="standard">Standard Counterclockwise: 2πr/m</option>
                     <option value="reverse">Reverse (Clockwise): -2πr/m</option>
@@ -525,6 +672,22 @@
                     <option value="rotated">Rotated by π/2</option>
                     <option value="farey">Farey-Order Mapping</option>
                 </select>
+            </div>
+        </div>
+
+        <div class="animation-controls">
+            <h4>Animation Controls</h4>
+            <div class="control-group">
+                <label>Animate Modulus Growth:</label>
+                <button class="animation-button" id="animateModulusBtn" onclick="toggleModulusAnimation()">▶ Play</button>
+                <button onclick="resetModulusAnimation()">Reset</button>
+            </div>
+            <div class="control-group">
+                <label>Animation Speed:</label>
+                <div class="slider-group">
+                    <input type="range" id="animationSpeed" min="1" max="10" value="5" oninput="updateAnimationSpeed()">
+                    <span class="value-display" id="animationSpeedValue">5</span>
+                </div>
             </div>
         </div>
 
@@ -571,7 +734,7 @@
                     <span class="value-display" id="numRingsValue">12</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="numRingsInput" min="1" value="12" onchange="overrideNumRings()">
+                    <input type="number" id="numRingsInput" min="1" value="12" oninput="overrideNumRings()">
                 </div>
             </div>
             <div class="control-group">
@@ -581,12 +744,8 @@
                     <span class="value-display" id="ringSpacingValue">1.0</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="ringSpacingInput" min="0.1" max="10" value="1" step="0.1" onchange="overrideRingSpacing()">
+                    <input type="number" id="ringSpacingInput" min="0.1" max="10" value="1" step="0.1" oninput="overrideRingSpacing()">
                 </div>
-            </div>
-            <div class="control-group">
-                <label>Color by GCD:</label>
-                <input type="checkbox" id="colorByGCD" checked onchange="renderNestedRings()">
             </div>
             <div class="control-group">
                 <label>Show Coprime Connections:</label>
@@ -599,8 +758,128 @@
                     <span class="value-display" id="nestedPointSizeValue">2</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="nestedPointSizeInput" min="1" max="50" value="2" onchange="overrideNestedPointSize()">
+                    <input type="number" id="nestedPointSizeInput" min="1" max="50" value="2" oninput="overrideNestedPointSize()">
                 </div>
+            </div>
+        </div>
+
+        <div class="animation-controls">
+            <h4>Animation Controls</h4>
+            <div class="control-group">
+                <label>Animate Ring Growth:</label>
+                <button class="animation-button" id="animateRingsBtn" onclick="toggleRingsAnimation()">▶ Play</button>
+                <button onclick="resetRingsAnimation()">Reset</button>
+            </div>
+            <div class="control-group">
+                <label>Animation Speed:</label>
+                <div class="slider-group">
+                    <input type="range" id="ringsAnimationSpeed" min="1" max="10" value="5" oninput="updateRingsAnimationSpeed()">
+                    <span class="value-display" id="ringsAnimationSpeedValue">5</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-header">Global Coloring System</div>
+            <div class="control-group">
+                <label>Color Scheme:</label>
+                <select id="colorScheme" onchange="updateColorScheme(); renderAll()" style="padding: 8px; font-size: 1em; width: 100%; max-width: 500px;">
+                    <option value="rainbow">Rainbow by Angular Position</option>
+                    <option value="residue">By Residue Value</option>
+                    <option value="ring">By Ring (Modulus)</option>
+                    <option value="prime" selected>Prime vs Composite</option>
+                    <option value="gcd_unified">GCD=1: Unified Color (Character Support)</option>
+                    <option value="gcd_modulus">GCD=1: Unique Color per Modulus</option>
+                    <option value="gcd_residue">GCD=1: Unique Color per Residue Value</option>
+                    <option value="gcd_progression">GCD=1: Mathematical Progression</option>
+                    <option value="gcd_spectral">GCD=1: Spectral Distribution</option>
+                    <option value="custom">Custom Single Color</option>
+                </select>
+            </div>
+            <div class="control-group" id="customColorGroup" style="display: none;">
+                <label>Custom GCD=1 Color:</label>
+                <input type="color" id="customGCD1Color" value="#e74c3c" onchange="updateColorScheme(); renderAll()" style="width: 60px; height: 40px; border: 2px solid #333; cursor: pointer;">
+            </div>
+            <div class="control-group">
+                <label>Non-Coprime (GCD>1) Color:</label>
+                <input type="color" id="nonCoprimeColor" value="#95a5a6" onchange="updateColorScheme(); renderAll()" style="width: 60px; height: 40px; border: 2px solid #333; cursor: pointer;">
+            </div>
+            <div class="control-group">
+                <label>Non-Coprime Opacity:</label>
+                <div class="slider-group">
+                    <input type="range" id="nonCoprimeOpacity" min="0" max="1" value="0.3" step="0.05" oninput="updateNonCoprimeOpacity(); renderAll()">
+                    <span class="value-display" id="nonCoprimeOpacityValue">0.30</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-header">Global Labeling System</div>
+            <div class="control-group">
+                <label>Show Labels:</label>
+                <input type="checkbox" id="showLabels" checked onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Label Format:</label>
+                <select id="labelFormat" onchange="renderAll()" style="padding: 8px; font-size: 1em; width: 100%; max-width: 500px;">
+                    <option value="number" selected>Number (r)</option>
+                    <option value="fraction">Fraction (r/M)</option>
+                    <option value="farey">Farey Sequence (simplified r/M)</option>
+                    <option value="angle">Angle (θ = 2πr/M)</option>
+                    <option value="gcd">GCD Value gcd(r,M)</option>
+                    <option value="coprime">Coprime Status (✓/✗)</option>
+                    <option value="combined">Combined (r, gcd, θ)</option>
+                </select>
+            </div>
+            <h4 style="color: #2c3e50; margin: 20px 0 10px 0; font-size: 1.1em;">Selective Labeling Options</h4>
+            <div class="control-group">
+                <label>Label Unit Circle (M=1):</label>
+                <input type="checkbox" id="labelUnitCircle" checked onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Label GCD=1 Residues:</label>
+                <input type="checkbox" id="labelGCD1" checked onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Label GCD≠1 Residues:</label>
+                <input type="checkbox" id="labelGCDNot1" onchange="renderAll()">
+            </div>
+            <h4 style="color: #2c3e50; margin: 20px 0 10px 0; font-size: 1.1em;">GCD-Specific Label Information</h4>
+            <div class="control-group">
+                <label>Show gcd(r,M) value:</label>
+                <input type="checkbox" id="showGCDValue" onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Show ✓/✗ coprime indicator:</label>
+                <input type="checkbox" id="showCoprimeIndicator" onchange="renderAll()">
+            </div>
+            <div class="control-group">
+                <label>Show position in φ(M) sequence:</label>
+                <input type="checkbox" id="showPhiPosition" onchange="renderAll()">
+            </div>
+            <h4 style="color: #2c3e50; margin: 20px 0 10px 0; font-size: 1.1em;">Label Appearance</h4>
+            <div class="control-group">
+                <label>Label Size:</label>
+                <div class="slider-group">
+                    <input type="range" id="labelSize" min="0.5" max="2.5" value="1.0" step="0.1" oninput="updateLabelSize(); renderAll()">
+                    <span class="value-display" id="labelSizeValue">1.0x</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Label Opacity:</label>
+                <div class="slider-group">
+                    <input type="range" id="labelOpacity" min="0" max="1" value="0.95" step="0.05" oninput="updateLabelOpacity(); renderAll()">
+                    <span class="value-display" id="labelOpacityValue">0.95</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Label Background:</label>
+                <input type="checkbox" id="labelBackground" checked onchange="renderAll()">
+            </div>
+            <h4 style="color: #2c3e50; margin: 20px 0 10px 0; font-size: 1.1em;">Nested Rings: Label Only Modulus</h4>
+            <div class="control-group">
+                <label>Show modulus labels on nested rings:</label>
+                <input type="checkbox" id="showNestedModulusLabels" onchange="renderNestedRings()">
             </div>
         </div>
 
@@ -638,7 +917,125 @@
             </div>
         </div>
 
-        <h2>2. Density of Coprime Pairs</h2>
+        <h2>2. Primitive Lattice Vectors & Gaussian Integer Geometry</h2>
+        <div class="section-content">
+            <p>A lattice point (<span class="math">a</span>, <span class="math">b</span>) ∈ ℤ² is <strong>primitive</strong> (or <strong>visible from the origin</strong>) if gcd(<span class="math">a</span>, <span class="math">b</span>) = 1. These points correspond to Gaussian integers <span class="math">z</span> = <span class="math">a</span> + <span class="math">bi</span> with norm N(<span class="math">z</span>) = <span class="math">a</span>² + <span class="math">b</span>². The norm is prime when it equals 2 or a prime <span class="math">p</span> ≡ 1 (mod 4), by Fermat's Two-Square Theorem.</p>
+        </div>
+
+        <div class="controls">
+            <div class="controls-header">Lattice Visualization Controls</div>
+            <div class="control-group">
+                <label>Lattice Range (±N):</label>
+                <div class="slider-group">
+                    <input type="range" id="latticeRange" min="5" max="50" value="20" oninput="updateLatticeRange(); renderLattice()">
+                    <span class="value-display" id="latticeRangeValue">20</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="latticeRangeInput" min="5" value="20" oninput="overrideLatticeRange()">
+                </div>
+            </div>
+            <div class="control-group">
+                <label>Visualization Mode:</label>
+                <select id="latticeMode" onchange="renderLattice()" style="padding: 8px; font-size: 1em; width: 100%; max-width: 500px;">
+                    <option value="points">Points Only (Primitive vs Non-Primitive)</option>
+                    <option value="rays" selected>Rays from Origin (Visibility)</option>
+                    <option value="norm">Color by Norm (a²+b²)</option>
+                    <option value="prime_norm">Highlight Prime Norms</option>
+                    <option value="quadrant">Quadrant Analysis</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Show Non-Primitive Points:</label>
+                <input type="checkbox" id="showNonPrimitive" checked onchange="renderLattice()">
+            </div>
+            <div class="control-group">
+                <label>Show Grid Lines:</label>
+                <input type="checkbox" id="showGridLines" checked onchange="renderLattice()">
+            </div>
+            <div class="control-group">
+                <label>Show Norm Circles:</label>
+                <input type="checkbox" id="showNormCircles" onchange="renderLattice()">
+            </div>
+            <div class="control-group">
+                <label>Lattice Point Size:</label>
+                <div class="slider-group">
+                    <input type="range" id="latticePointSize" min="2" max="10" value="4" oninput="updateLatticePointSize(); renderLattice()">
+                    <span class="value-display" id="latticePointSizeValue">4</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-controls">
+            <h4>Animation Controls</h4>
+            <div class="control-group">
+                <label>Animate Lattice Growth:</label>
+                <button class="animation-button" id="animateLatticeBtn" onclick="toggleLatticeAnimation()">▶ Play</button>
+                <button onclick="resetLatticeAnimation()">Reset</button>
+            </div>
+            <div class="control-group">
+                <label>Animation Speed:</label>
+                <div class="slider-group">
+                    <input type="range" id="latticeAnimationSpeed" min="1" max="10" value="5" oninput="updateLatticeAnimationSpeed()">
+                    <span class="value-display" id="latticeAnimationSpeedValue">5</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="zoom-controls">
+            <h4>Canvas Zoom Controls</h4>
+            <div class="control-group">
+                <label>Lattice View Zoom:</label>
+                <div class="slider-group">
+                    <input type="range" id="latticeZoom" min="50" max="300" value="100" step="5" oninput="updateLatticeZoom(); renderLattice()">
+                    <span class="value-display" id="latticeZoomValue">100%</span>
+                </div>
+                <div class="input-override">
+                    <input type="number" id="latticeZoomInput" min="10" max="500" value="100" step="5" onchange="overrideLatticeZoom()">
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="latticeCanvas" width="900" height="900"></canvas>
+            <div class="export-buttons">
+                <button onclick="exportCanvas('latticeCanvas', '4k')">Export as 4K PNG</button>
+                <button onclick="exportLatticeData()">Export Data as CSV</button>
+            </div>
+        </div>
+
+        <div class="stats-panel" id="latticeStats">
+            <h3>Primitive Lattice Vector Statistics</h3>
+            <div class="stat-item">
+                <span class="stat-label">Lattice Range:</span>
+                <span class="stat-value" id="latticeRangeStat">±20</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Lattice Points:</span>
+                <span class="stat-value" id="totalLatticePoints">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Primitive Points (gcd=1):</span>
+                <span class="stat-value" id="primitivePoints">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Primitive Ratio:</span>
+                <span class="stat-value" id="primitiveRatio">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Points with Prime Norm:</span>
+                <span class="stat-value" id="primeNormCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Average Norm (Primitive):</span>
+                <span class="stat-value" id="avgNormPrimitive">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Canvas Zoom Level:</span>
+                <span class="stat-value" id="latticeZoomStat">100%</span>
+            </div>
+        </div>
+
+        <h2>3. Density of Coprime Pairs</h2>
         <div class="section-content">
             <p>Let <span class="math">A<sub>N</sub></span> = #{(<span class="math">a</span>, <span class="math">b</span>) : 1 ≤ <span class="math">a</span>, <span class="math">b</span> ≤ <span class="math">N</span>, gcd(<span class="math">a</span>, <span class="math">b</span>) = 1} be the count of coprime pairs in an <span class="math">N</span> × <span class="math">N</span> grid.</p>
         </div>
@@ -657,7 +1054,23 @@
                     <span class="value-display" id="gridSizeValue">60</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="gridSizeInput" min="10" value="60" step="10" onchange="overrideGridSize()">
+                    <input type="number" id="gridSizeInput" min="10" value="60" step="10" oninput="overrideGridSize()">
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-controls">
+            <h4>Animation Controls</h4>
+            <div class="control-group">
+                <label>Animate Grid Growth:</label>
+                <button class="animation-button" id="animateGridBtn" onclick="toggleGridAnimation()">▶ Play</button>
+                <button onclick="resetGridAnimation()">Reset</button>
+            </div>
+            <div class="control-group">
+                <label>Animation Speed:</label>
+                <div class="slider-group">
+                    <input type="range" id="gridAnimationSpeed" min="1" max="10" value="5" oninput="updateGridAnimationSpeed()">
+                    <span class="value-display" id="gridAnimationSpeedValue">5</span>
                 </div>
             </div>
         </div>
@@ -735,12 +1148,40 @@
                     <span class="value-display" id="phiMaxValue">100</span>
                 </div>
                 <div class="input-override">
-                    <input type="number" id="phiMaxModulusInput" min="10" value="100" step="10" onchange="overridePhiMaxModulus()">
+                    <input type="number" id="phiMaxModulusInput" min="10" value="100" step="10" oninput="overridePhiMaxModulus()">
                 </div>
             </div>
             <div class="control-group">
                 <label>Show Primes Only:</label>
                 <input type="checkbox" id="primesOnly" onchange="renderPhiRatios()">
+            </div>
+            <div class="control-group">
+                <label>Show Point Labels:</label>
+                <input type="checkbox" id="showPhiLabels" checked onchange="renderPhiRatios()">
+            </div>
+            <div class="control-group">
+                <label>Connect Reduced Fractions (Farey):</label>
+                <input type="checkbox" id="connectFarey" checked onchange="renderPhiRatios()">
+            </div>
+            <div class="control-group">
+                <label>Show 1/ζ(2) Reference Line:</label>
+                <input type="checkbox" id="showZetaLine" checked onchange="renderPhiRatios()">
+            </div>
+        </div>
+
+        <div class="animation-controls">
+            <h4>Animation Controls</h4>
+            <div class="control-group">
+                <label>Animate φ(m)/m Growth:</label>
+                <button class="animation-button" id="animatePhiBtn" onclick="togglePhiAnimation()">▶ Play</button>
+                <button onclick="resetPhiAnimation()">Reset</button>
+            </div>
+            <div class="control-group">
+                <label>Animation Speed:</label>
+                <div class="slider-group">
+                    <input type="range" id="phiAnimationSpeed" min="1" max="10" value="5" oninput="updatePhiAnimationSpeed()">
+                    <span class="value-display" id="phiAnimationSpeedValue">5</span>
+                </div>
             </div>
         </div>
 
@@ -863,7 +1304,8 @@
             pairs: 1.0,
             phi: 1.0,
             convergence: 1.0,
-            nested: 1.0
+            nested: 1.0,
+            lattice: 1.0
         };
 
         // Nested rings state
@@ -871,6 +1313,15 @@
             numRings: 12,
             ringSpacing: 1.0,
             pointSize: 2
+        };
+
+        // Animation state
+        const animationState = {
+            modulus: { playing: false, interval: null, speed: 5 },
+            grid: { playing: false, interval: null, speed: 5 },
+            phi: { playing: false, interval: null, speed: 5 },
+            rings: { playing: false, interval: null, speed: 5 },
+            lattice: { playing: false, interval: null, speed: 5 }
         };
 
         // Mathematical utilities
@@ -963,6 +1414,222 @@
             zoomState.nested = parseFloat(val) / 100;
             document.getElementById('nestedZoomValue').textContent = val + '%';
             document.getElementById('nestedZoomInput').value = val;
+        }
+
+        function updateLatticeZoom() {
+            const val = document.getElementById('latticeZoom').value;
+            zoomState.lattice = parseFloat(val) / 100;
+            document.getElementById('latticeZoomValue').textContent = val + '%';
+            document.getElementById('latticeZoomStat').textContent = val + '%';
+            document.getElementById('latticeZoomInput').value = val;
+        }
+
+        function updateNonCoprimeOpacity() {
+            const val = document.getElementById('nonCoprimeOpacity').value;
+            document.getElementById('nonCoprimeOpacityValue').textContent = parseFloat(val).toFixed(2);
+        }
+
+        function updateLabelSize() {
+            const val = document.getElementById('labelSize').value;
+            document.getElementById('labelSizeValue').textContent = parseFloat(val).toFixed(1) + 'x';
+        }
+
+        function updateLabelOpacity() {
+            const val = document.getElementById('labelOpacity').value;
+            document.getElementById('labelOpacityValue').textContent = parseFloat(val).toFixed(2);
+        }
+
+        function updateColorScheme() {
+            const scheme = document.getElementById('colorScheme').value;
+            const customGroup = document.getElementById('customColorGroup');
+            customGroup.style.display = scheme === 'custom' ? 'flex' : 'none';
+        }
+
+        function getColorForPoint(r, m, g) {
+            const scheme = document.getElementById('colorScheme').value;
+            
+            if (g !== 1) {
+                const baseColor = document.getElementById('nonCoprimeColor').value;
+                const opacity = parseFloat(document.getElementById('nonCoprimeOpacity').value);
+                return hexToRGBA(baseColor, opacity);
+            }
+
+            switch(scheme) {
+                case 'rainbow': {
+                    const angle = getAngle(r, m, document.getElementById('angularMapping').value);
+                    const hue = (angle / (2 * Math.PI)) * 360;
+                    return `hsl(${hue}, 85%, 55%)`;
+                }
+                case 'residue': {
+                    const hue = (r / m) * 360;
+                    return `hsl(${hue}, 80%, 60%)`;
+                }
+                case 'ring': {
+                    const hue = (m % 12) * 30;
+                    return `hsl(${hue}, 75%, 55%)`;
+                }
+                case 'prime': {
+                    return isPrime(r) ? '#e74c3c' : '#3498db';
+                }
+                case 'gcd_unified':
+                    return '#e74c3c';
+                case 'gcd_modulus': {
+                    const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
+                    return colors[m % colors.length];
+                }
+                case 'gcd_residue': {
+                    const hue = (r * 137.508) % 360;
+                    return `hsl(${hue}, 70%, 55%)`;
+                }
+                case 'gcd_progression': {
+                    const phi_m = euler_phi(m);
+                    let coprimeIndex = 0;
+                    for (let i = 0; i < r; i++) {
+                        if (gcd(i, m) === 1) coprimeIndex++;
+                    }
+                    const hue = (coprimeIndex / phi_m) * 280;
+                    return `hsl(${hue}, 75%, 55%)`;
+                }
+                case 'gcd_spectral': {
+                    const wavelengths = [380, 450, 495, 570, 590, 620, 750];
+                    const phi_m = euler_phi(m);
+                    let coprimeIndex = 0;
+                    for (let i = 0; i < r; i++) {
+                        if (gcd(i, m) === 1) coprimeIndex++;
+                    }
+                    const t = coprimeIndex / phi_m;
+                    const wl = wavelengths[0] + t * (wavelengths[wavelengths.length - 1] - wavelengths[0]);
+                    return wavelengthToColor(wl);
+                }
+                case 'custom':
+                    return document.getElementById('customGCD1Color').value;
+                default:
+                    return '#e74c3c';
+            }
+        }
+
+        function hexToRGBA(hex, alpha) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        function wavelengthToColor(wavelength) {
+            let r, g, b;
+            if (wavelength >= 380 && wavelength < 440) {
+                r = -(wavelength - 440) / (440 - 380);
+                g = 0;
+                b = 1;
+            } else if (wavelength >= 440 && wavelength < 490) {
+                r = 0;
+                g = (wavelength - 440) / (490 - 440);
+                b = 1;
+            } else if (wavelength >= 490 && wavelength < 510) {
+                r = 0;
+                g = 1;
+                b = -(wavelength - 510) / (510 - 490);
+            } else if (wavelength >= 510 && wavelength < 580) {
+                r = (wavelength - 510) / (580 - 510);
+                g = 1;
+                b = 0;
+            } else if (wavelength >= 580 && wavelength < 645) {
+                r = 1;
+                g = -(wavelength - 645) / (645 - 580);
+                b = 0;
+            } else if (wavelength >= 645 && wavelength <= 750) {
+                r = 1;
+                g = 0;
+                b = 0;
+            } else {
+                r = 0;
+                g = 0;
+                b = 0;
+            }
+            r = Math.round(r * 255);
+            g = Math.round(g * 255);
+            b = Math.round(b * 255);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function getLabelText(r, m, g) {
+            const format = document.getElementById('labelFormat').value;
+            const showGCD = document.getElementById('showGCDValue').checked;
+            const showCoprime = document.getElementById('showCoprimeIndicator').checked;
+            const showPhi = document.getElementById('showPhiPosition').checked;
+
+            let label = '';
+
+            switch(format) {
+                case 'number':
+                    label = `${r}`;
+                    break;
+                case 'fraction':
+                    label = `${r}/${m}`;
+                    break;
+                case 'farey': {
+                    const simplified_gcd = gcd(r, m);
+                    const num = r / simplified_gcd;
+                    const den = m / simplified_gcd;
+                    label = den === 1 ? `${num}` : `${num}/${den}`;
+                    break;
+                }
+                case 'angle': {
+                    const angle = getAngle(r, m, document.getElementById('angularMapping').value);
+                    label = `${(angle / Math.PI).toFixed(2)}π`;
+                    break;
+                }
+                case 'gcd':
+                    label = `gcd=${g}`;
+                    break;
+                case 'coprime':
+                    label = g === 1 ? '✓' : '✗';
+                    break;
+                case 'combined': {
+                    const angle = getAngle(r, m, document.getElementById('angularMapping').value);
+                    label = `r=${r}, gcd=${g}, θ=${(angle / Math.PI).toFixed(2)}π`;
+                    break;
+                }
+            }
+
+            if (format !== 'combined' && format !== 'gcd') {
+                if (showGCD) label += ` (gcd=${g})`;
+                if (showCoprime) label += g === 1 ? ' ✓' : ' ✗';
+            }
+
+            if (showPhi && g === 1) {
+                let phiPos = 0;
+                for (let i = 0; i < r; i++) {
+                    if (gcd(i, m) === 1) phiPos++;
+                }
+                label += ` [${phiPos}]`;
+            }
+
+            return label;
+        }
+
+        function drawLabel(ctx, text, x, y, size, opacity, background) {
+            const fontSize = 10 * size;
+            ctx.font = `${fontSize}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            if (background) {
+                const metrics = ctx.measureText(text);
+                const padding = 3;
+                const bgWidth = metrics.width + padding * 2;
+                const bgHeight = fontSize + padding * 2;
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.9})`;
+                ctx.fillRect(x - bgWidth / 2, y - bgHeight / 2, bgWidth, bgHeight);
+                
+                ctx.strokeStyle = `rgba(0, 0, 0, ${opacity * 0.5})`;
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x - bgWidth / 2, y - bgHeight / 2, bgWidth, bgHeight);
+            }
+
+            ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+            ctx.fillText(text, x, y);
         }
 
         // Override functions for input boxes
@@ -1085,6 +1752,17 @@
             }
         }
 
+        function overrideLatticeZoom() {
+            const val = parseFloat(document.getElementById('latticeZoomInput').value);
+            if (val >= 10) {
+                zoomState.lattice = val / 100;
+                document.getElementById('latticeZoom').value = Math.min(val, 300);
+                document.getElementById('latticeZoomValue').textContent = val + '%';
+                document.getElementById('latticeZoomStat').textContent = val + '%';
+                renderLattice();
+            }
+        }
+
         // Zoom update functions
         function updateCircleZoom() {
             const val = document.getElementById('circleZoom').value;
@@ -1123,14 +1801,159 @@
             document.getElementById('phiZoom').value = 100;
             document.getElementById('convergenceZoom').value = 100;
             document.getElementById('nestedZoom').value = 100;
+            document.getElementById('latticeZoom').value = 100;
             
             updateCircleZoom();
             updatePairsZoom();
             updatePhiZoom();
             updateConvergenceZoom();
             updateNestedZoom();
+            updateLatticeZoom();
             
             renderAll();
+        }
+
+        // Animation functions
+        function updateAnimationSpeed() {
+            const val = document.getElementById('animationSpeed').value;
+            animationState.modulus.speed = parseInt(val);
+            document.getElementById('animationSpeedValue').textContent = val;
+        }
+
+        function updateGridAnimationSpeed() {
+            const val = document.getElementById('gridAnimationSpeed').value;
+            animationState.grid.speed = parseInt(val);
+            document.getElementById('gridAnimationSpeedValue').textContent = val;
+        }
+
+        function updatePhiAnimationSpeed() {
+            const val = document.getElementById('phiAnimationSpeed').value;
+            animationState.phi.speed = parseInt(val);
+            document.getElementById('phiAnimationSpeedValue').textContent = val;
+        }
+
+        function toggleModulusAnimation() {
+            const btn = document.getElementById('animateModulusBtn');
+            if (animationState.modulus.playing) {
+                // Stop animation
+                clearInterval(animationState.modulus.interval);
+                animationState.modulus.playing = false;
+                btn.textContent = '▶ Play';
+                btn.classList.remove('playing');
+            } else {
+                // Start animation
+                animationState.modulus.playing = true;
+                btn.textContent = '⏸ Pause';
+                btn.classList.add('playing');
+                
+                const maxModulusSlider = document.getElementById('maxModulus');
+                const minVal = parseInt(maxModulusSlider.min);
+                const maxVal = parseInt(maxModulusSlider.max);
+                let currentVal = parseInt(maxModulusSlider.value);
+                
+                animationState.modulus.interval = setInterval(() => {
+                    currentVal++;
+                    if (currentVal > maxVal) {
+                        currentVal = minVal;
+                    }
+                    maxModulusSlider.value = currentVal;
+                    document.getElementById('maxModulusInput').value = currentVal;
+                    updateModulusDisplay();
+                    renderAll();
+                }, 1000 / animationState.modulus.speed);
+            }
+        }
+
+        function resetModulusAnimation() {
+            if (animationState.modulus.playing) {
+                toggleModulusAnimation();
+            }
+            document.getElementById('maxModulus').value = 20;
+            document.getElementById('maxModulusInput').value = 20;
+            updateModulusDisplay();
+            renderAll();
+        }
+
+        function toggleGridAnimation() {
+            const btn = document.getElementById('animateGridBtn');
+            if (animationState.grid.playing) {
+                clearInterval(animationState.grid.interval);
+                animationState.grid.playing = false;
+                btn.textContent = '▶ Play';
+                btn.classList.remove('playing');
+            } else {
+                animationState.grid.playing = true;
+                btn.textContent = '⏸ Pause';
+                btn.classList.add('playing');
+                
+                const gridSlider = document.getElementById('gridSize');
+                const minVal = parseInt(gridSlider.min);
+                const maxVal = parseInt(gridSlider.max);
+                let currentVal = parseInt(gridSlider.value);
+                
+                animationState.grid.interval = setInterval(() => {
+                    currentVal += 10;
+                    if (currentVal > maxVal) {
+                        currentVal = minVal;
+                    }
+                    gridSlider.value = currentVal;
+                    document.getElementById('gridSizeInput').value = currentVal;
+                    updateGridSizeDisplay();
+                    renderCoprimePairs();
+                }, 1000 / animationState.grid.speed);
+            }
+        }
+
+        function resetGridAnimation() {
+            if (animationState.grid.playing) {
+                toggleGridAnimation();
+            }
+            document.getElementById('gridSize').value = 60;
+            document.getElementById('gridSizeInput').value = 60;
+            updateGridSizeDisplay();
+            renderCoprimePairs();
+        }
+
+        function togglePhiAnimation() {
+            const btn = document.getElementById('animatePhiBtn');
+            if (animationState.phi.playing) {
+                clearInterval(animationState.phi.interval);
+                animationState.phi.playing = false;
+                btn.textContent = '▶ Play';
+                btn.classList.remove('playing');
+            } else {
+                animationState.phi.playing = true;
+                btn.textContent = '⏸ Pause';
+                btn.classList.add('playing');
+                
+                const phiSlider = document.getElementById('phiMaxModulus');
+                const minVal = parseInt(phiSlider.min);
+                const maxVal = parseInt(phiSlider.max);
+                let currentVal = parseInt(phiSlider.value);
+                
+                animationState.phi.interval = setInterval(() => {
+                    currentVal += 10;
+                    if (currentVal > maxVal) {
+                        currentVal = minVal;
+                    }
+                    phiSlider.value = currentVal;
+                    document.getElementById('phiMaxModulusInput').value = currentVal;
+                    updatePhiMaxDisplay();
+                    renderPhiRatios();
+                    renderConvergence();
+                }, 1000 / animationState.phi.speed);
+            }
+        }
+
+        function resetPhiAnimation() {
+            if (animationState.phi.playing) {
+                togglePhiAnimation();
+            }
+            document.getElementById('phiMaxModulus').value = 100;
+            document.getElementById('phiMaxModulusInput').value = 100;
+            updatePhiMaxDisplay();
+            renderPhiRatios();
+            renderConvergence();
         }
 
         // Angular mapping functions
@@ -1167,11 +1990,11 @@
             const n = nestedState.numRings;
             const spacing = nestedState.ringSpacing;
             const pointSize = nestedState.pointSize;
-            const colorByGCD = document.getElementById('colorByGCD').checked;
             const showConnections = document.getElementById('showCoprimeConnections').checked;
             const mapping = document.getElementById('angularMapping').value;
             const zoom = zoomState.nested;
-
+            const showNestedModulusLabels = document.getElementById('showNestedModulusLabels').checked;
+            
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
             const maxRadius = (Math.min(cx, cy) - 50) * zoom;
@@ -1189,15 +2012,6 @@
             ctx.stroke();
 
             const baseRadius = maxRadius * 0.15;
-            
-            const gcdColors = {
-                1: '#e74c3c',
-                2: '#3498db',
-                3: '#2ecc71',
-                4: '#f39c12',
-                5: '#9b59b6',
-                default: '#95a5a6'
-            };
 
             for (let m = 1; m <= n; m++) {
                 const t = (m - 1) / (n - 1 || 1);
@@ -1209,9 +2023,12 @@
                 ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
                 ctx.stroke();
 
-                ctx.fillStyle = '#666';
-                ctx.font = '10px Arial';
-                ctx.fillText(`m=${m}`, cx + radius + 5, cy);
+                // Only show modulus labels if enabled
+                if (showNestedModulusLabels) {
+                    ctx.fillStyle = '#666';
+                    ctx.font = '10px Arial';
+                    ctx.fillText(`m=${m}`, cx + radius + 5, cy);
+                }
 
                 for (let r = 0; r < m; r++) {
                     const g = gcd(r, m);
@@ -1220,12 +2037,7 @@
                     const x = cx + radius * Math.cos(angle);
                     const y = cy - radius * Math.sin(angle);
 
-                    let color;
-                    if (colorByGCD) {
-                        color = gcdColors[g] || gcdColors.default;
-                    } else {
-                        color = g === 1 ? '#e74c3c' : '#95a5a6';
-                    }
+                    const color = getColorForPoint(r, m, g);
 
                     ctx.fillStyle = color;
                     ctx.beginPath();
@@ -1245,45 +2057,17 @@
                 }
             }
 
-            const legendX = 20;
-            const legendY = canvas.height - 120;
-            
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.fillRect(legendX, legendY, 200, 100);
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(legendX, legendY, 200, 100);
-
-            ctx.fillStyle = '#333';
-            ctx.font = 'bold 12px Arial';
-            ctx.fillText('GCD Color Legend', legendX + 10, legendY + 20);
-
-            let y = legendY + 40;
-            const legendItems = [
-                { gcd: 1, label: 'GCD = 1 (Coprime)', color: gcdColors[1] },
-                { gcd: 2, label: 'GCD = 2', color: gcdColors[2] },
-                { gcd: 3, label: 'GCD = 3', color: gcdColors[3] },
-                { gcd: 4, label: 'GCD >= 4', color: gcdColors.default }
-            ];
-
-            legendItems.forEach(item => {
-                ctx.fillStyle = item.color;
-                ctx.beginPath();
-                ctx.arc(legendX + 15, y, 4, 0, 2 * Math.PI);
-                ctx.fill();
-
-                ctx.fillStyle = '#333';
-                ctx.font = '11px Arial';
-                ctx.fillText(item.label, legendX + 30, y + 4);
-                y += 15;
-            });
-
             ctx.fillStyle = '#2c3e50';
             ctx.font = 'bold 11px Arial';
             const mappingText = document.getElementById('angularMapping').options[
                 document.getElementById('angularMapping').selectedIndex
             ].text;
             ctx.fillText('Mapping: ' + mappingText.split(':')[0], 20, 30);
+            
+            const schemeText = document.getElementById('colorScheme').options[
+                document.getElementById('colorScheme').selectedIndex
+            ].text;
+            ctx.fillText('Color: ' + schemeText, 20, 50);
         }
 
         function exportNestedData() {
@@ -1322,6 +2106,306 @@
             updateExportCount();
         }
 
+        // Render Lattice Vectors - Complete Implementation
+        function renderLattice() {
+            const canvas = document.getElementById('latticeCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const N = parseInt(document.getElementById('latticeRange').value);
+            const mode = document.getElementById('latticeMode').value;
+            const showNonPrimitive = document.getElementById('showNonPrimitive').checked;
+            const showGridLines = document.getElementById('showGridLines').checked;
+            const showNormCircles = document.getElementById('showNormCircles').checked;
+            const pointSize = parseInt(document.getElementById('latticePointSize').value);
+            const zoom = zoomState.lattice;
+            
+            const showLabels = document.getElementById('showLabels').checked;
+            const labelSize = parseFloat(document.getElementById('labelSize').value);
+            const labelOpacity = parseFloat(document.getElementById('labelOpacity').value);
+            const labelBackground = document.getElementById('labelBackground').checked;
+            const labelGCD1 = document.getElementById('labelGCD1').checked;
+            const labelGCDNot1 = document.getElementById('labelGCDNot1').checked;
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const scale = (Math.min(canvas.width, canvas.height) / (2 * N + 4)) * zoom;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid lines
+            if (showGridLines) {
+                ctx.strokeStyle = 'rgba(200, 200, 200, 0.2)';
+                ctx.lineWidth = 1;
+                for (let i = -N; i <= N; i++) {
+                    // Vertical lines
+                    ctx.beginPath();
+                    ctx.moveTo(cx + i * scale, cy - N * scale);
+                    ctx.lineTo(cx + i * scale, cy + N * scale);
+                    ctx.stroke();
+                    
+                    // Horizontal lines
+                    ctx.beginPath();
+                    ctx.moveTo(cx - N * scale, cy - i * scale);
+                    ctx.lineTo(cx + N * scale, cy - i * scale);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx - N * scale - 20, cy);
+            ctx.lineTo(cx + N * scale + 20, cy);
+            ctx.moveTo(cx, cy - N * scale - 20);
+            ctx.lineTo(cx, cy + N * scale + 20);
+            ctx.stroke();
+
+            // Draw norm circles if enabled
+            if (showNormCircles) {
+                const maxNorm = N * N * 2;
+                const normStep = Math.ceil(maxNorm / 10);
+                ctx.strokeStyle = 'rgba(100, 100, 200, 0.15)';
+                ctx.lineWidth = 1;
+                for (let normSq = normStep; normSq <= maxNorm; normSq += normStep) {
+                    const radius = Math.sqrt(normSq) * scale;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+            }
+
+            // Calculate statistics
+            let totalPoints = 0;
+            let primitiveCount = 0;
+            let primeNormCount = 0;
+            let sumNormPrimitive = 0;
+
+            const points = [];
+
+            // Collect all points
+            for (let a = -N; a <= N; a++) {
+                for (let b = -N; b <= N; b++) {
+                    if (a === 0 && b === 0) continue;
+                    
+                    const g = gcd(a, b);
+                    const isPrimitive = g === 1;
+                    const normSq = a * a + b * b;
+                    const isPrimeNorm = isPrimitive && isPrime(normSq);
+
+                    totalPoints++;
+                    if (isPrimitive) {
+                        primitiveCount++;
+                        sumNormPrimitive += normSq;
+                        if (isPrimeNorm) primeNormCount++;
+                    }
+
+                    if (!showNonPrimitive && !isPrimitive) continue;
+
+                    points.push({ a, b, g, isPrimitive, normSq, isPrimeNorm });
+                }
+            }
+
+            // Draw rays first (if in rays mode)
+            if (mode === 'rays') {
+                points.forEach(pt => {
+                    if (!pt.isPrimitive) return;
+                    
+                    const x = cx + pt.a * scale;
+                    const y = cy - pt.b * scale;
+
+                    ctx.strokeStyle = 'rgba(52, 152, 219, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                });
+            }
+
+            // Draw points
+            points.forEach(pt => {
+                const x = cx + pt.a * scale;
+                const y = cy - pt.b * scale;
+
+                let color;
+                
+                if (!pt.isPrimitive) {
+                    const baseColor = document.getElementById('nonCoprimeColor').value;
+                    const opacity = parseFloat(document.getElementById('nonCoprimeOpacity').value);
+                    color = hexToRGBA(baseColor, opacity);
+                } else {
+                    // Use the global color scheme for primitive points
+                    const colorScheme = document.getElementById('colorScheme').value;
+                    
+                    switch(colorScheme) {
+                        case 'rainbow':
+                            const angle = Math.atan2(pt.b, pt.a);
+                            const hue = ((angle + Math.PI) / (2 * Math.PI)) * 360;
+                            color = `hsl(${hue}, 85%, 55%)`;
+                            break;
+                        case 'prime':
+                            color = isPrime(pt.normSq) ? '#e74c3c' : '#3498db';
+                            break;
+                        case 'gcd_unified':
+                            color = '#e74c3c';
+                            break;
+                        case 'gcd_modulus':
+                            const hue1 = (pt.normSq % 12) * 30;
+                            color = `hsl(${hue1}, 75%, 55%)`;
+                            break;
+                        case 'gcd_residue':
+                            const hue2 = ((pt.a + pt.b) * 137.508) % 360;
+                            color = `hsl(${hue2}, 70%, 55%)`;
+                            break;
+                        case 'gcd_progression':
+                            const normRatio = Math.sqrt(pt.normSq) / (N * Math.SQRT2);
+                            const hue3 = normRatio * 280;
+                            color = `hsl(${hue3}, 75%, 55%)`;
+                            break;
+                        case 'gcd_spectral':
+                            const t = Math.sqrt(pt.normSq) / (N * Math.SQRT2);
+                            const wl = 380 + t * (750 - 380);
+                            color = wavelengthToColor(wl);
+                            break;
+                        case 'custom':
+                            color = document.getElementById('customGCD1Color').value;
+                            break;
+                        default:
+                            // For mode-specific coloring when using other schemes
+                            switch(mode) {
+                                case 'points':
+                                case 'rays':
+                                    color = '#16a085';
+                                    break;
+                                case 'norm':
+                                    const hueNorm = (Math.sqrt(pt.normSq) / (N * Math.SQRT2)) * 240;
+                                    color = `hsl(${240 - hueNorm}, 70%, 55%)`;
+                                    break;
+                                case 'prime_norm':
+                                    color = pt.isPrimeNorm ? '#e74c3c' : '#3498db';
+                                    break;
+                                case 'quadrant':
+                                    if (pt.a > 0 && pt.b > 0) color = '#e74c3c';
+                                    else if (pt.a < 0 && pt.b > 0) color = '#3498db';
+                                    else if (pt.a < 0 && pt.b < 0) color = '#2ecc71';
+                                    else color = '#f39c12';
+                                    break;
+                                default:
+                                    color = '#16a085';
+                            }
+                    }
+                }
+
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, pointSize, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Highlight origin
+                if (pt.a === 0 && pt.b === 0) {
+                    ctx.strokeStyle = '#e74c3c';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(x, y, pointSize + 2, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+                
+                // Draw labels if enabled
+                if (showLabels && N <= 30) {
+                    const shouldLabel = (pt.isPrimitive && labelGCD1) || (!pt.isPrimitive && labelGCDNot1);
+                    
+                    if (shouldLabel) {
+                        const format = document.getElementById('labelFormat').value;
+                        let labelText = '';
+                        
+                        switch(format) {
+                            case 'number':
+                                labelText = `(${pt.a},${pt.b})`;
+                                break;
+                            case 'gcd':
+                                labelText = `${pt.g}`;
+                                break;
+                            case 'coprime':
+                                labelText = pt.isPrimitive ? '✓' : '✗';
+                                break;
+                            default:
+                                labelText = `(${pt.a},${pt.b})`;
+                        }
+                        
+                        if (document.getElementById('showGCDValue').checked && format !== 'gcd') {
+                            labelText += ` [${pt.g}]`;
+                        }
+                        
+                        const labelX = x + pointSize + 8;
+                        const labelY = y;
+                        drawLabel(ctx, labelText, labelX, labelY, labelSize * 0.7, labelOpacity, labelBackground);
+                    }
+                }
+            });
+
+            // Draw legend at top center
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Mode: ${mode.replace('_', ' ').toUpperCase()}`, canvas.width / 2, 25);
+            
+            const schemeText = document.getElementById('colorScheme').options[
+                document.getElementById('colorScheme').selectedIndex
+            ].text;
+            ctx.fillText('Color: ' + schemeText, canvas.width / 2, 45);
+            
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'left';
+            
+            if (mode === 'prime_norm') {
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillText('■ Prime Norm', 20, 75);
+                ctx.fillStyle = '#3498db';
+                ctx.fillText('■ Composite Norm', 20, 95);
+            } else if (mode === 'quadrant') {
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillText('■ Q1 (+,+)', 20, 75);
+                ctx.fillStyle = '#3498db';
+                ctx.fillText('■ Q2 (-,+)', 20, 95);
+                ctx.fillStyle = '#2ecc71';
+                ctx.fillText('■ Q3 (-,-)', 20, 115);
+                ctx.fillStyle = '#f39c12';
+                ctx.fillText('■ Q4 (+,-)', 20, 135);
+            }
+            ctx.textAlign = 'left';
+
+            // Update statistics
+            document.getElementById('totalLatticePoints').textContent = totalPoints;
+            document.getElementById('primitivePoints').textContent = primitiveCount;
+            document.getElementById('primitiveRatio').textContent = 
+                totalPoints > 0 ? (primitiveCount / totalPoints).toFixed(6) : '0';
+            document.getElementById('primeNormCount').textContent = primeNormCount;
+            document.getElementById('avgNormPrimitive').textContent = 
+                primitiveCount > 0 ? (sumNormPrimitive / primitiveCount).toFixed(2) : '0';
+        }
+
+        function exportLatticeData() {
+            const N = parseInt(document.getElementById('latticeRangeInput').value);
+            let csv = 'a,b,gcd,is_primitive,norm_squared,is_prime_norm,visible_from_origin\n';
+
+            for (let a = -N; a <= N; a++) {
+                for (let b = -N; b <= N; b++) {
+                    if (a === 0 && b === 0) continue;
+                    
+                    const g = gcd(a, b);
+                    const isPrimitive = g === 1;
+                    const normSq = a * a + b * b;
+                    const isPrimeNorm = isPrimitive && isPrime(normSq);
+
+                    csv += `${a},${b},${g},${isPrimitive ? 1 : 0},${normSq},${isPrimeNorm ? 1 : 0},${isPrimitive ? 1 : 0}\n`;
+                }
+            }
+
+            downloadCSV(csv, `primitive_lattice_vectors_range${N}.csv`);
+        }
+
         // Render Unit Circle
         function renderUnitCircle() {
             const canvas = document.getElementById('unitCircleCanvas');
@@ -1331,6 +2415,14 @@
             const pointSize = parseInt(document.getElementById('pointSizeInput').value);
             const mapping = document.getElementById('angularMapping').value;
             const zoom = zoomState.circle;
+
+            const showLabels = document.getElementById('showLabels').checked;
+            const labelSize = parseFloat(document.getElementById('labelSize').value);
+            const labelOpacity = parseFloat(document.getElementById('labelOpacity').value);
+            const labelBackground = document.getElementById('labelBackground').checked;
+            const labelUnitCircle = document.getElementById('labelUnitCircle').checked;
+            const labelGCD1 = document.getElementById('labelGCD1').checked;
+            const labelGCDNot1 = document.getElementById('labelGCDNot1').checked;
 
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
@@ -1373,19 +2465,44 @@
                     if (points.has(key)) continue;
                     points.add(key);
 
-                    ctx.fillStyle = iscoprime ? '#e74c3c' : '#3498db';
+                    const g = iscoprime ? 1 : gcd(r, m);
+                    const color = getColorForPoint(r, m, g);
+                    
+                    ctx.fillStyle = color;
                     ctx.beginPath();
                     ctx.arc(x, y, pointSize, 0, 2 * Math.PI);
                     ctx.fill();
+
+                    // Draw labels
+                    if (showLabels) {
+                        const shouldLabel = (m === 1 && labelUnitCircle) ||
+                                          (g === 1 && labelGCD1) ||
+                                          (g !== 1 && labelGCDNot1);
+                        
+                        if (shouldLabel && m === maxM) {
+                            const labelText = getLabelText(r, m, g);
+                            const labelOffset = pointSize + 12;
+                            const labelX = cx + (radius + labelOffset) * Math.cos(angle);
+                            const labelY = cy - (radius + labelOffset) * Math.sin(angle);
+                            drawLabel(ctx, labelText, labelX, labelY, labelSize, labelOpacity, labelBackground);
+                        }
+                    }
                 }
             }
 
             ctx.fillStyle = '#2c3e50';
             ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
             const mappingText = document.getElementById('angularMapping').options[
                 document.getElementById('angularMapping').selectedIndex
             ].text;
-            ctx.fillText('Mapping: ' + mappingText.split(':')[0], 20, 30);
+            ctx.fillText('Mapping: ' + mappingText.split(':')[0], canvas.width / 2, 25);
+
+            const schemeText = document.getElementById('colorScheme').options[
+                document.getElementById('colorScheme').selectedIndex
+            ].text;
+            ctx.fillText('Color: ' + schemeText, canvas.width / 2, 45);
+            ctx.textAlign = 'left';
 
             document.getElementById('totalPoints').textContent = totalPoints;
             document.getElementById('coprimePoints').textContent = coprimeCount;
@@ -1399,6 +2516,14 @@
             const ctx = canvas.getContext('2d');
             const N = parseInt(document.getElementById('gridSizeInput').value);
             const zoom = zoomState.pairs;
+            const coprimeOnly = document.getElementById('coprimeOnly').checked;
+
+            const showLabels = document.getElementById('showLabels').checked;
+            const labelSize = parseFloat(document.getElementById('labelSize').value);
+            const labelOpacity = parseFloat(document.getElementById('labelOpacity').value);
+            const labelBackground = document.getElementById('labelBackground').checked;
+            const labelGCD1 = document.getElementById('labelGCD1').checked;
+            const labelGCDNot1 = document.getElementById('labelGCDNot1').checked;
 
             const cellSize = (Math.min(canvas.width, canvas.height) / (N + 2)) * zoom;
             const offsetX = (canvas.width - cellSize * (N + 2)) / 2;
@@ -1410,17 +2535,81 @@
 
             for (let a = 1; a <= N; a++) {
                 for (let b = 1; b <= N; b++) {
+                    const g = gcd(a, b);
+                    const iscoprime = g === 1;
+                    
+                    if (coprimeOnly && !iscoprime) continue;
+
                     const x = offsetX + a * cellSize;
                     const y = canvas.height - offsetY - b * cellSize;
                     
-                    if (gcd(a, b) === 1) {
-                        ctx.fillStyle = '#e74c3c';
+                    if (iscoprime) {
+                        // Use the global color scheme for coprime pairs
+                        ctx.fillStyle = getColorForPoint(a, b, 1);
                         coprimeCount++;
                     } else {
-                        ctx.fillStyle = '#ecf0f1';
+                        // Use the global non-coprime color
+                        const baseColor = document.getElementById('nonCoprimeColor').value;
+                        const opacity = parseFloat(document.getElementById('nonCoprimeOpacity').value);
+                        ctx.fillStyle = hexToRGBA(baseColor, opacity);
                     }
                     
                     ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
+
+                    // Draw labels if enabled
+                    if (showLabels && cellSize > 15) {
+                        const shouldLabel = (iscoprime && labelGCD1) || (!iscoprime && labelGCDNot1);
+                        
+                        if (shouldLabel) {
+                            const centerX = x + cellSize / 2;
+                            const centerY = y + cellSize / 2;
+                            
+                            let labelText = '';
+                            const format = document.getElementById('labelFormat').value;
+                            const showGCD = document.getElementById('showGCDValue').checked;
+                            const showCoprime = document.getElementById('showCoprimeIndicator').checked;
+
+                            switch(format) {
+                                case 'number':
+                                    labelText = `(${a},${b})`;
+                                    break;
+                                case 'gcd':
+                                    labelText = `${g}`;
+                                    break;
+                                case 'coprime':
+                                    labelText = iscoprime ? '✓' : '✗';
+                                    break;
+                                default:
+                                    labelText = `(${a},${b})`;
+                                    if (showGCD) labelText += `\ngcd=${g}`;
+                                    if (showCoprime) labelText += iscoprime ? ' ✓' : ' ✗';
+                            }
+
+                            // Adjust font size based on cell size
+                            const adjustedSize = labelSize * Math.min(cellSize / 30, 1);
+                            const fontSize = 10 * adjustedSize;
+                            ctx.font = `${fontSize}px Arial`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+
+                            if (labelBackground) {
+                                ctx.fillStyle = `rgba(255, 255, 255, ${labelOpacity * 0.9})`;
+                                const padding = 2;
+                                ctx.fillRect(x + padding, y + padding, cellSize - padding * 2 - 1, cellSize - padding * 2 - 1);
+                            }
+
+                            ctx.fillStyle = `rgba(0, 0, 0, ${labelOpacity})`;
+                            
+                            // Handle multi-line labels
+                            const lines = labelText.split('\n');
+                            const lineHeight = fontSize * 1.2;
+                            const startY = centerY - ((lines.length - 1) * lineHeight) / 2;
+                            
+                            lines.forEach((line, idx) => {
+                                ctx.fillText(line, centerX, startY + idx * lineHeight);
+                            });
+                        }
+                    }
                 }
             }
 
@@ -1436,9 +2625,46 @@
             ctx.stroke();
 
             ctx.fillStyle = '#333';
-            ctx.font = '16px Arial';
+            ctx.font = 'bold 18px Arial';
             ctx.fillText('a', canvas.width - offsetX - 30, axisY + 25);
             ctx.fillText('b', axisX - 30, offsetY + 20);
+
+            // Draw axis labels for a (horizontal axis)
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'center';
+            const labelInterval = Math.max(1, Math.floor(N / 20));
+            for (let i = 1; i <= N; i += labelInterval) {
+                const x = offsetX + i * cellSize;
+                ctx.fillStyle = '#666';
+                ctx.fillText(i, x + cellSize / 2, axisY + 20);
+                
+                // Tick marks
+                ctx.strokeStyle = '#999';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x + cellSize / 2, axisY);
+                ctx.lineTo(x + cellSize / 2, axisY + 5);
+                ctx.stroke();
+            }
+
+            // Draw axis labels for b (vertical axis)
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (let i = 1; i <= N; i += labelInterval) {
+                const y = canvas.height - offsetY - i * cellSize;
+                ctx.fillStyle = '#666';
+                ctx.fillText(i, axisX - 10, y - cellSize / 2);
+                
+                // Tick marks
+                ctx.strokeStyle = '#999';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(axisX, y - cellSize / 2);
+                ctx.lineTo(axisX - 5, y - cellSize / 2);
+                ctx.stroke();
+            }
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'alphabetic';
 
             const totalPairs = N * N;
             const ratio = coprimeCount / totalPairs;
@@ -1457,6 +2683,9 @@
             const ctx = canvas.getContext('2d');
             const maxM = parseInt(document.getElementById('phiMaxModulusInput').value);
             const primesOnly = document.getElementById('primesOnly').checked;
+            const showPhiLabels = document.getElementById('showPhiLabels').checked;
+            const connectFarey = document.getElementById('connectFarey').checked;
+            const showZetaLine = document.getElementById('showZetaLine').checked;
             const zoom = zoomState.phi;
 
             const padding = 60;
@@ -1475,37 +2704,46 @@
             ctx.lineTo(canvas.width - offsetX, canvas.height - offsetY);
             ctx.stroke();
 
-            ctx.strokeStyle = '#27ae60';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 5]);
-            const limitY = canvas.height - offsetY - (SIX_OVER_PI_SQUARED * plotHeight);
-            ctx.beginPath();
-            ctx.moveTo(offsetX, limitY);
-            ctx.lineTo(canvas.width - offsetX, limitY);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            // Draw 1/ζ(2) reference line
+            if (showZetaLine) {
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                const limitY = canvas.height - offsetY - (SIX_OVER_PI_SQUARED * plotHeight);
+                ctx.beginPath();
+                ctx.moveTo(offsetX, limitY);
+                ctx.lineTo(canvas.width - offsetX, limitY);
+                ctx.stroke();
+                ctx.setLineDash([]);
 
-            ctx.fillStyle = '#27ae60';
-            ctx.font = 'bold 14px Arial';
-            ctx.fillText('6/π² ≈ 0.6079', canvas.width - offsetX + 10, limitY + 5);
+                ctx.fillStyle = '#27ae60';
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText('1/ζ(2) = 6/π²', canvas.width - offsetX - 100, limitY - 8);
+            }
 
             let sum = 0;
             let count = 0;
             let primeSum = 0;
             let primeCount = 0;
+            
+            const points = [];
+            const fareyPoints = []; // Points where gcd(phi(m), m) = 1 (reduced fraction)
 
             for (let m = 1; m <= maxM; m++) {
                 const isPrimeNum = isPrime(m);
                 if (primesOnly && !isPrimeNum) continue;
 
-                const ratio = euler_phi(m) / m;
+                const phi_m = euler_phi(m);
+                const ratio = phi_m / m;
                 const x = offsetX + (m / maxM) * plotWidth;
                 const y = canvas.height - offsetY - ratio * plotHeight;
 
-                ctx.fillStyle = isPrimeNum ? '#e74c3c' : '#3498db';
-                ctx.beginPath();
-                ctx.arc(x, y, 3, 0, 2 * Math.PI);
-                ctx.fill();
+                points.push({ m, ratio, x, y, isPrime: isPrimeNum, phi_m });
+                
+                // Check if phi(m)/m is in lowest terms (for Farey connection)
+                if (gcd(phi_m, m) === 1) {
+                    fareyPoints.push({ m, ratio, x, y, phi_m });
+                }
 
                 sum += ratio;
                 count++;
@@ -1516,14 +2754,64 @@
                 }
             }
 
+            // Draw Farey connections (reduced fractions)
+            if (connectFarey && fareyPoints.length > 1) {
+                ctx.strokeStyle = 'rgba(155, 89, 182, 0.4)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                for (let i = 0; i < fareyPoints.length - 1; i++) {
+                    if (i === 0) {
+                        ctx.moveTo(fareyPoints[i].x, fareyPoints[i].y);
+                    }
+                    ctx.lineTo(fareyPoints[i + 1].x, fareyPoints[i + 1].y);
+                }
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Draw points
+            points.forEach(pt => {
+                ctx.fillStyle = pt.isPrime ? '#e74c3c' : '#3498db';
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw labels
+                if (showPhiLabels && maxM <= 100) {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                    ctx.font = '9px Arial';
+                    ctx.textAlign = 'center';
+                    
+                    // Label format: m or φ(m)/m
+                    const label = pt.m <= 20 ? `${pt.m}` : (pt.m % 5 === 0 ? `${pt.m}` : '');
+                    if (label) {
+                        ctx.fillText(label, pt.x, pt.y - 8);
+                    }
+                }
+            });
+
             ctx.fillStyle = '#333';
             ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
             ctx.fillText('Modulus m', canvas.width / 2, canvas.height - 20);
             ctx.save();
             ctx.translate(20, canvas.height / 2);
             ctx.rotate(-Math.PI / 2);
             ctx.fillText('φ(m)/m', 0, 0);
             ctx.restore();
+            
+            // Legend at top
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillText('φ(m)/m Ratios', canvas.width / 2, offsetY - 30);
+            
+            ctx.font = '11px Arial';
+            if (connectFarey) {
+                ctx.fillStyle = '#9b59b6';
+                ctx.fillText('Purple dashed: Reduced fractions (gcd(φ(m),m)=1)', canvas.width / 2, offsetY - 12);
+            }
 
             const avgRatio = sum / count;
             const error = Math.abs(avgRatio - SIX_OVER_PI_SQUARED);
@@ -1664,6 +2952,7 @@
                 }
 
                 const canvasInfo = {
+                    'lattice': { canvas: document.getElementById('latticeCanvas'), title: 'Primitive Lattice', color: '#16a085', subtitle: 'Gaussian Integers' },
                     'circle': { canvas: document.getElementById('unitCircleCanvas'), title: 'Unit Circle', color: '#e74c3c', subtitle: 'Roots of Unity' },
                     'nested': { canvas: document.getElementById('nestedRingsCanvas'), title: 'Nested Rings', color: '#9b59b6', subtitle: 'Moduli 1 to n' },
                     'pairs': { canvas: document.getElementById('coprimePairsCanvas'), title: 'Coprime Pairs', color: '#3498db', subtitle: 'GCD Grid' },
@@ -1680,7 +2969,7 @@
 
                 const baseSize = Math.min(width, height);
                 const canvasSize = baseSize / Math.max(rows, cols);
-                const legendSpace = includeLegend ? 500 : 0;
+                const legendSpace = includeLegend ? 700 : 0;
                 const gridWidth = canvasSize * cols;
                 const gridHeight = canvasSize * rows;
 
@@ -1731,9 +3020,9 @@
                     ctx.strokeRect(legendX, 20, legendWidth, gridHeight - 40);
 
                     let currentY = 60;
-                    const baseFont = 22;
-                    const titleFont = 28;
-                    const squareSize = 24;
+                    const baseFont = 20;
+                    const titleFont = 26;
+                    const squareSize = 22;
 
                     ctx.fillStyle = '#ffd700';
                     ctx.font = `bold ${titleFont}px "Fira Code"`;
@@ -1742,7 +3031,7 @@
                     currentY += titleFont * 2.5;
 
                     ctx.fillStyle = '#00ffff';
-                    ctx.font = `bold ${baseFont * 1.2}px "Fira Code"`;
+                    ctx.font = `bold ${baseFont * 1.1}px "Fira Code"`;
                     ctx.fillText('Visualizations', legendX + padding, currentY);
                     currentY += baseFont * 2;
 
@@ -1770,28 +3059,31 @@
                     if (includeParameters) {
                         currentY += baseFont;
                         ctx.fillStyle = '#00ffff';
-                        ctx.font = `bold ${baseFont * 1.2}px "Fira Code"`;
+                        ctx.font = `bold ${baseFont * 1.1}px "Fira Code"`;
                         ctx.fillText('Parameters', legendX + padding, currentY);
                         currentY += baseFont * 2;
 
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                        ctx.font = `${baseFont * 0.9}px "Fira Code"`;
+                        ctx.font = `${baseFont * 0.85}px "Fira Code"`;
 
-                        const maxM = document.getElementById('maxModulusInput').value;
-                        const gridSize = document.getElementById('gridSizeInput').value;
-                        const phiMax = document.getElementById('phiMaxModulusInput').value;
-                        const numRings = document.getElementById('numRingsInput').value;
+                        const maxM = parseInt(document.getElementById('maxModulusInput').value);
+                        const gridSize = parseInt(document.getElementById('gridSizeInput').value);
+                        const phiMax = parseInt(document.getElementById('phiMaxModulusInput').value);
+                        const numRings = parseInt(document.getElementById('numRingsInput').value);
                         const mapping = document.getElementById('angularMapping').options[
                             document.getElementById('angularMapping').selectedIndex
                         ].text.split(':')[0];
+                        const colorScheme = document.getElementById('colorScheme').options[
+                            document.getElementById('colorScheme').selectedIndex
+                        ].text;
 
                         const params = [
                             `Max Modulus: ${maxM}`,
                             `Nested Rings: ${numRings}`,
-                            `Mapping: ${mapping}`,
-                            `Grid Size: ${gridSize}`,
+                            `Grid Size: ${gridSize}×${gridSize}`,
                             `φ Range: 1-${phiMax}`,
-                            `Target: 6/π² ≈ 0.608`
+                            `Mapping: ${mapping}`,
+                            `Color: ${colorScheme}`
                         ];
 
                         params.forEach(param => {
@@ -1800,8 +3092,168 @@
                         });
                     }
 
+                    // Add detailed statistics for each selected visualization
+                    currentY += baseFont * 1.5;
+                    ctx.fillStyle = '#00ffff';
+                    ctx.font = `bold ${baseFont * 1.1}px "Fira Code"`;
+                    ctx.fillText('Numerical Statistics', legendX + padding, currentY);
+                    currentY += baseFont * 2;
+
+                    ctx.font = `${baseFont * 0.8}px "Fira Code"`;
+                    
+                    selected.forEach(key => {
+                        ctx.fillStyle = canvasInfo[key].color;
+                        ctx.font = `bold ${baseFont * 0.9}px "Fira Code"`;
+                        ctx.fillText(canvasInfo[key].title + ':', legendX + padding, currentY);
+                        currentY += baseFont * 1.5;
+                        
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                        ctx.font = `${baseFont * 0.75}px "Fira Code"`;
+
+                        if (key === 'lattice') {
+                            const N = parseInt(document.getElementById('latticeRangeInput').value);
+                            let totalPts = 0, primitivePts = 0, primeNorms = 0;
+                            for (let a = -N; a <= N; a++) {
+                                for (let b = -N; b <= N; b++) {
+                                    if (a === 0 && b === 0) continue;
+                                    totalPts++;
+                                    const g = gcd(a, b);
+                                    if (g === 1) {
+                                        primitivePts++;
+                                        const normSq = a * a + b * b;
+                                        if (isPrime(normSq)) primeNorms++;
+                                    }
+                                }
+                            }
+                            const ratio = totalPts > 0 ? primitivePts / totalPts : 0;
+                            ctx.fillText(`  Range: ±${N}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Total Points: ${totalPts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Primitive: ${primitivePts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Ratio: ${ratio.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Prime Norms: ${primeNorms}`, legendX + padding, currentY);
+                        } else if (key === 'circle') {
+                            const maxM = parseInt(document.getElementById('maxModulusInput').value);
+                            let totalPts = 0, coprimePts = 0;
+                            for (let m = 1; m <= maxM; m++) {
+                                for (let r = 0; r < m; r++) {
+                                    totalPts++;
+                                    if (gcd(r, m) === 1) coprimePts++;
+                                }
+                            }
+                            const ratio = totalPts > 0 ? coprimePts / totalPts : 0;
+                            ctx.fillText(`  Total Points: ${totalPts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Coprime: ${coprimePts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Ratio: ${ratio.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Error: ${Math.abs(ratio - SIX_OVER_PI_SQUARED).toFixed(6)}`, legendX + padding, currentY);
+                        } else if (key === 'nested') {
+                            const n = parseInt(document.getElementById('numRingsInput').value);
+                            let totalPts = 0, coprimePts = 0;
+                            for (let m = 1; m <= n; m++) {
+                                for (let r = 0; r < m; r++) {
+                                    totalPts++;
+                                    if (gcd(r, m) === 1) coprimePts++;
+                                }
+                            }
+                            const ratio = totalPts > 0 ? coprimePts / totalPts : 0;
+                            ctx.fillText(`  Rings: ${n}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Total Points: ${totalPts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Coprime: ${coprimePts}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Ratio: ${ratio.toFixed(6)}`, legendX + padding, currentY);
+                        } else if (key === 'pairs') {
+                            const N = parseInt(document.getElementById('gridSizeInput').value);
+                            let coprimeCnt = 0;
+                            for (let a = 1; a <= N; a++) {
+                                for (let b = 1; b <= N; b++) {
+                                    if (gcd(a, b) === 1) coprimeCnt++;
+                                }
+                            }
+                            const totalPairs = N * N;
+                            const ratio = coprimeCnt / totalPairs;
+                            const error = Math.abs(ratio - SIX_OVER_PI_SQUARED);
+                            ctx.fillText(`  Grid: ${N}×${N}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Total Pairs: ${totalPairs}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Coprime: ${coprimeCnt}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Density: ${ratio.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Target: ${SIX_OVER_PI_SQUARED.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Error: ${error.toFixed(6)}`, legendX + padding, currentY);
+                        } else if (key === 'phi') {
+                            const maxM = parseInt(document.getElementById('phiMaxModulusInput').value);
+                            let sum = 0, primeSum = 0, primeCount = 0;
+                            for (let m = 1; m <= maxM; m++) {
+                                const ratio = euler_phi(m) / m;
+                                sum += ratio;
+                                if (isPrime(m)) {
+                                    primeSum += ratio;
+                                    primeCount++;
+                                }
+                            }
+                            const avgRatio = sum / maxM;
+                            const error = Math.abs(avgRatio - SIX_OVER_PI_SQUARED);
+                            const primeAvg = primeCount > 0 ? primeSum / primeCount : 0;
+                            ctx.fillText(`  Range: 1-${maxM}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Avg φ(m)/m: ${avgRatio.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Target: ${SIX_OVER_PI_SQUARED.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Error: ${error.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Primes: ${primeCount}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Prime Avg: ${primeAvg.toFixed(6)}`, legendX + padding, currentY);
+                        } else if (key === 'convergence') {
+                            const maxM = 500;
+                            let sum = 0;
+                            for (let m = 1; m <= maxM; m++) {
+                                sum += euler_phi(m) / m;
+                            }
+                            const finalAvg = sum / maxM;
+                            const error = Math.abs(finalAvg - SIX_OVER_PI_SQUARED);
+                            ctx.fillText(`  Max N: ${maxM}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Final Avg: ${finalAvg.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Target: ${SIX_OVER_PI_SQUARED.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            ctx.fillText(`  Error: ${error.toFixed(6)}`, legendX + padding, currentY);
+                            currentY += baseFont * 1.2;
+                            const convergenceRate = ((1 - error / 0.1) * 100).toFixed(2);
+                            ctx.fillText(`  Convergence: ${convergenceRate}%`, legendX + padding, currentY);
+                        }
+                        
+                        currentY += baseFont * 2.5;
+                    });
+
+                    // Add theoretical constant
+                    currentY += baseFont * 0.5;
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = `bold ${baseFont * 0.95}px "Fira Code"`;
+                    ctx.fillText('Theoretical Constant', legendX + padding, currentY);
+                    currentY += baseFont * 1.8;
+                    
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = `${baseFont * 0.8}px "Fira Code"`;
+                    ctx.fillText('6/π² = 1/ζ(2)', legendX + padding, currentY);
+                    currentY += baseFont * 1.3;
+                    ctx.fillText(`≈ ${SIX_OVER_PI_SQUARED.toFixed(8)}`, legendX + padding, currentY);
+
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                    ctx.font = `italic ${baseFont * 0.8}px "Fira Code"`;
+                    ctx.font = `italic ${baseFont * 0.75}px "Fira Code"`;
                     ctx.textAlign = 'center';
                     ctx.fillText('Coprime Density Explorer', legendX + legendWidth / 2, gridHeight - 60);
                     ctx.fillText('Wessen Getachew (@7dview)', legendX + legendWidth / 2, gridHeight - 35);
@@ -1900,6 +3352,7 @@
 
         // Main render function
         function renderAll() {
+            renderLattice();
             renderUnitCircle();
             renderNestedRings();
             renderCoprimePairs();
@@ -1919,4 +3372,4 @@
         };
     </script>
 </body>
-</html>
+    </html>
